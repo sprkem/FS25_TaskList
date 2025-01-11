@@ -26,5 +26,6 @@
 		<text name="ui_no_task_selected_error" text="No task selected"/>		
 		<text name="ui_confirm_deletion" text="Are you sure you want to delete?"/>
 		<text name="ui_group_not_found_error" text="Could not find the group. Check the group was not deleted."/>
+		<text name="ui_task_not_found_error" text="Could not find the task. Check the task was not deleted."/>
 	</texts>
 </l10n>

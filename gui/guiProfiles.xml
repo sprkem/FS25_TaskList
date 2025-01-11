@@ -7,13 +7,10 @@
         <Preset name="colorListHeaderBackground" value="0 0 0 0.35" />
     </Presets>
     <Profile name="ingameMenuTodoListMenuHeaderIcon" extends="baseReference" with="anchorMiddleCenter">
-        <size value="50px 50px" />
-        <!-- <imageSliceId value="gui.icon_ingameMenu_prices" /> -->
         <imageSliceId value="gui.icon_ingameMenu_contracts" />
         <imageColor value="$preset_fs25_colorMainDark" />
     </Profile>
     <Profile name="ingameMenuTodoListHeader" extends="baseReference">
-        <size value="155px 32px" />
         <imageColor value="0 0 0 0" />
         <textFocusedColor value="$preset_fs25_colorMainHighlight" />
         <textHighlightedColor value="$preset_fs25_colorMainHighlight" />
@@ -25,7 +22,6 @@
         <textDisabledColor value="$preset_colorDisabled" />
     </Profile>
     <Profile name="ingameMenuTodoListHeaderRight" extends="baseReference">
-        <size value="155px 32px" />
         <imageColor value="0 0 0 0" />
         <textFocusedColor value="$preset_fs25_colorMainHighlight" />
         <textHighlightedColor value="$preset_fs25_colorMainHighlight" />
@@ -37,8 +33,6 @@
         <textDisabledColor value="$preset_colorDisabled" />
     </Profile>
     <Profile name="ingameMenuTodoListTable" extends="emptyPanel" with="anchorStretchingYLeft pivotTopLeft" />
-        <!-- <position value="0px -40px" /> -->
-    <!-- </Profile> -->
     <Profile name="ingameMenuTodoListListItem" extends="baseReference" with="anchorTopStretchingX alternating">
         <height value="32px"/>
         <imageColor value="$preset_fs25_colorGrey" />
@@ -46,7 +40,6 @@
         <alternateBackgroundColor value="$preset_fs25_colorGreyDark_50" />
     </Profile>
     <Profile name="ingameMenuTodoListRowCellLeft" extends="baseReference" with="anchorStretchingYLeft">
-        <size value="155px 32px" />
         <textBold value="false" />
         <textSize value="15px" />
         <textAlignment value="left" />
@@ -57,29 +50,5 @@
     <Profile name="ingameMenuTodoListRowCellRight" extends="ingameMenuTodoListRowCellLeft">
         <textAlignment value="right" />
     </Profile>
-    <Profile name="ingameMenuTodoListSliderBox" extends="fs25_listSliderBox" with="anchorTopRight">
-        <position value="28px -40px" />
-        <size value="6px 710px"/>
-    </Profile>
-
-    <Profile name="ingameMenuTodoListGroupsSliderBox" extends="fs25_listSliderBox" with="anchorTopRight">
-        <position value="-20px -70px" />
-        <size value="6px 500px"/>
-    </Profile>
-    <Profile name="ingameMenuTodoListManageGroupsFrame" extends="dialogBg">
-        <Value name="size" value="780px 800px"/>
-    </Profile>
-    <Profile name="ingameMenuTodoListManageGroupsHeaderBox" extends="emptyPanel" with="anchorTopLeft">
-        <size value="705px 50px"/>  
-        <position value="20px -50px"/>  
-        <imageColor value="$preset_colorListHeaderBackground"/>
-        <alignmentX value="left"/>
-        <alignmentY value="middle"/>
-        <flowDirection value="horizontal"/>
-        <wrapAround value="true"/>
-        <lateralFlowSize value="200px"/>
-        <fitToElements value="false"/>
-        <autoValidateLayout value="true"/>
-        <hasFrame value="false"/>
-    </Profile>
+    <Profile name="todoListGroupsSliderBox" extends="fs25_listSliderBox" with="anchorTopRight" />
 </GUIProfiles>
