@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<modDesc descVersion="92">
+    <author>HerrWasser</author>
+    <version>1.0.0.0</version>
+    <iconFilename>icon_todoList.dds</iconFilename>
+    <title>
+        <en>Todo List</en>
+        <de>Todo-Liste</de>
+    </title>
+    <description>
+        <en>
+            <![CDATA[A mod to define tasks and be reminded to do them.]]>
+        </en>
+        <de>
+            <![CDATA[Ein Mod, um Aufgaben zu definieren und daran erinnert zu werden, sie zu erledigen.]]>
+        </de>
+    </description>
+	<extraSourceFiles>
+        <sourceFile filename="main.lua"/>
+    </extraSourceFiles>
+    <multiplayer supported="true"/>
+    <l10n filenamePrefix="languages/l10n" />
+</modDesc>

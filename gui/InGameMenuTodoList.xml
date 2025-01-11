@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<GUI name="inGameMenuTodoList">
+    <GuiElement profile="fs25_menuContainer">
+        <GuiElement profile="fs25_menuHeaderPanel">
+			<Bitmap profile="fs25_menuHeaderIconBg">
+				<Bitmap profile="ingameMenuTodoListMenuHeaderIcon"/>
+            </Bitmap>
+			<Text profile="fs25_menuHeaderTitle" id="categoryHeaderText" text="$l10n_ui_ingameMenuTodoList"/>
+		</GuiElement>
+
+        <!-- Header -->
+        <GuiElement profile="fs25_statisticsHeaderBox">
+            <Button profile="ingameMenuTodoListHeader" position="40px 0px" size="155px 32px" text="$l10n_ui_header_group" handleFocus="false" />
+            <Button profile="ingameMenuTodoListHeader" position="205px 0px" size="155px 32px" text="$l10n_ui_header_detail" handleFocus="false" />
+            <Button profile="ingameMenuTodoListHeaderRight" position="405px 0px" size="155px 32px" text="$l10n_ui_header_priority" handleFocus="false" />
+        </GuiElement>
+
+        <!-- The data itself -->
+        <SmoothList profile="ingameMenuTodoListTable" id="currentTasksTable" position="0px -40px">
+            <ListItem profile="ingameMenuTodoListListItem">
+                <Text profile="ingameMenuTodoListRowCellLeft" position="40px 0px" name="group"/>
+                <Text profile="ingameMenuTodoListRowCellLeft" position="205px 0px" name="detail"/>
+                <Text profile="ingameMenuTodoListRowCellRight" position="405px 0px" name="priority"/>
+            </ListItem>
+        </SmoothList>
+
+        <ThreePartBitmap profile="ingameMenuTodoListSliderBox">
+            <Slider profile="fs25_listSlider" dataElementId="currentTasksTable" />
+        </ThreePartBitmap>
+
+    </GuiElement>
+</GUI>
