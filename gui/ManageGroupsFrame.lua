@@ -36,6 +36,15 @@ end
 
 function ManageGroupsFrame:updateContent()
     self.currentGroups = g_currentMission.todoList:getGroupListForCurrentFarm()
+
+    if next(self.currentGroups) == nil then
+        self.tableContainer:setVisible(false)
+        self.noDataContainer:setVisible(true)
+        return
+    end
+    
+    self.tableContainer:setVisible(true)
+    self.noDataContainer:setVisible(false)
     self.groupsTable:reloadData()
 end
 

@@ -99,9 +99,18 @@ function InGameMenuTodoList:updateContent()
 
     self.activeTasks = g_currentMission.todoList:getActiveTasksForCurrentFarm()
     table.sort(self.activeTasks, InGameMenuTodoList.sortingFunction)    
-    DebugUtil.printTableRecursively(self.activeTasks,".",0,5)
+    -- DebugUtil.printTableRecursively(self.activeTasks,".",0,5)
+
+    if next(self.activeTasks) == nil then
+        self.tableContainer:setVisible(false)
+        self.noDataContainer:setVisible(true)
+        return
+    end
 
 --     TODO: Possibly populate a 'next month list'
+
+    self.tableContainer:setVisible(true)
+    self.noDataContainer:setVisible(false)
     self.currentTasksTable:reloadData()
 end
 
