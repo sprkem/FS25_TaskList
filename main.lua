@@ -17,6 +17,7 @@ TodoList.modName = g_currentModName
 
 source(TodoList.dir .. "gui/InGameMenuTodoList.lua")
 source(TodoList.dir .. "gui/ManageGroupsFrame.lua")
+-- source(TodoList.dir .. "gui/ManageTasksFrame.lua")
 
 function TodoList:loadMap()
 
@@ -30,6 +31,9 @@ function TodoList:loadMap()
 
     local manageGroupsFrame = ManageGroupsFrame.new(g_i18n)
 	g_gui:loadGui(TodoList.dir .. "gui/ManageGroupsFrame.xml", "manageGroupsFrame", manageGroupsFrame)	
+    
+    -- local manageTasksFrame = ManageTasksFrame.new(g_i18n)
+	-- g_gui:loadGui(TodoList.dir .. "gui/ManageTasksFrame.xml", "manageTasksFrame", manageTasksFrame)	
 
     TodoList.fixInGameMenu(guiTodoList,"inGameMenuTodoList", {0,0,1024,1024}, 2, TodoList:makeIsTodoListCheckEnabledPredicate())
 
@@ -268,6 +272,14 @@ function TodoList:getGroupListForCurrentFarm()
         end
     end
     return result
+end
+
+function TodoList:getGroupById(groupId, showInfoIfNotFound)
+    local group = self.groups[groupId]
+    if group == nil and showInfoIfNotFound == true then
+        InfoDialog.show(g_i18n:getText("ui_group_not_found_error"))        
+    end
+    return group
 end
 
 

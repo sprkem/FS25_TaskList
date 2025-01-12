@@ -121,7 +121,9 @@ end
 
 function InGameMenuTodoList:getNumberOfItemsInSection(list, section)
     print("InGameMenuTodoList:getNumberOfItemsInSection")
-    return #self.activeTasks
+    local count = 0
+    for _ in pairs(self.activeTasks) do count = count + 1 end
+    return count
 end
 
 function InGameMenuTodoList:getTitleForSectionHeader(list, section)
@@ -143,7 +145,7 @@ end
 
 function InGameMenuTodoList:completeTask()
     if self.selectedRow == -1 then
-        InfoDialog.show(g_i18n:getText("ui_no_task_selected_error"))
+        InfoDialog.show(g_i18n:getText("ui_no_task_selected"))
         return
     end    
     g_currentMission.todoList:completeTask(self.activeTasks[self.selectedRow].id)
@@ -156,5 +158,6 @@ function InGameMenuTodoList:showManageGroups()
 end
 
 function InGameMenuTodoList:manageTasks()
-    print("Manage tasks received")
+    print("InGameMenuTodoList:manageTasks")
+    -- local dialog = g_gui:showDialog("manageTasksFrame")
 end

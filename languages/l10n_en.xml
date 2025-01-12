@@ -8,7 +8,8 @@
         <text name="ui_header_detail" text="Task"/>
         <text name="ui_header_priority" text="Priority"/>
         <text name="ui_header_manage_groups" text="Manage Groups"/>
-		<text name="ui_header_set_group_name" text="Choose A Group Name"/>		
+        <text name="ui_header_manage_tasks" text="Manage Tasks"/>
+        <text name="ui_header_current_group" text="Tasks for group: %s"/>
 
 		<text name="ui_btn_manage_groups" text="Manage Groups"/>
 		<text name="ui_btn_manage_tasks" text="Manage Tasks"/>
@@ -20,10 +21,13 @@
 		<text name="ui_btn_add_group" text="Add Group"/>
 		<text name="ui_btn_add_task" text="Add Task"/>
 
+		<text name="ui_set_group_name" text="Choose A Group Name"/>
 		<text name="ui_group_exists_error" text="A group with this name already exists"/>
 		<text name="ui_no_name_specified_error" text="No name for the group was specified"/>
 		<text name="ui_no_group_selected_error" text="No group selected to copy"/>
-		<text name="ui_no_task_selected_error" text="No task selected"/>		
+		<text name="ui_no_task_selected" text="No task selected"/>		
+		<text name="ui_no_group_selected" text="No group selected"/>		
+		<text name="ui_btn_select_group" text="Choose group"/>		
 		<text name="ui_confirm_deletion" text="Are you sure you want to delete?"/>
 		<text name="ui_group_not_found_error" text="Could not find the group. Check the group was not deleted."/>
 		<text name="ui_task_not_found_error" text="Could not find the task. Check the task was not deleted."/>

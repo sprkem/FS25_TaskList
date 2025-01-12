@@ -21,5 +21,8 @@ function dump(o)
  end
 
 input = ' hellow world '
-str = string.gsub(input, '^%s*(.-)%s*$', '%1')
-print(":" .. str .. ":")
+local a = { "A", "B", "C"}
+
+
+print(next(a))
+print(next(a))

@@ -53,7 +53,9 @@ function ManageGroupsFrame:getNumberOfSections()
 end
 
 function ManageGroupsFrame:getNumberOfItemsInSection(list, section)
-    return #self.currentGroups
+    local count = 0
+    for _ in pairs(self.currentGroups) do count = count + 1 end
+    return count    
 end
 
 function ManageGroupsFrame:getTitleForSectionHeader(list, section)
@@ -78,7 +80,7 @@ function ManageGroupsFrame:onClickAdd(sender)
     TextInputDialog.show(
 		ManageGroupsFrame.onNewGroupNameSet, self,
 		"",
-		g_i18n:getText("ui_header_set_group_name"),
+		g_i18n:getText("ui_set_group_name"),
         nil, 30, g_i18n:getText("ui_btn_ok"))
 end
 
@@ -92,7 +94,7 @@ function ManageGroupsFrame:onClickCopy(sender)
     TextInputDialog.show(
 		ManageGroupsFrame.onCopyGroupNameSet, self,
 		"",
-		g_i18n:getText("ui_header_set_group_name"),
+		g_i18n:getText("ui_set_group_name"),
         nil, 30, g_i18n:getText("ui_btn_ok"), self.selectedGroupIndex)
 end
 
