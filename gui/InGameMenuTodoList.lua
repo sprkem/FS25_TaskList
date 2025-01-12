@@ -159,5 +159,5 @@ end
 
 function InGameMenuTodoList:manageTasks()
     print("InGameMenuTodoList:manageTasks")
-    -- local dialog = g_gui:showDialog("manageTasksFrame")
+    local dialog = g_gui:showDialog("manageTasksFrame")
 end

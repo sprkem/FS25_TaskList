@@ -17,7 +17,7 @@ TodoList.modName = g_currentModName
 
 source(TodoList.dir .. "gui/InGameMenuTodoList.lua")
 source(TodoList.dir .. "gui/ManageGroupsFrame.lua")
--- source(TodoList.dir .. "gui/ManageTasksFrame.lua")
+source(TodoList.dir .. "gui/ManageTasksFrame.lua")
 
 function TodoList:loadMap()
 
@@ -32,8 +32,8 @@ function TodoList:loadMap()
     local manageGroupsFrame = ManageGroupsFrame.new(g_i18n)
 	g_gui:loadGui(TodoList.dir .. "gui/ManageGroupsFrame.xml", "manageGroupsFrame", manageGroupsFrame)	
     
-    -- local manageTasksFrame = ManageTasksFrame.new(g_i18n)
-	-- g_gui:loadGui(TodoList.dir .. "gui/ManageTasksFrame.xml", "manageTasksFrame", manageTasksFrame)	
+    local manageTasksFrame = ManageTasksFrame.new(g_i18n)
+	g_gui:loadGui(TodoList.dir .. "gui/ManageTasksFrame.xml", "manageTasksFrame", manageTasksFrame)	
 
     TodoList.fixInGameMenu(guiTodoList,"inGameMenuTodoList", {0,0,1024,1024}, 2, TodoList:makeIsTodoListCheckEnabledPredicate())
 
@@ -263,7 +263,7 @@ end
 function TodoList:getGroupListForCurrentFarm()
     local currentFarmId = self:getCurrentFarmId()
     local result = {}
-    for k, group in pairs(self.groups) do
+    for _, group in pairs(self.groups) do
         if group.farmId == currentFarmId or not g_currentMission.missionDynamicInfo.isMultiplayer then
             table.insert(result, {
                 id = group.id,
@@ -275,11 +275,23 @@ function TodoList:getGroupListForCurrentFarm()
 end
 
 function TodoList:getGroupById(groupId, showInfoIfNotFound)
+    -- Returns a copy of the group but tasks are indexed sequentially for table rendering
     local group = self.groups[groupId]
-    if group == nil and showInfoIfNotFound == true then
-        InfoDialog.show(g_i18n:getText("ui_group_not_found_error"))        
+    if group == nil then
+        if showInfoIfNotFound == true then
+            InfoDialog.show(g_i18n:getText("ui_group_not_found_error"))
+        end
+        return nil 
     end
-    return group
+
+    local groupCopy = deepcopy(group)
+    groupCopy.tasks = {}
+    for _, task in pairs(group.tasks) do
+        local taskCopy = deepcopy(task)
+        table.insert(groupCopy.tasks, taskCopy)
+    end
+
+    return groupCopy
 end
 
 

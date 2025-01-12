@@ -99,17 +99,21 @@ function ManageGroupsFrame:onClickCopy(sender)
 end
 
 function ManageGroupsFrame:onClickDelete(sender)
+    print("Delete")
     if self.selectedGroupIndex == -1 then
         InfoDialog.show(g_i18n:getText("ui_no_group_selected_error"))
         return
     end
+    print("Showing yesnodialog")
     YesNoDialog.show(
         ManageGroupsFrame.onRespondToDeletePrompt, self,
         g_i18n:getText("ui_confirm_deletion"),
         nil, nil, nil, nil, nil, nil)
+    print("Show called for yesnodialog")
 end
 
 function ManageGroupsFrame:onRespondToDeletePrompt(clickOk)
+    print("onRespondToDeletePrompt")
     if clickOk then
         g_currentMission.todoList:deleteGroup(self.currentGroups[self.selectedGroupIndex].id)
     end

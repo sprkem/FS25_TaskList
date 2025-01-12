@@ -21,8 +21,13 @@ function dump(o)
  end
 
 input = ' hellow world '
-local a = { "A", "B", "C"}
 
 
-print(next(a))
-print(next(a))
+tasks = {}
+tasks[1] = { id='1', name = 'field 1'}
+tasks[2] = { id='2', name = 'field 2'}
+
+local sortingFunction = function (k1, k2) return k1.name < k2.name end
+table.sort(tasks, sortingFunction)
+
+print(dump(tasks))

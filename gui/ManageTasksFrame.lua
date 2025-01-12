@@ -1,6 +1,7 @@
 ManageTasksFrame = {}
 ManageTasksFrame.availableGroups = {}
 local ManageTasksFrame_mt = Class(ManageTasksFrame, MessageDialog)
+ManageTasksFrame.sortingFunction = function (k1, k2) return k1.name < k2.name end
 
 
 function ManageTasksFrame.new(target, custom_mt)
@@ -39,7 +40,7 @@ function ManageTasksFrame:onOpen()
     --     self:updateContent()
     -- end, self)
     self:updateContent()
-	-- FocusManager:setFocus(self.groupsTable)
+	FocusManager:setFocus(self.tasksTable)
 end
 
 function ManageTasksFrame:onClose()
@@ -49,6 +50,7 @@ end
 
 function ManageTasksFrame:updateContent()
     self.availableGroups = g_currentMission.todoList:getGroupListForCurrentFarm()
+    table.sort(self.availableGroups, ManageTasksFrame.sortingFunction)  
 
     -- local texts = {}
     -- for _, group in pairs(self.availableGroups) do
@@ -58,8 +60,8 @@ function ManageTasksFrame:updateContent()
 
     -- Check there are any groups
     if next(self.availableGroups) == nil then
-        self.tableContainer:setVisible(false)
-        self.noDataContainer:setVisible(true)
+        self.tasksContainer:setVisible(false)
+        self.noTasksContainer:setVisible(true)
         return
     end
 
@@ -77,25 +79,16 @@ function ManageTasksFrame:updateContent()
     -- Check if any tasks on the current Group. If not hide the table and return
     if next(self.currentGroup.tasks) == nil then
         print("No tasks so hiding visuals")
-        self.tableContainer:setVisible(false)
-        self.noDataContainer:setVisible(true)
+        self.tabletasksContainerContainer:setVisible(false)
+        self.noTasksContainer:setVisible(true)
         return
     end
 
-    self.tableContainer:setVisible(true)
-    self.noDataContainer:setVisible(false)
+    self.tasksContainer:setVisible(true)
+    self.noTasksContainer:setVisible(false)
 
-    -- self:setCurrentGroupLabel()
-
-    -- if next(self.currentGroups) == nil then
-    --     self.tableContainer:setVisible(false)
-    --     self.noDataContainer:setVisible(true)
-    --     return
-    -- end
-
-    -- self.tableContainer:setVisible(true)
-    -- self.noDataContainer:setVisible(false)
-    -- self.groupsTable:reloadData()
+    self:setCurrentGroupLabel()
+    self.tasksTable:reloadData()
 end
 
 function ManageTasksFrame:getNumberOfSections()
@@ -103,9 +96,9 @@ function ManageTasksFrame:getNumberOfSections()
 end
 
 function ManageTasksFrame:getNumberOfItemsInSection(list, section)
-    -- local count = 0
-    -- for _ in pairs(self.currentGroups) do count = count + 1 end
-    -- return count
+    local count = 0
+    for _ in pairs(self.currentGroup.tasks) do count = count + 1 end
+    return count
 end
 
 function ManageTasksFrame:getTitleForSectionHeader(list, section)
@@ -113,28 +106,30 @@ function ManageTasksFrame:getTitleForSectionHeader(list, section)
 end
 
 function ManageTasksFrame:populateCellForItemInSection(list, section, index, cell)
-    -- local entry = self.currentGroups[index]
-    -- cell:getAttribute("group"):setText(entry.name)
+    local task = self.currentGroup.tasks[index]
+    cell:getAttribute("detail"):setText(task.detail)
 end
 
 function ManageTasksFrame:onListSelectionChanged(list, section, index)
-    -- self.selectedTaskIndex = index
+    self.selectedTaskIndex = index
 end
 
 function ManageTasksFrame:setCurrentGroupLabel()
-    self.currentGroupLabel.setText(string.format(g_i18n:getText("ui_header_current_group"), self.currentGroup.name))
+    local labelText = string.format(g_i18n:getText("ui_header_current_group"), self.currentGroup.name)
+    print("Label text: " .. labelText)
+    self.currentGroupLabel:setText(labelText)
 end
 
-function ManageGroupsFrame:onClickBack(sender)
+function ManageTasksFrame:onClickBack(sender)
 	self:close()
 end
 
-function ManageGroupsFrame:onClickAdd(sender)
+function ManageTasksFrame:onClickAdd(sender)
     print("Got Add button call")
 
 end
 
-function ManageGroupsFrame:onClickCopy(sender)
+function ManageTasksFrame:onClickCopy(sender)
     print("Got copy button call")
     -- if self.selectedGroupIndex == -1 then
     --     InfoDialog.show(g_i18n:getText("ui_no_group_selected_error"))
@@ -142,10 +137,11 @@ function ManageGroupsFrame:onClickCopy(sender)
     -- end
 end
 
-function ManageGroupsFrame:onClickChooseGroup(sender)
+function ManageTasksFrame:onClickChooseGroup(sender)
     -- if self.currentGroup == nil then
     --     -- TODO show info and return
     -- end
+    print("HELLPFP")
     local texts = {
         "A", "B", "getTextsForValues"
     }
@@ -158,7 +154,7 @@ function ManageGroupsFrame:onClickChooseGroup(sender)
 			"a different string", texts)
 end
 
-function ManageGroupsFrame:onClickDelete(sender)
+function ManageTasksFrame:onClickDelete(sender)
     -- if self.selectedGroupIndex == -1 then
     --     InfoDialog.show(g_i18n:getText("ui_no_group_selected_error"))
     --     return
@@ -169,7 +165,7 @@ function ManageGroupsFrame:onClickDelete(sender)
     --     nil, nil, nil, nil, nil, nil)
 end
 
-function ManageGroupsFrame:onRespondToDeletePrompt(clickOk)
+function ManageTasksFrame:onRespondToDeletePrompt(clickOk)
     if clickOk then
         -- g_currentMission.todoList:deleteGroup(self.currentGroups[self.selectedGroupIndex].id)
     end
