@@ -9,14 +9,17 @@
         <GuiElement profile="fs25_dialogContentContainer">
             <Animation profile="fs25_dialogLoading" id="iconLoadingElement" />
             <Text profile="dialogTitle" text="$l10n_ui_header_manage_tasks" position="0px -30px" />
-            <Text id="currentGroupLabel" profile="dialogTitle" position="0px -60px" />            
+
+            <MultiTextOption profile="fs25_subCategorySelectorTabbed" id="groupSelector" position="0px -80px" size="450px 50px" onClick="OnGroupSelectChange" >
+                <Text profile="fs25_multiTextOptionText" name="text" />
+            </MultiTextOption>
 
             <GuiElement id="tasksContainer">
                 <GuiElement profile="fs25_statisticsHeaderBox">
-                    <Button profile="ingameMenuTodoListHeader" position="60px -105px" size="155px 32px" text="$l10n_ui_header_detail" handleFocus="false" />
+                    <Button profile="ingameMenuTodoListHeader" position="60px -125px" size="155px 32px" text="$l10n_ui_header_detail" handleFocus="false" />
                 </GuiElement>
 
-                <SmoothList id="tasksTable" profile="ingameMenuTodoListTable" position="40px -140px" size="650px 550px">
+                <SmoothList id="tasksTable" profile="ingameMenuTodoListTable" position="40px -160px" size="650px 550px">
                     <ListItem profile="ingameMenuTodoListListItem">
                         <Text profile="ingameMenuTodoListRowCellLeft" position="20px 0px" size="155px 32px" name="detail"/>
                     </ListItem>
@@ -35,8 +38,7 @@
         <BoxLayout profile="fs25_dialogButtonBox">
             <Button profile="buttonCancel" text="$l10n_ui_btn_delete" onClick="onClickDelete" />
             <Button profile="buttonActivate" text="$l10n_ui_btn_copy" onClick="onClickCopy" />
-            <Button profile="buttonOK" text="$l10n_ui_btn_add_group" onClick="onClickAdd" />
-            <Button profile="buttonExtra1" text="$l10n_ui_btn_select_group" onClick="onClickChooseGroup" />
+            <Button profile="buttonOK" text="$l10n_ui_btn_add_task" onClick="onClickAdd" />            
             <Button profile="buttonBack" text="$l10n_ui_btn_close" onClick="onClickBack" />
         </BoxLayout>
     </GuiElement>

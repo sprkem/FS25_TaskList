@@ -22,7 +22,7 @@ end
 
 function ManageGroupsFrame:onOpen()
 	ManageGroupsFrame:superClass().onOpen(self)
-    g_messageCenter:subscribe(MessageType.GROUPS_UPDATED, function (menu)
+    g_messageCenter:subscribe(MessageType.TASK_GROUPS_UPDATED, function (menu)
         self:updateContent()
     end, self)
     self:updateContent()

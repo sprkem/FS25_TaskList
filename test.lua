@@ -1,5 +1,7 @@
 math.randomseed(os.time())
-local function generateId()
+Testing = {}
+
+function Testing.generateId()
     local template ='xxxxxxxx-xxxx-xxxx-yxxx-xxxxxxxxxxxx'
     return (string.gsub(template, '[xy]', function (c)
         local v = (c == 'x') and math.random(0, 0xf) or math.random(8, 0xb)
@@ -7,12 +9,12 @@ local function generateId()
     end))
 end
 
-function dump(o)
+function Testing.dump(o)
     if type(o) == 'table' then
        local s = '{ '
        for k,v in pairs(o) do
           if type(k) ~= 'number' then k = '"'..k..'"' end
-          s = s .. '['..k..'] = ' .. dump(v) .. ','
+          s = s .. '['..k..'] = ' .. Testing.dump(v) .. ','
        end
        return s .. '} '
     else
@@ -20,14 +22,20 @@ function dump(o)
     end
  end
 
-input = ' hellow world '
+-- input = ' hellow world '
 
 
-tasks = {}
-tasks[1] = { id='1', name = 'field 1'}
-tasks[2] = { id='2', name = 'field 2'}
+-- tasks = {}
+-- tasks[1] = { id='1', name = 'field 1'}
+-- tasks[2] = { id='2', name = 'field 2'}
 
-local sortingFunction = function (k1, k2) return k1.name < k2.name end
-table.sort(tasks, sortingFunction)
+-- local sortingFunction = function (k1, k2) return k1.name < k2.name end
+-- table.sort(tasks, sortingFunction)
 
-print(dump(tasks))
+-- print(dump(tasks))
+
+local a = true
+local taskCount = 3
+for j = 1, taskCount do
+   print(j)
+end
