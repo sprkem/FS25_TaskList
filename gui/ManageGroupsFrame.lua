@@ -4,33 +4,33 @@ local ManageGroupsFrame_mt = Class(ManageGroupsFrame, MessageDialog)
 
 
 function ManageGroupsFrame.new(target, custom_mt)
-	local self = MessageDialog.new(target, custom_mt or ManageGroupsFrame_mt)
+    local self = MessageDialog.new(target, custom_mt or ManageGroupsFrame_mt)
     self.i18n = g_i18n
     self.selectedGroupIndex = -1;
-	return self
+    return self
 end
 
 function ManageGroupsFrame:onCreate()
-	ManageGroupsFrame:superClass().onCreate(self)
+    ManageGroupsFrame:superClass().onCreate(self)
 end
 
 function ManageGroupsFrame:onGuiSetupFinished()
-	ManageGroupsFrame:superClass().onGuiSetupFinished(self)
+    ManageGroupsFrame:superClass().onGuiSetupFinished(self)
     self.groupsTable:setDataSource(self)
-	self.groupsTable:setDelegate(self)
+    self.groupsTable:setDelegate(self)
 end
 
 function ManageGroupsFrame:onOpen()
-	ManageGroupsFrame:superClass().onOpen(self)
-    g_messageCenter:subscribe(MessageType.TASK_GROUPS_UPDATED, function (menu)
+    ManageGroupsFrame:superClass().onOpen(self)
+    g_messageCenter:subscribe(MessageType.TASK_GROUPS_UPDATED, function(menu)
         self:updateContent()
     end, self)
     self:updateContent()
-	FocusManager:setFocus(self.groupsTable)
+    FocusManager:setFocus(self.groupsTable)
 end
 
 function ManageGroupsFrame:onClose()
-	ManageGroupsFrame:superClass().onClose(self)
+    ManageGroupsFrame:superClass().onClose(self)
     g_messageCenter:unsubscribeAll(self)
 end
 
@@ -42,20 +42,20 @@ function ManageGroupsFrame:updateContent()
         self.noDataContainer:setVisible(true)
         return
     end
-    
+
     self.tableContainer:setVisible(true)
     self.noDataContainer:setVisible(false)
     self.groupsTable:reloadData()
 end
 
 function ManageGroupsFrame:getNumberOfSections()
-	return 1
+    return 1
 end
 
 function ManageGroupsFrame:getNumberOfItemsInSection(list, section)
     local count = 0
     for _ in pairs(self.currentGroups) do count = count + 1 end
-    return count    
+    return count
 end
 
 function ManageGroupsFrame:getTitleForSectionHeader(list, section)
@@ -72,16 +72,16 @@ function ManageGroupsFrame:onListSelectionChanged(list, section, index)
 end
 
 function ManageGroupsFrame:onClickBack(sender)
-	self:close()
+    self:close()
 end
 
 function ManageGroupsFrame:onClickAdd(sender)
     print("Got Add button call")
     TextInputDialog.show(
-		ManageGroupsFrame.onNewGroupNameSet, self,
-		"",
-		g_i18n:getText("ui_set_group_name"),
-        nil, 30, g_i18n:getText("ui_btn_ok"))
+        ManageGroupsFrame.onNewGroupNameSet, self,
+        "",
+        g_i18n:getText("ui_set_group_name"),
+        nil, TaskGroup.MAX_NAME_LENGTH, g_i18n:getText("ui_btn_ok"))
 end
 
 function ManageGroupsFrame:onClickCopy(sender)
@@ -92,35 +92,39 @@ function ManageGroupsFrame:onClickCopy(sender)
     end
 
     TextInputDialog.show(
-		ManageGroupsFrame.onCopyGroupNameSet, self,
-		"",
-		g_i18n:getText("ui_set_group_name"),
+        ManageGroupsFrame.onCopyGroupNameSet, self,
+        "",
+        g_i18n:getText("ui_set_group_name"),
         nil, 30, g_i18n:getText("ui_btn_ok"), self.selectedGroupIndex)
 end
 
 function ManageGroupsFrame:onClickDelete(sender)
-    print("Delete")
     if self.selectedGroupIndex == -1 then
         InfoDialog.show(g_i18n:getText("ui_no_group_selected_error"))
         return
     end
-    print("Showing yesnodialog")
+    -- YesNoDialog.show(
+    --     ManageGroupsFrame.onRespondToDeletePrompt, self,
+    --     g_i18n:getText("ui_confirm_deletion"),
+    --     nil, nil, nil, nil, nil, nil)
     YesNoDialog.show(
-        ManageGroupsFrame.onRespondToDeletePrompt, self,
-        g_i18n:getText("ui_confirm_deletion"),
-        nil, nil, nil, nil, nil, nil)
-    print("Show called for yesnodialog")
+        function(self, clickOk)
+            if clickOk then
+                g_currentMission.todoList:deleteGroup(self.currentGroups[self.selectedGroupIndex].id)
+            end
+        end, self,
+        g_i18n:getText("ui_confirm_deletion"))
 end
 
-function ManageGroupsFrame:onRespondToDeletePrompt(clickOk)
-    print("onRespondToDeletePrompt")
-    if clickOk then
-        g_currentMission.todoList:deleteGroup(self.currentGroups[self.selectedGroupIndex].id)
-    end
-end
+-- function ManageGroupsFrame:onRespondToDeletePrompt(clickOk)
+--     print("onRespondToDeletePrompt")
+--     if clickOk then
+--         g_currentMission.todoList:deleteGroup(self.currentGroups[self.selectedGroupIndex].id)
+--     end
+-- end
 
 function ManageGroupsFrame:onNewGroupNameSet(name, clickOk)
-    if clickOk then        
+    if clickOk then
         name = string.gsub(name, '^%s*(.-)%s*$', '%1')
         if name == "" then
             InfoDialog.show(g_i18n:getText("ui_no_name_specified_error"))

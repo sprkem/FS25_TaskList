@@ -34,8 +34,21 @@ function Testing.dump(o)
 
 -- print(dump(tasks))
 
-local a = true
-local taskCount = 3
-for j = 1, taskCount do
-   print(j)
-end
+-- local a = true
+-- local taskCount = 3
+-- for j = 1, taskCount do
+--    print(j)
+-- en
+
+local abc = {}
+
+abc[123] = {
+   tasks = {}
+}
+
+local task = {1}
+local group = abc[123]
+group.tasks[1] = task
+
+print(Testing.dump(abc))
+print(Testing.dump(group))

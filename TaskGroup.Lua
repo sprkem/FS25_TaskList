@@ -1,6 +1,8 @@
 TaskGroup = {}
 local Group_mt = Class(TaskGroup)
 
+TaskGroup.MAX_NAME_LENGTH = 30
+
 function TaskGroup.new(customMt)
     local self = {}
 

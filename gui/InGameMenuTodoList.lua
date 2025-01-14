@@ -88,14 +88,14 @@ function InGameMenuTodoList:updateContent()
     -- Get the current farm
     print("Fetching groups/tasks for farm")
 
-    -- local currentMonth = math.floor(g_currentMission.environment.currentPeriod)
-    -- print("Fetching tasks for next month: " .. currentMonth)
+    -- local currentPeriod = math.floor(g_currentMission.environment.currentPeriod)
+    -- print("Fetching tasks for next month: " .. currentPeriod)
 
-    -- local nextMonth = currentMonth + 1
+    -- local nextMonth = currentPeriod + 1
     -- if nextMonth > 12 then
     --     nextMonth = 1
     -- end
-    -- local nextMonthTasks = g_currentMission.todoList:getTasksForMonthForCurrentFarm(nextMonth)
+    -- local nextMonthTasks = g_currentMission.todoList:getTasksForPeriodForCurrentFarm(nextMonth)
 
     self.activeTasks = g_currentMission.todoList:getActiveTasksForCurrentFarm()
     table.sort(self.activeTasks, InGameMenuTodoList.sortingFunction)    
@@ -137,6 +137,8 @@ function InGameMenuTodoList:populateCellForItemInSection(list, section, index, c
     cell:getAttribute("group"):setText(entry.groupName)
     cell:getAttribute("detail"):setText(entry.detail)
     cell:getAttribute("priority"):setText(entry.priority)
+
+     --TOOD g_i18n:formatPeriod(task.period, true)
 end
 
 function InGameMenuTodoList:onListSelectionChanged(list, section, index)

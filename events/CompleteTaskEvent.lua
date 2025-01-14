@@ -18,7 +18,7 @@ function CompleteTaskEvent:writeStream(streamId, connection)
 end
 
 function CompleteTaskEvent:readStream(streamId, connection)
-    self.id = streamWriteInt32(streamId, self.priority)
+    self.id = streamWriteInt32(streamId)
 
     self:run(connection)
 end

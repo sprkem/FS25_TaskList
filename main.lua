@@ -26,6 +26,8 @@ source(TodoList.dir .. "events/NewTaskGroupEvent.lua")
 source(TodoList.dir .. "events/DeleteGroupEvent.lua")
 source(TodoList.dir .. "events/NewTaskGroupEvent.lua")
 source(TodoList.dir .. "events/CompleteTaskEvent.lua")
+source(TodoList.dir .. "events/DeleteTaskEvent.lua")
+source(TodoList.dir .. "events/NewTaskEvent.lua")
 
 function TodoList:loadMap()
     MessageType.ACTIVE_TASKS_UPDATED = nextMessageTypeId()
@@ -48,8 +50,8 @@ function TodoList:loadMap()
     g_currentMission.todoList = self
     self.taskGroups = {}
     self.activeTasks = {}
-    -- self.currentMonth = math.floor(g_currentMission.environment.currentPeriod)
-    self.currentMonth = 5 -- TODO = replace
+    -- self.currentPeriod = math.floor(g_currentMission.environment.currentPeriod)
+    self.currentPeriod = 5 -- TODO = replace
 
     -- TODO - remove below synthetic data
     local group1 = TaskGroup.new()
@@ -60,17 +62,17 @@ function TodoList:loadMap()
     local task1 = Task.new()
     task1.detail = "Harvest"
     task1.priority = 1
-    task1.month = 6
-    task1.shouldRepeat = true
-    task1.shouldRepeatMode = Task.shouldRepeat_MODE.MONTH
+    task1.period = 6
+    task1.shouldRecur = true
+    task1.shouldRecurMode = Task.SHOULD_REPEAT_MODE.MONTHLY
     self.taskGroups[group1.id].tasks[task1.id] = task1
 
     local task2 = Task.new()
     task2.detail = "Mulch"
     task2.priority = 1
-    task2.month = 6
-    task2.shouldRepeat = true
-    task2.shouldRepeatMode = Task.shouldRepeat_MODE.MONTH
+    task2.period = 6
+    task2.shouldRecur = true
+    task2.shouldRecurMode = Task.SHOULD_REPEAT_MODE.MONTHLY
     self.taskGroups[group1.id].tasks[task2.id] = task2
 
     local group2 = TaskGroup.new()
@@ -81,17 +83,17 @@ function TodoList:loadMap()
     local task3 = Task.new()
     task3.detail = "Harvest"
     task3.priority = 1
-    task3.month = 6
-    task3.shouldRepeat = true
-    task3.shouldRepeatMode = Task.shouldRepeat_MODE.MONTH
+    task3.period = 6
+    task3.shouldRecur = true
+    task3.shouldRecurMode = Task.SHOULD_REPEAT_MODE.MONTHLY
     self.taskGroups[group2.id].tasks[task3.id] = task3
 
     local task4 = Task.new()
     task4.detail = "Cultivate"
     task4.priority = 1
-    task4.month = 6
-    task4.shouldRepeat = true
-    task4.shouldRepeatMode = Task.shouldRepeat_MODE.MONTH
+    task4.period = 6
+    task4.shouldRecur = true
+    task4.shouldRecurMode = Task.SHOULD_REPEAT_MODE.DAILY
     self.taskGroups[group2.id].tasks[task4.id] = task4
 
     guiTodoList:initialize()
@@ -167,29 +169,29 @@ end
 
 function TodoList:hourChanged()
     print("Hour changed received")
-    local month = math.floor(g_currentMission.environment.currentPeriod)
-    if month ~= g_currentMission.todoList.currentMonth then
-        g_currentMission.todoList:onMonthChanged()
+    local period = math.floor(g_currentMission.environment.currentPeriod)
+    if period ~= g_currentMission.todoList.currentPeriod then
+        g_currentMission.todoList:onPeriodChanged()
     end
 end
 
-function TodoList:onMonthChanged()
+function TodoList:onPeriodChanged()
     print("Month changed, updating tasks")
     -- for _, task in pairs(self.activeTasks) do
     --     task.overdue = true
     -- end
 
     for _, group in pairs(self.taskGroups) do
-        self:addGroupTasksForCurrentMonth(group)
+        self:addGroupTasksForCurrentPeriod(group)
     end
-    g_currentMission.todoList.currentMonth = math.floor(g_currentMission.environment.currentPeriod)
+    g_currentMission.todoList.currentPeriod = math.floor(g_currentMission.environment.currentPeriod)
 end
 
-function TodoList:addGroupTasksForCurrentMonth(group)
-    local currentMonth = math.floor(g_currentMission.environment.currentPeriod)
+function TodoList:addGroupTasksForCurrentPeriod(group)
+    local currentPeriod = math.floor(g_currentMission.environment.currentPeriod)
     local additions = false
     for _, task in pairs(group.tasks) do
-        if task.month == currentMonth then
+        if task.period == currentPeriod then
             self:addActiveTask(group.id, task.id)
             additions = true
         end
@@ -220,12 +222,12 @@ function TodoList:getActiveTasksForCurrentFarm()
     return result
 end
 
-function TodoList:getTasksForMonthForCurrentFarm(month)
+function TodoList:getTasksForPeriodForCurrentFarm(period)
     local result = {}
     for _, group in pairs(self.taskGroups) do
         if group.farmId == currentFarmId or not g_currentMission.missionDynamicInfo.isMultiplayer then
             for _, task in pairs(group.tasks) do
-                if task.month == month then
+                if task.period == period then
                     local taskCopy = TaskListUtils.deepcopy(task)
                     taskCopy.groupName = group.name
                     table.insert(result, taskCopy)
@@ -246,6 +248,32 @@ function TodoList:completeTask(taskId)
     g_client:getServerConnection():sendEvent(CompleteTaskEvent.new(taskId))
 end
 
+function TodoList:deleteTask(groupId, taskId)
+    local group = self.taskGroups[groupId]
+    if group == nil then
+        InfoDialog.show(g_i18n:getText("ui_group_not_found_error"))
+        return
+    end
+
+    local task = group.tasks[taskId]
+    if task == nil then
+        InfoDialog.show(g_i18n:getText("ui_task_not_found_error"))
+        return
+    end
+
+    g_client:getServerConnection():sendEvent(DeleteTaskEvent.new(groupId, taskId))
+end
+
+function TodoList:addTask(groupId, task)
+    local group = self.taskGroups[groupId]
+    if group == nil then
+        InfoDialog.show(g_i18n:getText("ui_group_not_found_error"))
+        return
+    end
+
+    g_client:getServerConnection():sendEvent(NewTaskEvent.new(groupId, task))
+end
+
 function TodoList:deleteGroup(groupId)
     local group = self.taskGroups[groupId]
     if group == nil then
@@ -255,6 +283,28 @@ function TodoList:deleteGroup(groupId)
 
     g_client:getServerConnection():sendEvent(DeleteGroupEvent.new(groupId))
 end
+
+function TodoList:addGroupForCurrentFarm(name)    
+    local group = TaskGroup.new()
+    group.name = name
+    g_client:getServerConnection():sendEvent(NewTaskGroupEvent.new(group))
+end
+
+function TodoList:copyGroupForCurrentFarm(newName, groupToCopyId)
+    -- Sanity check the group exists
+    local sourceGroup = self.taskGroups[groupToCopyId]
+    if sourceGroup == nil then
+        InfoDialog.show(g_i18n:getText("ui_group_not_found_error"))
+        return
+    end
+
+    local group = TaskGroup.new()
+    group.name = newName
+    group:copyTasksFromGroup(sourceGroup)
+
+    g_client:getServerConnection():sendEvent(NewTaskGroupEvent.new(group))
+end
+
 
 function TodoList:getGroupListForCurrentFarm()
     local currentFarmId = self:getCurrentFarmId()
@@ -302,62 +352,6 @@ function TodoList:groupExistsForCurrentFarm(name)
     return false
 end
 
-function TodoList:addGroupForCurrentFarm(name)
-    local currentFarmId = self:getCurrentFarmId()
-    local group = TaskGroup.new()
-    group.name = name
-    -- local nextId = g_currentMission.todoList:generateId()
-    -- self.taskGroups[nextId] = {
-    --     id = nextId,
-    --     farmId = currentFarmId,
-    --     name = name,
-    --     tasks = {}
-    -- }
-
-    g_client:getServerConnection():sendEvent(NewTaskGroupEvent.new(group))
-end
-
-function TodoList:copyGroupForCurrentFarm(newName, groupToCopyId)
-    -- local currentFarmId = self:getCurrentFarmId()
-
-    -- Sanity check the group exists
-    local sourceGroup = self.taskGroups[groupToCopyId]
-    if sourceGroup == nil then
-        InfoDialog.show(g_i18n:getText("ui_group_not_found_error"))
-        return
-    end
-
-    local group = TaskGroup.new()
-    group.name = newName
-    group:copyTasksFromGroup(sourceGroup)
-
-    g_client:getServerConnection():sendEvent(NewTaskGroupEvent.new(group))
-
-    -- -- Create a new group table
-    -- local nextId = g_currentMission.todoList:generateId()
-    -- local newGroup = {
-    --     id = nextId,
-    --     farmId = currentFarmId,
-    --     name = newName,
-    --     tasks = {}
-    -- }
-
-    -- -- Copy tasks with new ids and add to the group
-    -- for _, task in pairs(sourceGroup.tasks) do
-    --     local nextTaskId = g_currentMission.todoList:generateId()
-    --     local taskCopy = deepcopy(task)
-    --     taskCopy.id = nextTaskId
-    --     newGroup.tasks[nextTaskId] = taskCopy
-    -- end
-
-    -- TODO SEND EVENT HERE - DO NOT MUTATE
-    -- self.taskGroups[nextId] = newGroup
-
-    -- -- Add any tasks for the current month to activeTasks
-    -- self:addGroupTasksForCurrentMonth(newGroup)
-    -- g_messageCenter:publish(MessageType.TASK_GROUPS_UPDATED)
-end
-
 function TodoList:getCurrentFarmId()
     local currentFarmId = -1
     local farm = g_farmManager:getFarmByUserId(g_currentMission.playerUserId)
@@ -368,27 +362,12 @@ function TodoList:getCurrentFarmId()
 end
 
 function TodoList:generateId()
-    local template = 'xxxxxxxx-xxxx-xxxx-yxxx-xxxxxxxxxxxx'
+    local template = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
     return (string.gsub(template, '[xy]', function(c)
         local v = (c == 'x') and math.random(0, 0xf) or math.random(8, 0xb)
         return string.format('%x', v)
     end))
 end
-
--- function deepcopy(orig)
---     local orig_type = type(orig)
---     local copy
---     if orig_type == 'table' then
---         copy = {}
---         for orig_key, orig_value in next, orig, nil do
---             copy[deepcopy(orig_key)] = deepcopy(orig_value)
---         end
---         setmetatable(copy, deepcopy(getmetatable(orig)))
---     else -- number, string, boolean, etc
---         copy = orig
---     end
---     return copy
--- end
 
 g_messageCenter:subscribe(MessageType.HOUR_CHANGED, TodoList.hourChanged)
 addModEventListener(TodoList)

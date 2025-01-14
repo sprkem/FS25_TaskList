@@ -1,40 +1,39 @@
 ManageTasksFrame = {}
 ManageTasksFrame.availableGroups = {}
 local ManageTasksFrame_mt = Class(ManageTasksFrame, MessageDialog)
-ManageTasksFrame.sortingFunction = function (k1, k2) return k1.name < k2.name end
+ManageTasksFrame.sortingFunction = function(k1, k2) return k1.name < k2.name end
 
 
 function ManageTasksFrame.new(target, custom_mt)
-	local self = MessageDialog.new(target, custom_mt or ManageTasksFrame_mt)
+    local self = MessageDialog.new(target, custom_mt or ManageTasksFrame_mt)
     self.i18n = g_i18n
     self.selectedTaskIndex = -1
     self.currentGroupId = -1
-	return self
+    return self
 end
 
 function ManageTasksFrame:onCreate()
-	ManageTasksFrame:superClass().onCreate(self)
+    ManageTasksFrame:superClass().onCreate(self)
 end
 
 function ManageTasksFrame:onGuiSetupFinished()
-	ManageTasksFrame:superClass().onGuiSetupFinished(self)
+    ManageTasksFrame:superClass().onGuiSetupFinished(self)
     self.tasksTable:setDataSource(self)
-	self.tasksTable:setDelegate(self)
+    self.tasksTable:setDelegate(self)
 end
 
 function ManageTasksFrame:onOpen()
-	ManageTasksFrame:superClass().onOpen(self)
+    ManageTasksFrame:superClass().onOpen(self)
 
-    g_messageCenter:subscribe(MessageType.TASK_GROUPS_UPDATED, function (menu)
+    g_messageCenter:subscribe(MessageType.TASK_GROUPS_UPDATED, function(menu)
         self:updateContent()
     end, self)
     self:updateContent()
-	-- FocusManager:setFocus(self.tasksTable)
-	FocusManager:setFocus(self.groupSelector)
+    FocusManager:setFocus(self.groupSelector)
 end
 
 function ManageTasksFrame:onClose()
-	ManageTasksFrame:superClass().onClose(self)
+    ManageTasksFrame:superClass().onClose(self)
     g_messageCenter:unsubscribeAll(self)
 end
 
@@ -63,7 +62,6 @@ function ManageTasksFrame:updateContent()
             self.currentGroupId = group.id
             break
         end
-
     end
 
     -- Check if any tasks on the current Group. If not hide the table and return
@@ -76,12 +74,12 @@ function ManageTasksFrame:updateContent()
 
     self.tasksContainer:setVisible(true)
     self.noTasksContainer:setVisible(false)
-    
+
     self.tasksTable:reloadData()
 end
 
 function ManageTasksFrame:getNumberOfSections()
-	return 1
+    return 1
 end
 
 function ManageTasksFrame:getNumberOfItemsInSection(list, section)
@@ -96,7 +94,19 @@ end
 
 function ManageTasksFrame:populateCellForItemInSection(list, section, index, cell)
     local task = self.currentGroup.tasks[index]
+    
+    local monthString = TaskListUtils.formatPeriodFullMonthName(task.period)
+
     cell:getAttribute("detail"):setText(task.detail)
+    cell:getAttribute("priority"):setText(task.priority)
+
+    if not task.shouldRecur then
+        cell:getAttribute("due"):setText(monthString)
+    elseif task.shouldRecurMode == Task.SHOULD_REPEAT_MODE.DAILY then
+        cell:getAttribute("due"):setText(g_i18n:getText("ui_task_due_daily"))
+    elseif task.shouldRecurMode == Task.SHOULD_REPEAT_MODE.MONTHLY then
+        cell:getAttribute("due"):setText(string.format(g_i18n:getText("ui_task_due_monthly"), monthString))
+    end
 end
 
 function ManageTasksFrame:onListSelectionChanged(list, section, index)
@@ -104,12 +114,108 @@ function ManageTasksFrame:onListSelectionChanged(list, section, index)
 end
 
 function ManageTasksFrame:onClickBack(sender)
-	self:close()
+    self:close()
 end
 
+-- New Task Step
 function ManageTasksFrame:onClickAdd(sender)
-    print("Got Add button call")
+    local newTask = Task.new()
+    TextInputDialog.show(
+        function(self, value, clickOk)
+            if clickOk then
+                local detail = string.gsub(value, '^%s*(.-)%s*$', '%1')
+                if detail == "" then
+                    InfoDialog.show(g_i18n:getText("ui_no_detail_specified_error"))
+                    return
+                end
 
+                newTask.detail = detail
+                self:onNewTaskRequestPriority(newTask)
+            end
+        end, self,
+        "",
+        g_i18n:getText("ui_set_task_detail"),
+        "", Task.MAX_DETAIL_LENGTH, g_i18n:getText("ui_btn_ok"))
+end
+
+-- New Task Step
+function ManageTasksFrame:onNewTaskRequestPriority(newTask)
+    local allowedValues = { "1", "2", "3", "4", "5" }
+    OptionDialog.show(
+        function(index)
+            if index > 0 then
+                local value = allowedValues[index]
+                newTask.priority = tonumber(value)
+                self:onNewTaskRequestShouldRecur(newTask)
+            end
+        end,
+        g_i18n:getText("ui_set_task_priority"), "", allowedValues)
+end
+
+-- New Task Step
+function ManageTasksFrame:onNewTaskRequestShouldRecur(newTask)
+    YesNoDialog.show(
+        function(self, clickYes)
+            newTask.shouldRecur = clickYes
+            if newTask.shouldRecur == true then
+                self:onNewTaskRequestRecurMode(newTask)
+            else
+                self:onNewTaskRequestPeriod(newTask)
+            end
+        end, self, g_i18n:getText("ui_set_task_should_recur"))
+end
+
+-- New Task Step
+function ManageTasksFrame:onNewTaskRequestRecurMode(newTask)
+    local allowedValues = {
+        g_i18n:getText("ui_set_task_recur_mode_monthly"),
+        g_i18n:getText("ui_set_task_recur_mode_daily")
+    }
+    OptionDialog.show(
+        function(index)
+            if index > 0 then
+                newTask.shouldRecurMode = index
+
+                if newTask.shouldRecurMode == Task.SHOULD_REPEAT_MODE.MONTHLY then
+                    self:onNewTaskRequestPeriod(newTask)
+                elseif newTask.shouldRecurMode == Task.SHOULD_REPEAT_MODE.DAILY then
+                    self:onNewTaskJourneyComplete(newTask)
+                end
+            end
+        end,
+        g_i18n:getText("ui_set_task_recur_mode"), "", allowedValues)
+end
+
+-- New Task Step
+function ManageTasksFrame:onNewTaskRequestPeriod(newTask)
+    local allowedValues = {
+        g_i18n:getText("ui_month1"),
+        g_i18n:getText("ui_month2"),
+        g_i18n:getText("ui_month3"),
+        g_i18n:getText("ui_month4"),
+        g_i18n:getText("ui_month5"),
+        g_i18n:getText("ui_month6"),
+        g_i18n:getText("ui_month7"),
+        g_i18n:getText("ui_month8"),
+        g_i18n:getText("ui_month9"),
+        g_i18n:getText("ui_month10"),
+        g_i18n:getText("ui_month11"),
+        g_i18n:getText("ui_month12")
+    }
+    OptionDialog.show(
+        function(index)
+            if index > 0 then
+                newTask.period = TaskListUtils.convertMonthNumberToPeriod(index)
+                print("new taks period: " .. newTask.period)
+                self:onNewTaskJourneyComplete(newTask)
+            end
+        end,
+        g_i18n:getText("ui_set_task_period"), "", allowedValues)
+end
+
+-- New Task Final Step
+function ManageTasksFrame:onNewTaskJourneyComplete(newTask)    
+    g_currentMission.todoList:addTask(self.currentGroup.id, newTask)
 end
 
 function ManageTasksFrame:onClickCopy(sender)
@@ -121,24 +227,23 @@ function ManageTasksFrame:onClickCopy(sender)
 end
 
 function ManageTasksFrame:onClickDelete(sender)
-    -- if self.selectedGroupIndex == -1 then
-    --     InfoDialog.show(g_i18n:getText("ui_no_group_selected_error"))
-    --     return
-    -- end
-    -- YesNoDialog.show(
-    --     ManageGroupsFrame.onRespondToDeletePrompt, self,
-    --     g_i18n:getText("ui_confirm_deletion"),
-    --     nil, nil, nil, nil, nil, nil)
+    if self.selectedTaskIndex == -1 then
+        InfoDialog.show(g_i18n:getText("ui_no_task_selected"))
+        return
+    end
+    YesNoDialog.show(
+        ManageTasksFrame.onRespondToDeletePrompt, self,
+        g_i18n:getText("ui_confirm_deletion"),
+        nil, nil, nil, nil, nil, nil)
+end
+
+function ManageTasksFrame:onRespondToDeletePrompt(clickOk)
+    if clickOk then
+        g_currentMission.todoList:deleteTask(self.currentGroup.id, self.currentGroup.tasks[self.selectedTaskIndex])
+    end
 end
 
 function ManageTasksFrame:OnGroupSelectChange(index)
     self.currentGroupId = self.availableGroups[index].id
     self:updateContent()
 end
-
-function ManageTasksFrame:onRespondToDeletePrompt(clickOk)
-    if clickOk then
-        -- g_currentMission.todoList:deleteGroup(self.currentGroups[self.selectedGroupIndex].id)
-    end
-end
-

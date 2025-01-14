@@ -7,6 +7,7 @@
         <text name="ui_header_group" text="Group"/>
         <text name="ui_header_detail" text="Task"/>
         <text name="ui_header_priority" text="Priority"/>
+        <text name="ui_header_due" text="Due"/>
         <text name="ui_header_manage_groups" text="Manage Groups"/>
         <text name="ui_header_manage_tasks" text="Manage Tasks"/>
         <text name="ui_header_current_group" text="Tasks for group: %s"/>
@@ -22,16 +23,26 @@
 		<text name="ui_btn_add_task" text="Add Task"/>
 
 		<text name="ui_set_group_name" text="Choose A Group Name"/>
+		<text name="ui_set_task_detail" text="Describe the task"/>
+		<text name="ui_set_task_priority" text="Set the task priority"/>
+		<text name="ui_set_task_should_recur" text="Is the task recurring?"/>
+		<text name="ui_set_task_period" text="When is the task due?"/>
+		<text name="ui_set_task_recur_mode" text="When should the task recur?"/>
+		<text name="ui_set_task_recur_mode_monthly" text="On a specific month"/>
+		<text name="ui_set_task_recur_mode_daily" text="Daily"/>
+		<text name="ui_task_due_daily" text="Daily"/>
+		<text name="ui_task_due_monthly" text="Every %s"/>
 		<text name="ui_group_exists_error" text="A group with this name already exists"/>
 		<text name="ui_no_name_specified_error" text="No name for the group was specified"/>
+		<text name="ui_no_detail_specified_error" text="No task detail was specified"/>
 		<text name="ui_no_group_selected_error" text="No group selected to copy"/>
 		<text name="ui_no_task_selected" text="No task selected"/>		
 		<text name="ui_no_group_selected" text="No group selected"/>		
 		<text name="ui_btn_select_group" text="Change group"/>		
 		<text name="ui_confirm_deletion" text="Are you sure you want to delete?"/>
-		<text name="ui_group_not_found_error" text="Could not find the group. Check the group was not deleted."/>
-		<text name="ui_task_not_found_error" text="Could not find the task. Check the task was not deleted."/>
-		<text name="ui_no_groups_exist" text="You don't have any groups yet."/>
-		<text name="ui_no_active_tasks" text="You don't have any tasks."/>
+		<text name="ui_group_not_found_error" text="Could not find the group. Check the group was not deleted"/>
+		<text name="ui_task_not_found_error" text="Could not find the task. Check the task was not deleted"/>
+		<text name="ui_no_groups_exist" text="You don't have any groups yet"/>
+		<text name="ui_no_active_tasks" text="You don't have any tasks"/>
 	</texts>
 </l10n>

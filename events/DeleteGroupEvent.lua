@@ -18,7 +18,7 @@ function DeleteGroupEvent:writeStream(streamId, connection)
 end
 
 function DeleteGroupEvent:readStream(streamId, connection)
-    self.id = streamWriteInt32(streamId, self.priority)
+    self.id = streamReadSring(streamId)
 
     self:run(connection)
 end
@@ -30,7 +30,7 @@ function DeleteGroupEvent:run(connection)
 
     local group = g_currentMission.todoList.taskGroups[self.id]
     if group == nil then
-        print("Group not present, skipping.")
+        print("DeleteGroupEvent: Group not present, skipping.")
         return
     end
 

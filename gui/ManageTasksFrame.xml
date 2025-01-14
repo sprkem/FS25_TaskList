@@ -16,16 +16,20 @@
 
             <GuiElement id="tasksContainer">
                 <GuiElement profile="fs25_statisticsHeaderBox">
-                    <Button profile="ingameMenuTodoListHeader" position="60px -125px" size="155px 32px" text="$l10n_ui_header_detail" handleFocus="false" />
+                    <Button profile="ingameMenuTodoListHeader" position="60px -145px" text="$l10n_ui_header_detail" handleFocus="false" />
+                    <Button profile="ingameMenuTodoListHeader" position="540px -145px" text="$l10n_ui_header_due" handleFocus="false" />
+                    <Button profile="ingameMenuTodoListHeader" position="690px -145px" text="$l10n_ui_header_priority" handleFocus="false" />
                 </GuiElement>
 
-                <SmoothList id="tasksTable" profile="ingameMenuTodoListTable" position="40px -160px" size="650px 550px">
+                <SmoothList id="tasksTable" profile="ingameMenuTodoListTable" position="40px -180px" size="750px 520px">
                     <ListItem profile="ingameMenuTodoListListItem">
-                        <Text profile="ingameMenuTodoListRowCellLeft" position="20px 0px" size="155px 32px" name="detail"/>
+                        <Text profile="ingameMenuTodoListRowCellLeft" position="20px 0px" size="480px 32px" name="detail"/>
+                        <Text profile="ingameMenuTodoListRowCellLeft" position="500px 0px" size="150px 32px" name="due"/>
+                        <Text profile="ingameMenuTodoListRowCellRight" position="650px 0px" size="60px 32px" name="priority"/>
                     </ListItem>
                 </SmoothList>
 
-                <ThreePartBitmap profile="todoListGroupsSliderBox" position="-20px -140px" size="6px 550px">
+                <ThreePartBitmap profile="todoListGroupsSliderBox" position="-20px -140px" size="6px 520px">
                     <Slider profile="fs25_listSlider" dataElementId="tasksTable" />
                 </ThreePartBitmap>
             </GuiElement>

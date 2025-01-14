@@ -30,5 +30,5 @@ function NewTaskGroupEvent:run(connection)
     end
     g_currentMission.todoList.taskGroups[self.taskGroup.id] = self.taskGroup
     g_messageCenter:publish(MessageType.TASK_GROUPS_UPDATED)
-    g_currentMission.todoList:addGroupTasksForCurrentMonth(self.taskGroup)
+    g_currentMission.todoList:addGroupTasksForCurrentPeriod(self.taskGroup)
 end
