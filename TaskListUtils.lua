@@ -52,27 +52,8 @@ function TaskListUtils.formatPeriodFullMonthName(period)
     end
 end
 
+-- Courtesy of PowerTools
 function TaskListUtils.showOptionDialog(parameters)
-    -- local optionDialog = OptionDialog.new()
-
-    -- g_gui:loadGui("dataS/gui/dialogs/OptionDialog.xml", "PTMenu", optionDialog)
-
-    -- if parameters.callback and (type(parameters.callback)) == "function" then
-    --     optionDialog:setCallback(parameters.callback, parameters.target, parameters.args)
-    -- end
-
-    -- if parameters.okButtonText ~= nil or parameters.cancelButtonText ~= nil then
-    --     optionDialog:setButtonTexts(parameters.okButtonText, parameters.cancelButtonText)
-    -- end
-
-    -- optionDialog:setTitle(parameters.title or "")
-    -- optionDialog:setOptions( parameters.options)
-
-    -- local defaultOption = parameters.defaultOption or 1
-
-    -- optionDialog.optionElement:setState( defaultOption)
-
-    -- optionDialog:show()
     OptionDialog.createFromExistingGui({
         options = parameters.options,
         optionText = parameters.text,

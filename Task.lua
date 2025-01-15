@@ -64,5 +64,5 @@ function Task:loadFromXMLFile(xmlFile, key)
     self.priority = getXMLInt(xmlFile, key .. "#priority")
     self.period = getXMLInt(xmlFile, key .. "#period")
     self.shouldRecurMode = getXMLInt(xmlFile, key .. "#shouldRecurMode")
-    self.shouldRecur = getXMLInt(xmlFile, key .. "#shouldRecur")
+    self.shouldRecur = getXMLBool(xmlFile, key .. "#shouldRecur")
 end

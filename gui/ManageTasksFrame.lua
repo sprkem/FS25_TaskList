@@ -145,15 +145,22 @@ end
 -- New Task Step
 function ManageTasksFrame:onNewTaskRequestPriority(newTask)
     local allowedValues = { "1", "2", "3", "4", "5" }
-    OptionDialog.show(
-        function(index)
+    TaskListUtils.showOptionDialog({
+        text = g_i18n:getText("ui_set_task_priority"),
+        title = "",
+        defaultText = "",
+        options = allowedValues,
+        defaultOption = 1,
+        target = self,
+        args = {},
+        callback = function(_, index)
             if index > 0 then
                 local value = allowedValues[index]
                 newTask.priority = tonumber(value)
                 self:onNewTaskRequestShouldRecur(newTask)
             end
-        end,
-        g_i18n:getText("ui_set_task_priority"), "", allowedValues)
+        end
+    })
 end
 
 -- New Task Step
@@ -194,22 +201,8 @@ function ManageTasksFrame:onNewTaskRequestRecurMode(newTask)
                     self:onNewTaskJourneyComplete(newTask)
                 end
             end
-        end,
+        end
     })
-
-    -- OptionDialog.show(
-    --     function(index)
-    --         if index > 0 then
-    --             newTask.shouldRecurMode = index
-
-    --             if newTask.shouldRecurMode == Task.SHOULD_REPEAT_MODE.MONTHLY then
-    --                 self:onNewTaskRequestPeriod(newTask)
-    --             elseif newTask.shouldRecurMode == Task.SHOULD_REPEAT_MODE.DAILY then
-    --                 self:onNewTaskJourneyComplete(newTask)
-    --             end
-    --         end
-    --     end,
-    --     g_i18n:getText("ui_set_task_recur_mode"), "", allowedValues)
 end
 
 -- New Task Step
@@ -228,15 +221,22 @@ function ManageTasksFrame:onNewTaskRequestPeriod(newTask)
         g_i18n:getText("ui_month11"),
         g_i18n:getText("ui_month12")
     }
-    OptionDialog.show(
-        function(index)
+    TaskListUtils.showOptionDialog({
+        text = g_i18n:getText("ui_set_task_period"),
+        title = "",
+        defaultText = "",
+        options = allowedValues,
+        defaultOption = 1,
+        target = self,
+        args = {},
+        callback = function(_, index)
             if index > 0 then
                 newTask.period = TaskListUtils.convertMonthNumberToPeriod(index)
                 print("new taks period: " .. newTask.period)
                 self:onNewTaskJourneyComplete(newTask)
             end
-        end,
-        g_i18n:getText("ui_set_task_period"), "", allowedValues)
+        end
+    })
 end
 
 -- New Task Final Step
