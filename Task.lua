@@ -2,16 +2,16 @@ Task = {}
 local Group_mt = Class(Task)
 
 Task.SHOULD_REPEAT_MODE = {
-	MONTHLY = 1,
-	DAILY = 2
+    MONTHLY = 1,
+    DAILY = 2
 }
 
 Task.MAX_DETAIL_LENGTH = 40
 
 function Task.new(customMt)
-	local self = {}
+    local self = {}
 
-	setmetatable(self, customMt or Group_mt)
+    setmetatable(self, customMt or Group_mt)
 
     self.id = g_currentMission.todoList:generateId()
     self.detail = ""
@@ -47,4 +47,22 @@ function Task:readStream(streamId, connection)
     self.period = streamReadInt32(streamId)
     self.shouldRecur = streamReadBool(streamId)
     self.shouldRecurMode = streamReadInt32(streamId)
+end
+
+function Task:saveToXmlFile(xmlFile, key)
+    setXMLString(xmlFile, key .. "#id", self.id)
+    setXMLString(xmlFile, key .. "#detail", self.detail)
+    setXMLInt(xmlFile, key .. "#priority", self.priority)
+    setXMLInt(xmlFile, key .. "#period", self.period)
+    setXMLInt(xmlFile, key .. "#shouldRecurMode", self.shouldRecurMode)
+    setXMLBool(xmlFile, key .. "#shouldRecur", self.shouldRecur)
+end
+
+function Task:loadFromXMLFile(xmlFile, key)
+    self.id = getXMLString(xmlFile, key .. "#id")
+    self.detail = getXMLString(xmlFile, key .. "#detail")
+    self.priority = getXMLInt(xmlFile, key .. "#priority")
+    self.period = getXMLInt(xmlFile, key .. "#period")
+    self.shouldRecurMode = getXMLInt(xmlFile, key .. "#shouldRecurMode")
+    self.shouldRecur = getXMLInt(xmlFile, key .. "#shouldRecur")
 end

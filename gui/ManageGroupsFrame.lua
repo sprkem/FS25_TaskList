@@ -103,10 +103,7 @@ function ManageGroupsFrame:onClickDelete(sender)
         InfoDialog.show(g_i18n:getText("ui_no_group_selected_error"))
         return
     end
-    -- YesNoDialog.show(
-    --     ManageGroupsFrame.onRespondToDeletePrompt, self,
-    --     g_i18n:getText("ui_confirm_deletion"),
-    --     nil, nil, nil, nil, nil, nil)
+
     YesNoDialog.show(
         function(self, clickOk)
             if clickOk then
@@ -115,13 +112,6 @@ function ManageGroupsFrame:onClickDelete(sender)
         end, self,
         g_i18n:getText("ui_confirm_deletion"))
 end
-
--- function ManageGroupsFrame:onRespondToDeletePrompt(clickOk)
---     print("onRespondToDeletePrompt")
---     if clickOk then
---         g_currentMission.todoList:deleteGroup(self.currentGroups[self.selectedGroupIndex].id)
---     end
--- end
 
 function ManageGroupsFrame:onNewGroupNameSet(name, clickOk)
     if clickOk then

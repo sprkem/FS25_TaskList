@@ -23,6 +23,8 @@
 		<text name="ui_btn_add_group" text="Add Group"/>
 		<text name="ui_btn_add_task" text="Add Task"/>
 
+		<text name="ui_overdue_yes" text="Yes"/>
+		<text name="ui_overdue_no" text="No"/>
 		<text name="ui_set_group_name" text="Choose A Group Name"/>
 		<text name="ui_set_task_detail" text="Describe the task"/>
 		<text name="ui_set_task_priority" text="Set the task priority"/>
@@ -44,6 +46,13 @@
 		<text name="ui_group_not_found_error" text="Could not find the group. Check the group was not deleted"/>
 		<text name="ui_task_not_found_error" text="Could not find the task. Check the task was not deleted"/>
 		<text name="ui_no_groups_exist" text="You don't have any groups yet"/>
+		<text name="ui_no_tasks_exist_for_group" text="You don't have any tasks yet"/>
 		<text name="ui_no_active_tasks" text="You don't have any tasks"/>
+		<text name="ui_intro_text_header" text="Welcome to Task List"/>
+		<text name="ui_intro_text_1" text="To get started, use Manage Groups to create a Group. A group is a logical container for related tasks, for example Field 10, or General Farm Tasks."/>
+		<text name="ui_intro_text_2" text="Once you have made a group, use Manage Tasks to define things you need to do and when."/>
+		<text name="ui_intro_text_3" text="A task is just plain text, such as Feed the Cows, or Harvest. "/>
+		<text name="ui_intro_text_4" text="Tasks can recur on a given month, daily, or be one time jobs due at some point.  "/>
+		<text name="ui_intro_text_5" text="When a task is due it will show here. Use Complete Task when it is done. If it is a recurring task, it will show again when due."/>
 	</texts>
 </l10n>

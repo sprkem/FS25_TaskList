@@ -24,6 +24,7 @@ end
 
 function ManageTasksFrame:onOpen()
     ManageTasksFrame:superClass().onOpen(self)
+    self.currentGroupId = -1
 
     g_messageCenter:subscribe(MessageType.TASK_GROUPS_UPDATED, function(menu)
         self:updateContent()
@@ -50,16 +51,20 @@ function ManageTasksFrame:updateContent()
     -- Check there are any groups
     if next(self.availableGroups) == nil then
         self.tasksContainer:setVisible(false)
-        self.noTasksContainer:setVisible(true)
+        self.noTasksContainer:setVisible(false)
+        self.noGroupsContainer:setVisible(true)
         return
     end
+
+    self.noGroupsContainer:setVisible(false)
 
     -- If there are groups but the currentGroupId is not there, find one to show
     self.currentGroup = g_currentMission.todoList:getGroupById(self.currentGroupId, false)
     if self.currentGroup == nil then
-        for _, group in pairs(self.availableGroups) do
+        for i, group in pairs(self.availableGroups) do
             self.currentGroup = g_currentMission.todoList:getGroupById(group.id, false)
             self.currentGroupId = group.id
+            self.groupSelector:setState(i, false)
             break
         end
     end
@@ -170,8 +175,16 @@ function ManageTasksFrame:onNewTaskRequestRecurMode(newTask)
         g_i18n:getText("ui_set_task_recur_mode_monthly"),
         g_i18n:getText("ui_set_task_recur_mode_daily")
     }
-    OptionDialog.show(
-        function(index)
+
+    TaskListUtils.showOptionDialog({
+        text = g_i18n:getText("ui_set_task_recur_mode"),
+        title = "",
+        defaultText = "",
+        options = allowedValues,
+        defaultOption = 1,
+        target = self,
+        args = {},
+        callback = function(_, index)
             if index > 0 then
                 newTask.shouldRecurMode = index
 
@@ -182,7 +195,21 @@ function ManageTasksFrame:onNewTaskRequestRecurMode(newTask)
                 end
             end
         end,
-        g_i18n:getText("ui_set_task_recur_mode"), "", allowedValues)
+    })
+
+    -- OptionDialog.show(
+    --     function(index)
+    --         if index > 0 then
+    --             newTask.shouldRecurMode = index
+
+    --             if newTask.shouldRecurMode == Task.SHOULD_REPEAT_MODE.MONTHLY then
+    --                 self:onNewTaskRequestPeriod(newTask)
+    --             elseif newTask.shouldRecurMode == Task.SHOULD_REPEAT_MODE.DAILY then
+    --                 self:onNewTaskJourneyComplete(newTask)
+    --             end
+    --         end
+    --     end,
+    --     g_i18n:getText("ui_set_task_recur_mode"), "", allowedValues)
 end
 
 -- New Task Step
@@ -229,13 +256,12 @@ function ManageTasksFrame:onClickDelete(sender)
     end
     YesNoDialog.show(
         ManageTasksFrame.onRespondToDeletePrompt, self,
-        g_i18n:getText("ui_confirm_deletion"),
-        nil, nil, nil, nil, nil, nil)
+        g_i18n:getText("ui_confirm_deletion"))
 end
 
 function ManageTasksFrame:onRespondToDeletePrompt(clickOk)
     if clickOk then
-        g_currentMission.todoList:deleteTask(self.currentGroup.id, self.currentGroup.tasks[self.selectedTaskIndex])
+        g_currentMission.todoList:deleteTask(self.currentGroup.id, self.currentGroup.tasks[self.selectedTaskIndex].id)
     end
 end
 

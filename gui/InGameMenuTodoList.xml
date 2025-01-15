@@ -8,6 +8,15 @@
 			<Text profile="fs25_menuHeaderTitle" id="categoryHeaderText" text="$l10n_ui_ingameMenuTodoList"/>
 		</GuiElement>
 
+        <GuiElement id="noGroupsContainer" profile="fs25_statisticsHeaderBox">
+            <Text profile="dialogTitle" text="$l10n_ui_intro_text_header" position="0px -40px" />
+            <Text profile="taskListIntroText" text="$l10n_ui_intro_text_1" position="0px -140px" />
+            <Text profile="taskListIntroText" text="$l10n_ui_intro_text_2" position="0px -180px" />
+            <Text profile="taskListIntroText" text="$l10n_ui_intro_text_3" position="0px -220px" />
+            <Text profile="taskListIntroText" text="$l10n_ui_intro_text_4" position="0px -260px" />
+            <Text profile="taskListIntroText" text="$l10n_ui_intro_text_5" position="0px -300px" />
+        </GuiElement>
+        
         <GuiElement id="tableContainer">
             <GuiElement profile="fs25_statisticsHeaderBox">
                 <Button profile="ingameMenuTodoListHeader" position="40px 0px" text="$l10n_ui_header_group" handleFocus="false" />
@@ -33,8 +42,8 @@
         </GuiElement>
 
         <GuiElement id="noDataContainer">
-                <Text profile="dialogTitle" text="$l10n_ui_no_active_tasks" position="0px -40px" />
+            <Text profile="dialogTitle" text="$l10n_ui_no_active_tasks" position="0px -40px" />
         </GuiElement>
-
+        
     </GuiElement>
 </GUI>

@@ -1,4 +1,5 @@
 TaskListUtils = {}
+local g_currentModName = g_currentModName
 
 function TaskListUtils.deepcopy(orig)
     local orig_type = type(orig)
@@ -17,7 +18,7 @@ end
 
 function TaskListUtils.convertMonthNumberToPeriod(month)
     month = month - 2
-    if month < 0 then
+    if month <= 0 then
         month = month + 12
     end
     return month
@@ -49,4 +50,48 @@ function TaskListUtils.formatPeriodFullMonthName(period)
     elseif period == 12 then
         return g_i18n:getText("ui_month2")
     end
+end
+
+function TaskListUtils.showOptionDialog(parameters)
+    -- local optionDialog = OptionDialog.new()
+
+    -- g_gui:loadGui("dataS/gui/dialogs/OptionDialog.xml", "PTMenu", optionDialog)
+
+    -- if parameters.callback and (type(parameters.callback)) == "function" then
+    --     optionDialog:setCallback(parameters.callback, parameters.target, parameters.args)
+    -- end
+
+    -- if parameters.okButtonText ~= nil or parameters.cancelButtonText ~= nil then
+    --     optionDialog:setButtonTexts(parameters.okButtonText, parameters.cancelButtonText)
+    -- end
+
+    -- optionDialog:setTitle(parameters.title or "")
+    -- optionDialog:setOptions( parameters.options)
+
+    -- local defaultOption = parameters.defaultOption or 1
+
+    -- optionDialog.optionElement:setState( defaultOption)
+
+    -- optionDialog:show()
+    OptionDialog.createFromExistingGui({
+        options = parameters.options,
+        optionText = parameters.text,
+        optionTitle = parameters.title,
+        callbackFunc = parameters.callback,
+    }, parameters.name or g_currentModName .. "OptionDialog")
+
+    local optionDialog = OptionDialog.INSTANCE
+
+    if parameters.okButtonText ~= nil or parameters.cancelButtonText ~= nil then
+        optionDialog:setButtonTexts(parameters.okButtonText, parameters.cancelButtonText)
+    end
+
+    local defaultOption = parameters.defaultOption or 1
+
+    optionDialog.optionElement:setState( defaultOption)
+
+    if parameters.callback and (type(parameters.callback)) == "function" then
+        optionDialog:setCallback(parameters.callback, parameters.target, parameters.args)
+    end
+
 end

@@ -53,8 +53,6 @@ function Testing.dump(o)
 -- print(Testing.dump(abc))
 -- print(Testing.dump(group))
 
-a = 1
-b = 2
+local texts = {"HELLO"}
 
-local different = a ~= b
-print(different)
+-- local state = math.min(self.state, #self.texts)

@@ -10,6 +10,7 @@
             <Animation profile="fs25_dialogLoading" id="iconLoadingElement" />
             <Text profile="dialogTitle" text="$l10n_ui_header_manage_tasks" position="0px -30px" />
 
+            <!-- <MultiTextOption profile="fs25_subCategorySelectorTabbed" id="groupSelector" position="0px -80px" size="450px 50px" onClick="OnGroupSelectChange" disableButtonsOnSingleText="false" > -->
             <MultiTextOption profile="fs25_subCategorySelectorTabbed" id="groupSelector" position="0px -80px" size="450px 50px" onClick="OnGroupSelectChange" >
                 <Text profile="fs25_multiTextOptionText" name="text" />
             </MultiTextOption>
@@ -34,15 +35,19 @@
                 </ThreePartBitmap>
             </GuiElement>
 
+            <GuiElement id="noGroupsContainer">
+                <Text profile="dialogTitle" text="$l10n_ui_no_groups_exist" position="0px -150px" />
+            </GuiElement>
+
             <GuiElement id="noTasksContainer">
-                <Text profile="dialogTitle" text="$l10n_ui_no_groups_exist" position="0px -75px" />
+                <Text profile="dialogTitle" text="$l10n_ui_no_tasks_exist_for_group" position="0px -175px" />
             </GuiElement>
 
         </GuiElement>
         <BoxLayout profile="fs25_dialogButtonBox">
             <Button profile="buttonCancel" text="$l10n_ui_btn_delete" onClick="onClickDelete" />
             <!-- <Button profile="buttonActivate" text="$l10n_ui_btn_copy" onClick="onClickCopy" /> -->
-            <Button profile="buttonOK" text="$l10n_ui_btn_add_task" onClick="onClickAdd" />            
+            <Button profile="buttonOK" text="$l10n_ui_btn_add_task" onClick="onClickAdd" />
             <Button profile="buttonBack" text="$l10n_ui_btn_close" onClick="onClickBack" />
         </BoxLayout>
     </GuiElement>

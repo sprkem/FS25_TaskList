@@ -50,3 +50,34 @@ function TaskGroup:readStream(streamId, connection)
         self.tasks[task.id] = task
     end
 end
+
+function TaskGroup:saveToXmlFile(xmlFile, key)
+    setXMLString(xmlFile, key .. "#id", self.id)
+    setXMLString(xmlFile, key .. "#name", self.name)
+    setXMLInt(xmlFile, key .. "#farmId", self.farmId)
+    
+    local i = 0
+    for _, task in pairs(self.tasks) do
+        local taskKey = string.format("%s.tasks.task(%d)", key, i)
+        task:saveToXmlFile(xmlFile, taskKey)
+        i = i + 1
+    end
+end
+
+function TaskGroup:loadFromXMLFile(xmlFile, key)
+    self.id = getXMLString(xmlFile, key .. "#id")
+    self.name = getXMLString(xmlFile, key .. "#name")
+    self.farmId = getXMLInt(xmlFile, key .. "#farmId")
+
+    local i = 0
+    while true do
+        local taskKey = string.format("%s.tasks.task(%d)", key, i)
+        if not hasXMLProperty(xmlFile, taskKey) then
+            break
+        end
+        local task = Task.new()
+        task:loadFromXMLFile(xmlFile, taskKey)
+        self.tasks[task.id] = task
+        i = i + 1
+    end
+end

@@ -1,6 +1,5 @@
 InGameMenuTodoList = {}
--- InGameMenuTodoList.currentTasks = {}
-InGameMenuTodoList.activeTasks = {}
+InGameMenuTodoList.currentTasks = {}
 InGameMenuTodoList._mt = Class(InGameMenuTodoList, TabbedMenuFrameElement)
 InGameMenuTodoList.sortingFunction = function(k1, k2) return k1.priority < k2.priority end
 
@@ -75,6 +74,9 @@ function InGameMenuTodoList:onFrameOpen()
     g_messageCenter:subscribe(MessageType.ACTIVE_TASKS_UPDATED, function(menu)
         self:updateContent()
     end, self)
+    g_messageCenter:subscribe(MessageType.TASK_GROUPS_UPDATED, function(menu)
+        self:updateContent()
+    end, self)
     self:updateContent()
     FocusManager:setFocus(self.currentTasksTable)
 end
@@ -96,12 +98,23 @@ function InGameMenuTodoList:updateContent()
     --     nextMonth = 1
     -- end
     -- local nextMonthTasks = g_currentMission.todoList:getTasksForPeriodForCurrentFarm(nextMonth)
+    if next(g_currentMission.todoList.taskGroups) == nil then
+        self.tableContainer:setVisible(false)
+        self.noDataContainer:setVisible(false)
+        self.noGroupsContainer:setVisible(true)
+        self.btnManageTasks.disabled = true
+        self:setMenuButtonInfoDirty()
+        return
+    end
+    self.btnManageTasks.disabled = false
+    self.noGroupsContainer:setVisible(false)
+    self:setMenuButtonInfoDirty()
 
-    self.activeTasks = g_currentMission.todoList:getActiveTasksForCurrentFarm()
-    table.sort(self.activeTasks, InGameMenuTodoList.sortingFunction)
-    -- DebugUtil.printTableRecursively(self.activeTasks,".",0,5)
+    self.currentTasks = g_currentMission.todoList:getActiveTasksForCurrentFarm()
+    table.sort(self.currentTasks, InGameMenuTodoList.sortingFunction)
+    -- DebugUtil.printTableRecursively(self.currentTasks,".",0,5)
 
-    if next(self.activeTasks) == nil then
+    if next(self.currentTasks) == nil then
         self.tableContainer:setVisible(false)
         self.noDataContainer:setVisible(true)
         return
@@ -122,7 +135,7 @@ end
 function InGameMenuTodoList:getNumberOfItemsInSection(list, section)
     print("InGameMenuTodoList:getNumberOfItemsInSection")
     local count = 0
-    for _ in pairs(self.activeTasks) do count = count + 1 end
+    for _ in pairs(self.currentTasks) do count = count + 1 end
     return count
 end
 
@@ -133,16 +146,16 @@ end
 
 function InGameMenuTodoList:populateCellForItemInSection(list, section, index, cell)
     print("InGameMenuTodoList:populateCellForItemInSection" .. section)
-    local task = self.activeTasks[index]
+    local task = self.currentTasks[index]
     cell:getAttribute("group"):setText(task.groupName)
     cell:getAttribute("detail"):setText(task.detail)
     cell:getAttribute("priority"):setText(task.priority)
 
     local overdue = task.period ~= math.floor(g_currentMission.environment.currentPeriod)
     if overdue then
-        cell:getAttribute("overdue"):setText("YES")
+        cell:getAttribute("overdue"):setText(g_i18n:getText("ui_overdue_yes"))
     else
-        cell:getAttribute("overdue"):setText("NO")
+        cell:getAttribute("overdue"):setText(g_i18n:getText("ui_overdue_no"))
     end
 
     local monthString = TaskListUtils.formatPeriodFullMonthName(task.period)
@@ -164,7 +177,7 @@ function InGameMenuTodoList:completeTask()
         InfoDialog.show(g_i18n:getText("ui_no_task_selected"))
         return
     end
-    g_currentMission.todoList:completeTask(self.activeTasks[self.selectedRow].id)
+    g_currentMission.todoList:completeTask(self.currentTasks[self.selectedRow].id)
 end
 
 -- Functions opening dialogs
