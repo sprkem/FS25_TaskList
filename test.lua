@@ -40,15 +40,21 @@ function Testing.dump(o)
 --    print(j)
 -- en
 
-local abc = {}
+-- local abc = {}
 
-abc[123] = {
-   tasks = {}
-}
+-- abc[123] = {
+--    tasks = {}
+-- }
 
-local task = {1}
-local group = abc[123]
-group.tasks[1] = task
+-- local task = {1}
+-- local group = abc[123]
+-- group.tasks[1] = task
 
-print(Testing.dump(abc))
-print(Testing.dump(group))
+-- print(Testing.dump(abc))
+-- print(Testing.dump(group))
+
+a = 1
+b = 2
+
+local different = a ~= b
+print(different)

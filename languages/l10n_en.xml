@@ -6,6 +6,7 @@
         <text name="ui_header_icon" text=""/>
         <text name="ui_header_group" text="Group"/>
         <text name="ui_header_detail" text="Task"/>
+        <text name="ui_header_overdue" text="Overdue"/>
         <text name="ui_header_priority" text="Priority"/>
         <text name="ui_header_due" text="Due"/>
         <text name="ui_header_manage_groups" text="Manage Groups"/>

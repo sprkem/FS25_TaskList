@@ -94,12 +94,11 @@ end
 
 function ManageTasksFrame:populateCellForItemInSection(list, section, index, cell)
     local task = self.currentGroup.tasks[index]
-    
-    local monthString = TaskListUtils.formatPeriodFullMonthName(task.period)
 
     cell:getAttribute("detail"):setText(task.detail)
     cell:getAttribute("priority"):setText(task.priority)
 
+    local monthString = TaskListUtils.formatPeriodFullMonthName(task.period)
     if not task.shouldRecur then
         cell:getAttribute("due"):setText(monthString)
     elseif task.shouldRecurMode == Task.SHOULD_REPEAT_MODE.DAILY then
@@ -214,17 +213,14 @@ function ManageTasksFrame:onNewTaskRequestPeriod(newTask)
 end
 
 -- New Task Final Step
-function ManageTasksFrame:onNewTaskJourneyComplete(newTask)    
+function ManageTasksFrame:onNewTaskJourneyComplete(newTask)
     g_currentMission.todoList:addTask(self.currentGroup.id, newTask)
 end
 
-function ManageTasksFrame:onClickCopy(sender)
-    print("Got copy button call")
-    -- if self.selectedGroupIndex == -1 then
-    --     InfoDialog.show(g_i18n:getText("ui_no_group_selected_error"))
-    --     return
-    -- end
-end
+-- Unsure if copy makes sense. Awaiting feedback
+-- function ManageTasksFrame:onClickCopy(sender)
+--     print("Got copy button call")
+-- end
 
 function ManageTasksFrame:onClickDelete(sender)
     if self.selectedTaskIndex == -1 then
