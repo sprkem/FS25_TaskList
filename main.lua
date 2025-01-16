@@ -11,58 +11,58 @@
 --
 math.randomseed(g_time or os.clock())
 
-TodoList = {}
-TodoList.dir = g_currentModDirectory
-TodoList.modName = g_currentModName
+TaskList = {}
+TaskList.dir = g_currentModDirectory
+TaskList.modName = g_currentModName
 
-source(TodoList.dir .. "TaskListUtils.lua")
-source(TodoList.dir .. "TaskGroup.lua")
-source(TodoList.dir .. "Task.lua")
-source(TodoList.dir .. "gui/MenuTaskList.lua")
-source(TodoList.dir .. "gui/ManageGroupsFrame.lua")
-source(TodoList.dir .. "gui/ManageTasksFrame.lua")
-source(TodoList.dir .. "events/InitialClientState.lua")
-source(TodoList.dir .. "events/NewTaskGroupEvent.lua")
-source(TodoList.dir .. "events/DeleteGroupEvent.lua")
-source(TodoList.dir .. "events/NewTaskGroupEvent.lua")
-source(TodoList.dir .. "events/CompleteTaskEvent.lua")
-source(TodoList.dir .. "events/DeleteTaskEvent.lua")
-source(TodoList.dir .. "events/NewTaskEvent.lua")
+source(TaskList.dir .. "TaskListUtils.lua")
+source(TaskList.dir .. "TaskGroup.lua")
+source(TaskList.dir .. "Task.lua")
+source(TaskList.dir .. "gui/MenuTaskList.lua")
+source(TaskList.dir .. "gui/ManageGroupsFrame.lua")
+source(TaskList.dir .. "gui/ManageTasksFrame.lua")
+source(TaskList.dir .. "events/InitialClientState.lua")
+source(TaskList.dir .. "events/NewTaskGroupEvent.lua")
+source(TaskList.dir .. "events/DeleteGroupEvent.lua")
+source(TaskList.dir .. "events/NewTaskGroupEvent.lua")
+source(TaskList.dir .. "events/CompleteTaskEvent.lua")
+source(TaskList.dir .. "events/DeleteTaskEvent.lua")
+source(TaskList.dir .. "events/NewTaskEvent.lua")
 
-function TodoList:loadMap()
+function TaskList:loadMap()
     MessageType.ACTIVE_TASKS_UPDATED = nextMessageTypeId()
     MessageType.TASK_GROUPS_UPDATED = nextMessageTypeId()
 
-    g_gui:loadProfiles(TodoList.dir .. "gui/guiProfiles.xml")
+    g_gui:loadProfiles(TaskList.dir .. "gui/guiProfiles.xml")
 
-    local guiTodoList = MenuTaskList.new(g_i18n)
-    g_gui:loadGui(TodoList.dir .. "gui/MenuTaskList.xml", "menuTaskList", guiTodoList, true)
+    local guiTaskList = MenuTaskList.new(g_i18n)
+    g_gui:loadGui(TaskList.dir .. "gui/MenuTaskList.xml", "menuTaskList", guiTaskList, true)
 
     local manageGroupsFrame = ManageGroupsFrame.new(g_i18n)
-    g_gui:loadGui(TodoList.dir .. "gui/ManageGroupsFrame.xml", "manageGroupsFrame", manageGroupsFrame)
+    g_gui:loadGui(TaskList.dir .. "gui/ManageGroupsFrame.xml", "manageGroupsFrame", manageGroupsFrame)
 
     local manageTasksFrame = ManageTasksFrame.new(g_i18n)
-    g_gui:loadGui(TodoList.dir .. "gui/ManageTasksFrame.xml", "manageTasksFrame", manageTasksFrame)
+    g_gui:loadGui(TaskList.dir .. "gui/ManageTasksFrame.xml", "manageTasksFrame", manageTasksFrame)
 
-    TodoList.fixInGameMenu(guiTodoList, "menuTaskList", { 0, 0, 1024, 1024 }, 2,
-        TodoList:makeIsTodoListCheckEnabledPredicate())
+    TaskList.fixInGameMenu(guiTaskList, "menuTaskList", { 0, 0, 1024, 1024 }, 2,
+        TaskList:makeIsTaskListCheckEnabledPredicate())
 
     g_currentMission.taskList = self
     self.taskGroups = {}
     self.activeTasks = {}
     self.currentPeriod = math.floor(g_currentMission.environment.currentPeriod)
 
-    FSBaseMission.saveSavegame = Utils.appendedFunction(FSBaseMission.saveSavegame, TodoList.saveToXmlFile)
+    FSBaseMission.saveSavegame = Utils.appendedFunction(FSBaseMission.saveSavegame, TaskList.saveToXmlFile)
     self:loadFromXMLFile()
 
-    guiTodoList:initialize()
+    guiTaskList:initialize()
 end
 
-function TodoList:makeIsTodoListCheckEnabledPredicate()
+function TaskList:makeIsTaskListCheckEnabledPredicate()
     return function() return true end
 end
 
-function TodoList:saveToXmlFile()
+function TaskList:saveToXmlFile()
     if (not g_currentMission:getIsServer()) then return end
 
     local savegameFolderPath = g_currentMission.missionInfo.savegameDirectory .. "/"
@@ -93,7 +93,7 @@ function TodoList:saveToXmlFile()
     delete(xmlFile);
 end
 
-function TodoList:loadFromXMLFile()
+function TaskList:loadFromXMLFile()
     if (not g_currentMission:getIsServer()) then return end
 
     local savegameFolderPath = g_currentMission.missionInfo.savegameDirectory;
@@ -138,7 +138,7 @@ function TodoList:loadFromXMLFile()
 end
 
 -- from Courseplay
-function TodoList.fixInGameMenu(frame, pageName, uvs, position, predicateFunc)
+function TaskList.fixInGameMenu(frame, pageName, uvs, position, predicateFunc)
     local inGameMenu = g_gui.screenControllers[InGameMenu]
     local targetPosition = 0
 
@@ -186,7 +186,7 @@ function TodoList.fixInGameMenu(frame, pageName, uvs, position, predicateFunc)
     inGameMenu.pagingElement:updatePageMapping()
 
     inGameMenu:registerPage(inGameMenu[pageName], position, predicateFunc)
-    local iconFileName = Utils.getFilename('images/menuIcon.dds', TodoList.dir)
+    local iconFileName = Utils.getFilename('images/menuIcon.dds', TaskList.dir)
     inGameMenu:addPageTab(inGameMenu[pageName], iconFileName, GuiUtils.getUVs(uvs))
 
     for i = 1, #inGameMenu.pageFrames do
@@ -201,21 +201,21 @@ function TodoList.fixInGameMenu(frame, pageName, uvs, position, predicateFunc)
     inGameMenu:rebuildTabList()
 end
 
-function TodoList:hourChanged()
+function TaskList:hourChanged()
     local period = math.floor(g_currentMission.environment.currentPeriod)
     if period ~= g_currentMission.taskList.currentPeriod then
         g_currentMission.taskList:onPeriodChanged()
     end
 end
 
-function TodoList:onPeriodChanged()
+function TaskList:onPeriodChanged()
     for _, group in pairs(self.taskGroups) do
         self:addGroupTasksForCurrentPeriod(group)
     end
     g_currentMission.taskList.currentPeriod = math.floor(g_currentMission.environment.currentPeriod)
 end
 
-function TodoList:addGroupTasksForCurrentPeriod(group)
+function TaskList:addGroupTasksForCurrentPeriod(group)
     local currentPeriod = math.floor(g_currentMission.environment.currentPeriod)
     local additions = false
     for _, task in pairs(group.tasks) do
@@ -229,7 +229,7 @@ function TodoList:addGroupTasksForCurrentPeriod(group)
     end
 end
 
-function TodoList:addActiveTask(groupId, taskId)
+function TaskList:addActiveTask(groupId, taskId)
     local group = self.taskGroups[groupId]
     local task = group.tasks[taskId]
     local taskCopy = TaskListUtils.deepcopy(task)
@@ -240,7 +240,7 @@ function TodoList:addActiveTask(groupId, taskId)
     -- Expect caller to raise ACTIVE_TASKS_UPDATED as this is called repeatedly
 end
 
-function TodoList:getActiveTasksForCurrentFarm()
+function TaskList:getActiveTasksForCurrentFarm()
     local result = {}
     for _, task in pairs(self.activeTasks) do
         if task.farmId == currentFarmId or not g_currentMission.missionDynamicInfo.isMultiplayer then
@@ -251,7 +251,7 @@ function TodoList:getActiveTasksForCurrentFarm()
     return result
 end
 
-function TodoList:getTasksForPeriodForCurrentFarm(period)
+function TaskList:getTasksForPeriodForCurrentFarm(period)
     local result = {}
     for _, group in pairs(self.taskGroups) do
         if group.farmId == currentFarmId or not g_currentMission.missionDynamicInfo.isMultiplayer then
@@ -267,7 +267,7 @@ function TodoList:getTasksForPeriodForCurrentFarm(period)
     return result
 end
 
-function TodoList:completeTask(groupId, taskId)
+function TaskList:completeTask(groupId, taskId)
     local task = self.activeTasks[taskId]
     if task == nil then
         InfoDialog.show(g_i18n:getText("ui_task_not_found_error"))
@@ -277,7 +277,7 @@ function TodoList:completeTask(groupId, taskId)
     g_client:getServerConnection():sendEvent(CompleteTaskEvent.new(groupId, taskId))
 end
 
-function TodoList:deleteTask(groupId, taskId)
+function TaskList:deleteTask(groupId, taskId)
     local group = self.taskGroups[groupId]
     if group == nil then
         InfoDialog.show(g_i18n:getText("ui_group_not_found_error"))
@@ -293,7 +293,7 @@ function TodoList:deleteTask(groupId, taskId)
     g_client:getServerConnection():sendEvent(DeleteTaskEvent.new(groupId, taskId))
 end
 
-function TodoList:addTask(groupId, task)
+function TaskList:addTask(groupId, task)
     local group = self.taskGroups[groupId]
     if group == nil then
         InfoDialog.show(g_i18n:getText("ui_group_not_found_error"))
@@ -303,7 +303,7 @@ function TodoList:addTask(groupId, task)
     g_client:getServerConnection():sendEvent(NewTaskEvent.new(groupId, task))
 end
 
-function TodoList:deleteGroup(groupId)
+function TaskList:deleteGroup(groupId)
     local group = self.taskGroups[groupId]
     if group == nil then
         InfoDialog.show(g_i18n:getText("ui_group_not_found_error"))
@@ -313,13 +313,13 @@ function TodoList:deleteGroup(groupId)
     g_client:getServerConnection():sendEvent(DeleteGroupEvent.new(groupId))
 end
 
-function TodoList:addGroupForCurrentFarm(name)
+function TaskList:addGroupForCurrentFarm(name)
     local group = TaskGroup.new()
     group.name = name
     g_client:getServerConnection():sendEvent(NewTaskGroupEvent.new(group))
 end
 
-function TodoList:copyGroupForCurrentFarm(newName, groupToCopyId)
+function TaskList:copyGroupForCurrentFarm(newName, groupToCopyId)
     -- Sanity check the group exists
     local sourceGroup = self.taskGroups[groupToCopyId]
     if sourceGroup == nil then
@@ -334,7 +334,7 @@ function TodoList:copyGroupForCurrentFarm(newName, groupToCopyId)
     g_client:getServerConnection():sendEvent(NewTaskGroupEvent.new(group))
 end
 
-function TodoList:getGroupListForCurrentFarm()
+function TaskList:getGroupListForCurrentFarm()
     local currentFarmId = self:getCurrentFarmId()
     local result = {}
     for _, group in pairs(self.taskGroups) do
@@ -348,7 +348,7 @@ function TodoList:getGroupListForCurrentFarm()
     return result
 end
 
-function TodoList:getGroupById(groupId, showInfoIfNotFound)
+function TaskList:getGroupById(groupId, showInfoIfNotFound)
     -- Returns a copy of the group but tasks are indexed sequentially for table rendering
     local group = self.taskGroups[groupId]
     if group == nil then
@@ -368,7 +368,7 @@ function TodoList:getGroupById(groupId, showInfoIfNotFound)
     return groupCopy
 end
 
-function TodoList:groupExistsForCurrentFarm(name)
+function TaskList:groupExistsForCurrentFarm(name)
     local currentFarmId = self:getCurrentFarmId()
     for _, group in pairs(self.taskGroups) do
         if group.farmId == currentFarmId or not g_currentMission.missionDynamicInfo.isMultiplayer then
@@ -380,7 +380,7 @@ function TodoList:groupExistsForCurrentFarm(name)
     return false
 end
 
-function TodoList:getCurrentFarmId()
+function TaskList:getCurrentFarmId()
     local currentFarmId = -1
     local farm = g_farmManager:getFarmByUserId(g_currentMission.playerUserId)
     if farm ~= nil then
@@ -389,7 +389,7 @@ function TodoList:getCurrentFarmId()
     return currentFarmId -- Not sure can happen!
 end
 
-function TodoList:generateId()
+function TaskList:generateId()
     local template = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
     return (string.gsub(template, '[xy]', function(c)
         local v = (c == 'x') and math.random(0, 0xf) or math.random(8, 0xb)
@@ -397,12 +397,12 @@ function TodoList:generateId()
     end))
 end
 
-g_messageCenter:subscribe(MessageType.HOUR_CHANGED, TodoList.hourChanged)
-addModEventListener(TodoList)
+g_messageCenter:subscribe(MessageType.HOUR_CHANGED, TaskList.hourChanged)
+addModEventListener(TaskList)
 
-function TodoList:sendInitialClientState(connection, user, farm)
+function TaskList:sendInitialClientState(connection, user, farm)
     connection:sendEvent(InitialClientStateEvent.new())
 end
 
 FSBaseMission.sendInitialClientState = Utils.appendedFunction(FSBaseMission.sendInitialClientState,
-    TodoList.sendInitialClientState)
+    TaskList.sendInitialClientState)
