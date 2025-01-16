@@ -26,6 +26,7 @@
 		<text name="ui_intro_text_3" text="A task is just plain text, such as Feed the Cows, or Harvest. "/>
 		<text name="ui_intro_text_4" text="Tasks can recur on a given month, daily, or be one time jobs due at some point.  "/>
 		<text name="ui_intro_text_5" text="When a task is due it will show here. Use Complete Task when it is done. If it is a recurring task, it will show again when due."/>
+		<text name="ui_intro_text_6" text="A group and all of its tasks can be easily copied to a new group if needed."/>
 		<text name="ui_overdue_yes" text="Yes"/>
 		<text name="ui_overdue_no" text="No"/>
 		<text name="ui_set_group_name" text="Choose A Group Name"/>
