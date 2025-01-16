@@ -105,9 +105,9 @@ function ManageTasksFrame:populateCellForItemInSection(list, section, index, cel
     local monthString = TaskListUtils.formatPeriodFullMonthName(task.period)
     if not task.shouldRecur then
         cell:getAttribute("due"):setText(monthString)
-    elseif task.shouldRecurMode == Task.SHOULD_REPEAT_MODE.DAILY then
+    elseif task.recurMode == Task.RECUR_MODE.DAILY then
         cell:getAttribute("due"):setText(g_i18n:getText("ui_task_due_daily"))
-    elseif task.shouldRecurMode == Task.SHOULD_REPEAT_MODE.MONTHLY then
+    elseif task.recurMode == Task.RECUR_MODE.MONTHLY then
         cell:getAttribute("due"):setText(string.format(g_i18n:getText("ui_task_due_monthly"), monthString))
     end
 end
@@ -192,11 +192,11 @@ function ManageTasksFrame:onNewTaskRequestRecurMode(newTask)
         args = {},
         callback = function(_, index)
             if index > 0 then
-                newTask.shouldRecurMode = index
+                newTask.recurMode = index
 
-                if newTask.shouldRecurMode == Task.SHOULD_REPEAT_MODE.MONTHLY then
+                if newTask.recurMode == Task.RECUR_MODE.MONTHLY then
                     self:onNewTaskRequestPeriod(newTask)
-                elseif newTask.shouldRecurMode == Task.SHOULD_REPEAT_MODE.DAILY then
+                elseif newTask.recurMode == Task.RECUR_MODE.DAILY then
                     self:onNewTaskJourneyComplete(newTask)
                 end
             end

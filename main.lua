@@ -21,7 +21,7 @@ source(TaskList.dir .. "Task.lua")
 source(TaskList.dir .. "gui/MenuTaskList.lua")
 source(TaskList.dir .. "gui/ManageGroupsFrame.lua")
 source(TaskList.dir .. "gui/ManageTasksFrame.lua")
-source(TaskList.dir .. "events/InitialClientState.lua")
+source(TaskList.dir .. "events/InitialClientStateEvent.lua")
 source(TaskList.dir .. "events/NewTaskGroupEvent.lua")
 source(TaskList.dir .. "events/DeleteGroupEvent.lua")
 source(TaskList.dir .. "events/NewTaskGroupEvent.lua")
@@ -51,6 +51,7 @@ function TaskList:loadMap()
     self.taskGroups = {}
     self.activeTasks = {}
     self.currentPeriod = math.floor(g_currentMission.environment.currentPeriod)
+    self.currentDay = math.floor(g_currentMission.environment.currentDay)
 
     FSBaseMission.saveSavegame = Utils.appendedFunction(FSBaseMission.saveSavegame, TaskList.saveToXmlFile)
     self:loadFromXMLFile()
@@ -205,21 +206,48 @@ function TaskList:hourChanged()
     local period = math.floor(g_currentMission.environment.currentPeriod)
     if period ~= g_currentMission.taskList.currentPeriod then
         g_currentMission.taskList:onPeriodChanged()
+        return
+    end
+    local day = math.floor(g_currentMission.environment.currentDay)
+    if day ~= g_currentMission.taskList.currentDay then
+        g_currentMission.taskList:onDayChanged()
+        return
     end
 end
 
 function TaskList:onPeriodChanged()
     for _, group in pairs(self.taskGroups) do
         self:addGroupTasksForCurrentPeriod(group)
+        self:addDailyTasks(group)
     end
     g_currentMission.taskList.currentPeriod = math.floor(g_currentMission.environment.currentPeriod)
+end
+
+function TaskList:onDayChanged()
+    for _, group in pairs(self.taskGroups) do
+        self:addDailyTasks(group)
+    end
+    g_currentMission.taskList.currentDay = math.floor(g_currentMission.environment.currentDay)
 end
 
 function TaskList:addGroupTasksForCurrentPeriod(group)
     local currentPeriod = math.floor(g_currentMission.environment.currentPeriod)
     local additions = false
     for _, task in pairs(group.tasks) do
-        if task.period == currentPeriod then
+        if task.recurMode ~= Task.RECUR_MODE.DAILY and task.period == currentPeriod then
+            self:addActiveTask(group.id, task.id)
+            additions = true
+        end
+    end
+    if additions == true then
+        g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
+    end
+end
+
+function TaskList:addDailyTasks(group)
+    local additions = false
+    for _, task in pairs(group.tasks) do
+        if task.recurMode == Task.RECUR_MODE.DAILY then
             self:addActiveTask(group.id, task.id)
             additions = true
         end

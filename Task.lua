@@ -1,7 +1,7 @@
 Task = {}
 local Group_mt = Class(Task)
 
-Task.SHOULD_REPEAT_MODE = {
+Task.RECUR_MODE = {
     MONTHLY = 1,
     DAILY = 2
 }
@@ -18,7 +18,7 @@ function Task.new(customMt)
     self.priority = 1
     self.period = 1
     self.shouldRecur = false
-    self.shouldRecurMode = Task.SHOULD_REPEAT_MODE.MONTHLY
+    self.recurMode = Task.RECUR_MODE.MONTHLY
 
     return self
 end
@@ -28,7 +28,7 @@ function Task:copyValuesFromTask(sourceTask)
     self.priority = sourceTask.priority
     self.period = sourceTask.period
     self.shouldRecur = sourceTask.shouldRecur
-    self.shouldRecurMode = sourceTask.shouldRecurMode
+    self.recurMode = sourceTask.recurMode
 end
 
 function Task:writeStream(streamId, connection)
@@ -37,7 +37,7 @@ function Task:writeStream(streamId, connection)
     streamWriteInt32(streamId, self.priority)
     streamWriteInt32(streamId, self.period)
     streamWriteBool(streamId, self.shouldRecur)
-    streamWriteInt32(streamId, self.shouldRecurMode)
+    streamWriteInt32(streamId, self.recurMode)
 end
 
 function Task:readStream(streamId, connection)
@@ -46,7 +46,7 @@ function Task:readStream(streamId, connection)
     self.priority = streamReadInt32(streamId)
     self.period = streamReadInt32(streamId)
     self.shouldRecur = streamReadBool(streamId)
-    self.shouldRecurMode = streamReadInt32(streamId)
+    self.recurMode = streamReadInt32(streamId)
 end
 
 function Task:saveToXmlFile(xmlFile, key)
@@ -54,7 +54,7 @@ function Task:saveToXmlFile(xmlFile, key)
     setXMLString(xmlFile, key .. "#detail", self.detail)
     setXMLInt(xmlFile, key .. "#priority", self.priority)
     setXMLInt(xmlFile, key .. "#period", self.period)
-    setXMLInt(xmlFile, key .. "#shouldRecurMode", self.shouldRecurMode)
+    setXMLInt(xmlFile, key .. "#recurMode", self.recurMode)
     setXMLBool(xmlFile, key .. "#shouldRecur", self.shouldRecur)
 end
 
@@ -63,6 +63,6 @@ function Task:loadFromXMLFile(xmlFile, key)
     self.detail = getXMLString(xmlFile, key .. "#detail")
     self.priority = getXMLInt(xmlFile, key .. "#priority")
     self.period = getXMLInt(xmlFile, key .. "#period")
-    self.shouldRecurMode = getXMLInt(xmlFile, key .. "#shouldRecurMode")
+    self.recurMode = getXMLInt(xmlFile, key .. "#recurMode")
     self.shouldRecur = getXMLBool(xmlFile, key .. "#shouldRecur")
 end

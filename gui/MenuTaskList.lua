@@ -145,6 +145,10 @@ function MenuTaskList:populateCellForItemInSection(list, section, index, cell)
     cell:getAttribute("priority"):setText(task.priority)
 
     local overdue = task.period ~= math.floor(g_currentMission.environment.currentPeriod)
+    if task.recurMode == Task.RECUR_MODE.DAILY then
+        overdue = false
+    end
+
     if overdue then
         cell:getAttribute("overdue"):setText(g_i18n:getText("ui_overdue_yes"))
     else
@@ -154,9 +158,9 @@ function MenuTaskList:populateCellForItemInSection(list, section, index, cell)
     local monthString = TaskListUtils.formatPeriodFullMonthName(task.period)
     if not task.shouldRecur then
         cell:getAttribute("due"):setText(monthString)
-    elseif task.shouldRecurMode == Task.SHOULD_REPEAT_MODE.DAILY then
+    elseif task.recurMode == Task.RECUR_MODE.DAILY then
         cell:getAttribute("due"):setText(g_i18n:getText("ui_task_due_daily"))
-    elseif task.shouldRecurMode == Task.SHOULD_REPEAT_MODE.MONTHLY then
+    elseif task.recurMode == Task.RECUR_MODE.MONTHLY then
         cell:getAttribute("due"):setText(string.format(g_i18n:getText("ui_task_due_monthly"), monthString))
     end
 end

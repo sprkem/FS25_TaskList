@@ -40,5 +40,11 @@ function NewTaskEvent:run(connection)
 
     group.tasks[self.task.id] = self.task
     g_currentMission.taskList:addGroupTasksForCurrentPeriod(group)
+
+    if self.task.recurMode == Task.RECUR_MODE.DAILY then
+        g_currentMission.taskList:addActiveTask(group.id, self.task.id)
+        g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
+    end
+
     g_messageCenter:publish(MessageType.TASK_GROUPS_UPDATED)
 end
