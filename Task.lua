@@ -6,7 +6,7 @@ Task.SHOULD_REPEAT_MODE = {
     DAILY = 2
 }
 
-Task.MAX_DETAIL_LENGTH = 40
+Task.MAX_DETAIL_LENGTH = 45
 
 function Task.new(customMt)
     local self = {}
