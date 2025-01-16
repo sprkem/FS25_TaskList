@@ -47,7 +47,7 @@
 		<text name="ui_task_not_found_error" text="Could not find the task. Check the task was not deleted"/>
 		<text name="ui_no_groups_exist" text="You don't have any groups yet"/>
 		<text name="ui_no_tasks_exist_for_group" text="You don't have any tasks yet"/>
-		<text name="ui_no_active_tasks" text="You don't have any tasks"/>
+		<text name="ui_no_active_tasks" text="You don't have any tasks due"/>
 		<text name="ui_intro_text_header" text="Welcome to Task List"/>
 		<text name="ui_intro_text_1" text="To get started, use Manage Groups to create a Group. A group is a logical container for related tasks, for example Field 10, or General Farm Tasks."/>
 		<text name="ui_intro_text_2" text="Once you have made a group, use Manage Tasks to define things you need to do and when."/>

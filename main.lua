@@ -315,14 +315,14 @@ function TodoList:getTasksForPeriodForCurrentFarm(period)
     return result
 end
 
-function TodoList:completeTask(taskId)
+function TodoList:completeTask(groupId, taskId)
     local task = self.activeTasks[taskId]
     if task == nil then
         InfoDialog.show(g_i18n:getText("ui_task_not_found_error"))
         return
     end
 
-    g_client:getServerConnection():sendEvent(CompleteTaskEvent.new(taskId))
+    g_client:getServerConnection():sendEvent(CompleteTaskEvent.new(groupId, taskId))
 end
 
 function TodoList:deleteTask(groupId, taskId)

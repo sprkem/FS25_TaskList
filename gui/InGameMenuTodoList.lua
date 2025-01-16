@@ -177,7 +177,8 @@ function InGameMenuTodoList:completeTask()
         InfoDialog.show(g_i18n:getText("ui_no_task_selected"))
         return
     end
-    g_currentMission.todoList:completeTask(self.currentTasks[self.selectedRow].id)
+    local task = self.currentTasks[self.selectedRow]
+    g_currentMission.todoList:completeTask(task.groupId, task.id)
 end
 
 -- Functions opening dialogs
