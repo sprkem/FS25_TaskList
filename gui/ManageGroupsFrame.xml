@@ -12,16 +12,16 @@
 
             <GuiElement id="tableContainer">
                 <GuiElement profile="fs25_statisticsHeaderBox">
-                    <Button profile="TaskListHeader" position="60px -75px" size="155px 32px" text="$l10n_ui_header_group" handleFocus="false" />
+                    <Button profile="taskListHeader" position="60px -75px" size="155px 32px" text="$l10n_ui_header_group" handleFocus="false" />
                 </GuiElement>
 
-                <SmoothList id="groupsTable" profile="TaskListTable" position="40px -110px" size="650px 550px">
-                    <ListItem profile="TaskListListItem">
-                        <Text profile="TaskListRowCellLeft" position="20px 0px" size="155px 32px" name="group"/>
+                <SmoothList id="groupsTable" profile="taskListTable" position="40px -110px" size="650px 550px">
+                    <ListItem profile="taskListListItem">
+                        <Text profile="taskListRowCellLeft" position="20px 0px" size="155px 32px" name="group"/>
                     </ListItem>
                 </SmoothList>
 
-                <ThreePartBitmap profile="todoListGroupsSliderBox" position="-20px -110px" size="6px 550px">
+                <ThreePartBitmap profile="taskListGroupsSliderBox" position="-20px -110px" size="6px 550px">
                     <Slider profile="fs25_listSlider" dataElementId="groupsTable" />
                 </ThreePartBitmap>
             </GuiElement>

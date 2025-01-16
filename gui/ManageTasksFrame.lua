@@ -39,7 +39,7 @@ function ManageTasksFrame:onClose()
 end
 
 function ManageTasksFrame:updateContent()
-    self.availableGroups = g_currentMission.todoList:getGroupListForCurrentFarm()
+    self.availableGroups = g_currentMission.taskList:getGroupListForCurrentFarm()
     table.sort(self.availableGroups, ManageTasksFrame.sortingFunction)
 
     local texts = {}
@@ -59,10 +59,10 @@ function ManageTasksFrame:updateContent()
     self.noGroupsContainer:setVisible(false)
 
     -- If there are groups but the currentGroupId is not there, find one to show
-    self.currentGroup = g_currentMission.todoList:getGroupById(self.currentGroupId, false)
+    self.currentGroup = g_currentMission.taskList:getGroupById(self.currentGroupId, false)
     if self.currentGroup == nil then
         for i, group in pairs(self.availableGroups) do
-            self.currentGroup = g_currentMission.todoList:getGroupById(group.id, false)
+            self.currentGroup = g_currentMission.taskList:getGroupById(group.id, false)
             self.currentGroupId = group.id
             self.groupSelector:setState(i, false)
             break
@@ -239,7 +239,7 @@ end
 
 -- New Task Final Step
 function ManageTasksFrame:onNewTaskJourneyComplete(newTask)
-    g_currentMission.todoList:addTask(self.currentGroup.id, newTask)
+    g_currentMission.taskList:addTask(self.currentGroup.id, newTask)
 end
 
 -- Unsure if copy makes sense. Awaiting feedback
@@ -259,7 +259,7 @@ end
 
 function ManageTasksFrame:onRespondToDeletePrompt(clickOk)
     if clickOk then
-        g_currentMission.todoList:deleteTask(self.currentGroup.id, self.currentGroup.tasks[self.selectedTaskIndex].id)
+        g_currentMission.taskList:deleteTask(self.currentGroup.id, self.currentGroup.tasks[self.selectedTaskIndex].id)
     end
 end
 

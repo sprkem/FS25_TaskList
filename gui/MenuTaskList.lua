@@ -1,11 +1,11 @@
-InGameMenuTodoList = {}
-InGameMenuTodoList.currentTasks = {}
-InGameMenuTodoList._mt = Class(InGameMenuTodoList, TabbedMenuFrameElement)
-InGameMenuTodoList.sortingFunction = function(k1, k2) return k1.priority < k2.priority end
+MenuTaskList = {}
+MenuTaskList.currentTasks = {}
+MenuTaskList._mt = Class(MenuTaskList, TabbedMenuFrameElement)
+MenuTaskList.sortingFunction = function(k1, k2) return k1.priority < k2.priority end
 
-function InGameMenuTodoList.new(i18n, messageCenter)
-    local self = InGameMenuTodoList:superClass().new(nil, InGameMenuTodoList._mt)
-    self.name = "InGameMenuTodoList"
+function MenuTaskList.new(i18n, messageCenter)
+    local self = MenuTaskList:superClass().new(nil, MenuTaskList._mt)
+    self.name = "menuTaskList"
     self.i18n = i18n
     self.messageCenter = messageCenter
     self.selectedRow = -1;
@@ -50,26 +50,26 @@ function InGameMenuTodoList.new(i18n, messageCenter)
     return self
 end
 
-function InGameMenuTodoList:delete()
-    InGameMenuTodoList:superClass().delete(self)
+function MenuTaskList:delete()
+    MenuTaskList:superClass().delete(self)
 end
 
-function InGameMenuTodoList:copyAttributes(src)
-    InGameMenuTodoList:superClass().copyAttributes(self, src)
+function MenuTaskList:copyAttributes(src)
+    MenuTaskList:superClass().copyAttributes(self, src)
     self.i18n = src.i18n
 end
 
-function InGameMenuTodoList:onGuiSetupFinished()
-    InGameMenuTodoList:superClass().onGuiSetupFinished(self)
+function MenuTaskList:onGuiSetupFinished()
+    MenuTaskList:superClass().onGuiSetupFinished(self)
     self.currentTasksTable:setDataSource(self)
     self.currentTasksTable:setDelegate(self)
 end
 
-function InGameMenuTodoList:initialize()
+function MenuTaskList:initialize()
 end
 
-function InGameMenuTodoList:onFrameOpen()
-    InGameMenuTodoList:superClass().onFrameOpen(self)
+function MenuTaskList:onFrameOpen()
+    MenuTaskList:superClass().onFrameOpen(self)
 
     g_messageCenter:subscribe(MessageType.ACTIVE_TASKS_UPDATED, function(menu)
         self:updateContent()
@@ -81,12 +81,12 @@ function InGameMenuTodoList:onFrameOpen()
     FocusManager:setFocus(self.currentTasksTable)
 end
 
-function InGameMenuTodoList:onFrameClose()
-    InGameMenuTodoList:superClass().onFrameClose(self)
+function MenuTaskList:onFrameClose()
+    MenuTaskList:superClass().onFrameClose(self)
     g_messageCenter:unsubscribeAll(self)
 end
 
-function InGameMenuTodoList:updateContent()
+function MenuTaskList:updateContent()
     -- Get the current farm
 
     -- local currentPeriod = math.floor(g_currentMission.environment.currentPeriod)
@@ -96,7 +96,7 @@ function InGameMenuTodoList:updateContent()
     --     nextMonth = 1
     -- end
     -- local nextMonthTasks = g_currentMission.todoList:getTasksForPeriodForCurrentFarm(nextMonth)
-    if next(g_currentMission.todoList.taskGroups) == nil then
+    if next(g_currentMission.taskList.taskGroups) == nil then
         self.tableContainer:setVisible(false)
         self.noDataContainer:setVisible(false)
         self.noGroupsContainer:setVisible(true)
@@ -108,8 +108,8 @@ function InGameMenuTodoList:updateContent()
     self.noGroupsContainer:setVisible(false)
     self:setMenuButtonInfoDirty()
 
-    self.currentTasks = g_currentMission.todoList:getActiveTasksForCurrentFarm()
-    table.sort(self.currentTasks, InGameMenuTodoList.sortingFunction)
+    self.currentTasks = g_currentMission.taskList:getActiveTasksForCurrentFarm()
+    table.sort(self.currentTasks, MenuTaskList.sortingFunction)
 
     if next(self.currentTasks) == nil then
         self.tableContainer:setVisible(false)
@@ -124,21 +124,21 @@ function InGameMenuTodoList:updateContent()
     self.currentTasksTable:reloadData()
 end
 
-function InGameMenuTodoList:getNumberOfSections()
+function MenuTaskList:getNumberOfSections()
     return 1
 end
 
-function InGameMenuTodoList:getNumberOfItemsInSection(list, section)
+function MenuTaskList:getNumberOfItemsInSection(list, section)
     local count = 0
     for _ in pairs(self.currentTasks) do count = count + 1 end
     return count
 end
 
-function InGameMenuTodoList:getTitleForSectionHeader(list, section)
+function MenuTaskList:getTitleForSectionHeader(list, section)
     return ""
 end
 
-function InGameMenuTodoList:populateCellForItemInSection(list, section, index, cell)
+function MenuTaskList:populateCellForItemInSection(list, section, index, cell)
     local task = self.currentTasks[index]
     cell:getAttribute("group"):setText(task.groupName)
     cell:getAttribute("detail"):setText(task.detail)
@@ -161,24 +161,24 @@ function InGameMenuTodoList:populateCellForItemInSection(list, section, index, c
     end
 end
 
-function InGameMenuTodoList:onListSelectionChanged(list, section, index)
+function MenuTaskList:onListSelectionChanged(list, section, index)
     self.selectedRow = index
 end
 
-function InGameMenuTodoList:completeTask()
+function MenuTaskList:completeTask()
     if self.selectedRow == -1 then
         InfoDialog.show(g_i18n:getText("ui_no_task_selected"))
         return
     end
     local task = self.currentTasks[self.selectedRow]
-    g_currentMission.todoList:completeTask(task.groupId, task.id)
+    g_currentMission.taskList:completeTask(task.groupId, task.id)
 end
 
 -- Functions opening dialogs
-function InGameMenuTodoList:showManageGroups()
+function MenuTaskList:showManageGroups()
     local dialog = g_gui:showDialog("manageGroupsFrame")
 end
 
-function InGameMenuTodoList:manageTasks()
+function MenuTaskList:manageTasks()
     local dialog = g_gui:showDialog("manageTasksFrame")
 end

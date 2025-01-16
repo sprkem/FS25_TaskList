@@ -28,7 +28,7 @@ function NewTaskGroupEvent:run(connection)
     if not connection:getIsServer() then
         g_server:broadcastEvent(NewTaskGroupEvent.new(self.taskGroup))
     end
-    g_currentMission.todoList.taskGroups[self.taskGroup.id] = self.taskGroup
+    g_currentMission.taskList.taskGroups[self.taskGroup.id] = self.taskGroup
     g_messageCenter:publish(MessageType.TASK_GROUPS_UPDATED)
-    g_currentMission.todoList:addGroupTasksForCurrentPeriod(self.taskGroup)
+    g_currentMission.taskList:addGroupTasksForCurrentPeriod(self.taskGroup)
 end

@@ -13,14 +13,14 @@ end
 
 function InitialClientStateEvent:writeStream(streamId, connection)
     local groupCount = 0
-    for _ in pairs(g_currentMission.todoList.taskGroups) do groupCount = groupCount + 1 end
+    for _ in pairs(g_currentMission.taskList.taskGroups) do groupCount = groupCount + 1 end
     streamWriteInt32(streamId, groupCount)
 
     local activeTaskCount = 0
-    for _ in pairs(g_currentMission.todoList.activeTasks) do activeTaskCount = activeTaskCount + 1 end
+    for _ in pairs(g_currentMission.taskList.activeTasks) do activeTaskCount = activeTaskCount + 1 end
     streamWriteInt32(streamId, activeTaskCount)
 
-    for _, task in pairs(g_currentMission.todoList.activeTasks) do
+    for _, task in pairs(g_currentMission.taskList.activeTasks) do
         streamWriteString(streamId, task.id)
         streamWriteString(streamId, task.groupId)
     end
@@ -31,14 +31,14 @@ function InitialClientStateEvent:readStream(streamId, connection)
     for i = 1, groupCount do
         local group = TaskGroup.new()
         group:readStream(streamId, connection)
-        g_currentMission.todoList.taskGroups[group.id] = group
+        g_currentMission.taskList.taskGroups[group.id] = group
     end
 
     local activeTaskCount = streamReadInt32(streamId)
     for i = 1, activeTaskCount do
         local taskId = streamReadInt32(streamId)
         local groupId = streamReadInt32(streamId)
-        g_currentMission.todoList:addActiveTask(groupId, taskId)
+        g_currentMission.taskList:addActiveTask(groupId, taskId)
     end
 
     self:run(connection)

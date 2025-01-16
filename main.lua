@@ -1,12 +1,12 @@
 --
--- FS25 - TodoList
+-- FS25 - TaskList
 --
 -- @Author: Ozz
 -- @Date: 24.11.2024
 -- @Version: 1.0.0.0
 --
 -- Changelog:
---  v1.0.0.0 (26.02.2022):
+--  v1.0.0.0 (16.01.2024):
 --  - Initial Release
 --
 math.randomseed(g_time or os.clock())
@@ -18,7 +18,7 @@ TodoList.modName = g_currentModName
 source(TodoList.dir .. "TaskListUtils.lua")
 source(TodoList.dir .. "TaskGroup.lua")
 source(TodoList.dir .. "Task.lua")
-source(TodoList.dir .. "gui/InGameMenuTodoList.lua")
+source(TodoList.dir .. "gui/MenuTaskList.lua")
 source(TodoList.dir .. "gui/ManageGroupsFrame.lua")
 source(TodoList.dir .. "gui/ManageTasksFrame.lua")
 source(TodoList.dir .. "events/InitialClientState.lua")
@@ -35,8 +35,8 @@ function TodoList:loadMap()
 
     g_gui:loadProfiles(TodoList.dir .. "gui/guiProfiles.xml")
 
-    local guiTodoList = InGameMenuTodoList.new(g_i18n)
-    g_gui:loadGui(TodoList.dir .. "gui/InGameMenuTodoList.xml", "inGameMenuTodoList", guiTodoList, true)
+    local guiTodoList = MenuTaskList.new(g_i18n)
+    g_gui:loadGui(TodoList.dir .. "gui/MenuTaskList.xml", "menuTaskList", guiTodoList, true)
 
     local manageGroupsFrame = ManageGroupsFrame.new(g_i18n)
     g_gui:loadGui(TodoList.dir .. "gui/ManageGroupsFrame.xml", "manageGroupsFrame", manageGroupsFrame)
@@ -44,57 +44,13 @@ function TodoList:loadMap()
     local manageTasksFrame = ManageTasksFrame.new(g_i18n)
     g_gui:loadGui(TodoList.dir .. "gui/ManageTasksFrame.xml", "manageTasksFrame", manageTasksFrame)
 
-    TodoList.fixInGameMenu(guiTodoList, "inGameMenuTodoList", { 0, 0, 1024, 1024 }, 2,
+    TodoList.fixInGameMenu(guiTodoList, "menuTaskList", { 0, 0, 1024, 1024 }, 2,
         TodoList:makeIsTodoListCheckEnabledPredicate())
 
-    g_currentMission.todoList = self
+    g_currentMission.taskList = self
     self.taskGroups = {}
     self.activeTasks = {}
     self.currentPeriod = math.floor(g_currentMission.environment.currentPeriod)
-    -- self.currentPeriod = 5 -- TODO = replace
-
-    -- -- TODO - remove below synthetic data
-    -- local group1 = TaskGroup.new()
-    -- group1.farmId = 1
-    -- group1.name = "field 1"
-    -- self.taskGroups[group1.id] = group1
-
-    -- local task1 = Task.new()
-    -- task1.detail = "Harvest"
-    -- task1.priority = 1
-    -- task1.period = 6
-    -- task1.shouldRecur = true
-    -- task1.shouldRecurMode = Task.SHOULD_REPEAT_MODE.MONTHLY
-    -- self.taskGroups[group1.id].tasks[task1.id] = task1
-
-    -- local task2 = Task.new()
-    -- task2.detail = "Mulch"
-    -- task2.priority = 1
-    -- task2.period = 6
-    -- task2.shouldRecur = true
-    -- task2.shouldRecurMode = Task.SHOULD_REPEAT_MODE.MONTHLY
-    -- self.taskGroups[group1.id].tasks[task2.id] = task2
-
-    -- local group2 = TaskGroup.new()
-    -- group2.farmId = 1
-    -- group2.name = "field 2"
-    -- self.taskGroups[group2.id] = group2
-
-    -- local task3 = Task.new()
-    -- task3.detail = "Harvest"
-    -- task3.priority = 1
-    -- task3.period = 6
-    -- task3.shouldRecur = true
-    -- task3.shouldRecurMode = Task.SHOULD_REPEAT_MODE.MONTHLY
-    -- self.taskGroups[group2.id].tasks[task3.id] = task3
-
-    -- local task4 = Task.new()
-    -- task4.detail = "Cultivate"
-    -- task4.priority = 1
-    -- task4.period = 6
-    -- task4.shouldRecur = true
-    -- task4.shouldRecurMode = Task.SHOULD_REPEAT_MODE.DAILY
-    -- self.taskGroups[group2.id].tasks[task4.id] = task4
 
     FSBaseMission.saveSavegame = Utils.appendedFunction(FSBaseMission.saveSavegame, TodoList.saveToXmlFile)
     self:loadFromXMLFile()
@@ -119,14 +75,14 @@ function TodoList:saveToXmlFile()
     local xmlFile = createXMLFile(key, savegameFolderPath .. "tasklist.xml", key);
 
     local i = 0
-    for _, group in pairs(g_currentMission.todoList.taskGroups) do
+    for _, group in pairs(g_currentMission.taskList.taskGroups) do
         local groupKey = string.format("%s.taskGroups.group(%d)", key, i)
         group:saveToXmlFile(xmlFile, groupKey)
         i = i + 1
     end
     
     local j = 0
-    for _, activeTask in pairs(g_currentMission.todoList.activeTasks) do
+    for _, activeTask in pairs(g_currentMission.taskList.activeTasks) do
         local activeTaskKey = string.format("%s.activeTasks.tasks(%d)", key, j)
         setXMLString(xmlFile, activeTaskKey .. "#id", activeTask.id)
         setXMLString(xmlFile, activeTaskKey .. "#groupId", activeTask.groupId)
@@ -159,7 +115,7 @@ function TodoList:loadFromXMLFile()
 
             local group = TaskGroup.new()
             group:loadFromXMLFile(xmlFile, groupKey)
-            g_currentMission.todoList.taskGroups[group.id] = group
+            g_currentMission.taskList.taskGroups[group.id] = group
             i = i + 1
         end
 
@@ -172,7 +128,7 @@ function TodoList:loadFromXMLFile()
 
             local taskId = getXMLString(xmlFile, activeTaskKey .. "#id")
             local groupId = getXMLString(xmlFile, activeTaskKey .. "#groupId")
-            g_currentMission.todoList:addActiveTask(groupId, taskId)
+            g_currentMission.taskList:addActiveTask(groupId, taskId)
             j = j + 1
         end
 
@@ -247,8 +203,8 @@ end
 
 function TodoList:hourChanged()
     local period = math.floor(g_currentMission.environment.currentPeriod)
-    if period ~= g_currentMission.todoList.currentPeriod then
-        g_currentMission.todoList:onPeriodChanged()
+    if period ~= g_currentMission.taskList.currentPeriod then
+        g_currentMission.taskList:onPeriodChanged()
     end
 end
 
@@ -256,7 +212,7 @@ function TodoList:onPeriodChanged()
     for _, group in pairs(self.taskGroups) do
         self:addGroupTasksForCurrentPeriod(group)
     end
-    g_currentMission.todoList.currentPeriod = math.floor(g_currentMission.environment.currentPeriod)
+    g_currentMission.taskList.currentPeriod = math.floor(g_currentMission.environment.currentPeriod)
 end
 
 function TodoList:addGroupTasksForCurrentPeriod(group)

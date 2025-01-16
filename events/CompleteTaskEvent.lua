@@ -32,12 +32,12 @@ function CompleteTaskEvent:run(connection)
     end
 
     -- Remove active task
-    g_currentMission.todoList.activeTasks[self.taskId] = nil
+    g_currentMission.taskList.activeTasks[self.taskId] = nil
 
     -- Find the origin task and if it should not recur, delete it
-    local sourceTask = g_currentMission.todoList.taskGroups[self.groupId].tasks[self.taskId]
+    local sourceTask = g_currentMission.taskList.taskGroups[self.groupId].tasks[self.taskId]
     if sourceTask ~= nil and sourceTask.shouldRecur == false then
-        g_currentMission.todoList.taskGroups[self.groupId].tasks[self.taskId] = nil
+        g_currentMission.taskList.taskGroups[self.groupId].tasks[self.taskId] = nil
         g_messageCenter:publish(MessageType.TASK_GROUPS_UPDATED)
     end
 

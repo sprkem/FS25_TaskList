@@ -32,13 +32,13 @@ function NewTaskEvent:run(connection)
         g_server:broadcastEvent(NewTaskEvent.new(self.groupId, self.task))
     end
 
-    local group = g_currentMission.todoList.taskGroups[self.groupId]
+    local group = g_currentMission.taskList.taskGroups[self.groupId]
     if group == nil then
         print("DeleteGroupEvent: Group not present, skipping.")
         return
     end
 
     group.tasks[self.task.id] = self.task
-    g_currentMission.todoList:addGroupTasksForCurrentPeriod(group)
+    g_currentMission.taskList:addGroupTasksForCurrentPeriod(group)
     g_messageCenter:publish(MessageType.TASK_GROUPS_UPDATED)
 end

@@ -28,7 +28,7 @@ function DeleteGroupEvent:run(connection)
         g_server:broadcastEvent(DeleteGroupEvent.new(self.id))
     end
 
-    local group = g_currentMission.todoList.taskGroups[self.id]
+    local group = g_currentMission.taskList.taskGroups[self.id]
     if group == nil then
         print("DeleteGroupEvent: Group not present, skipping.")
         return
@@ -36,10 +36,10 @@ function DeleteGroupEvent:run(connection)
 
     -- Remove any active tasks for the group
     for _, task in pairs(group.tasks) do
-        g_currentMission.todoList.activeTasks[task.id] = nil
+        g_currentMission.taskList.activeTasks[task.id] = nil
     end
 
-    g_currentMission.todoList.taskGroups[self.id] = nil
+    g_currentMission.taskList.taskGroups[self.id] = nil
 
     g_messageCenter:publish(MessageType.TASK_GROUPS_UPDATED)
     g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)

@@ -8,8 +8,8 @@ function TaskGroup.new(customMt)
 
     setmetatable(self, customMt or Group_mt)
 
-    self.id = g_currentMission.todoList:generateId()
-    self.farmId = g_currentMission.todoList:getCurrentFarmId()
+    self.id = g_currentMission.taskList:generateId()
+    self.farmId = g_currentMission.taskList:getCurrentFarmId()
     self.name = ""
     self.tasks = {}
     return self

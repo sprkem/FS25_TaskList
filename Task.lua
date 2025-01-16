@@ -13,7 +13,7 @@ function Task.new(customMt)
 
     setmetatable(self, customMt or Group_mt)
 
-    self.id = g_currentMission.todoList:generateId()
+    self.id = g_currentMission.taskList:generateId()
     self.detail = ""
     self.priority = 1
     self.period = 1

@@ -31,13 +31,13 @@ function DeleteTaskEvent:run(connection)
         g_server:broadcastEvent(DeleteTaskEvent.new(self.groupId, self.taskId))
     end
 
-    if g_currentMission.todoList.taskGroups[self.groupId] == nil then
+    if g_currentMission.taskList.taskGroups[self.groupId] == nil then
         print("DeleteTaskEvent: Group not present, skipping.")
         return
     end
 
-    g_currentMission.todoList.taskGroups[self.groupId].tasks[self.taskId] = nil
-    g_currentMission.todoList.activeTasks[self.taskId] = nil
+    g_currentMission.taskList.taskGroups[self.groupId].tasks[self.taskId] = nil
+    g_currentMission.taskList.activeTasks[self.taskId] = nil
 
     g_messageCenter:publish(MessageType.TASK_GROUPS_UPDATED)
     g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)

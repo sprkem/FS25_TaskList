@@ -35,7 +35,7 @@ function ManageGroupsFrame:onClose()
 end
 
 function ManageGroupsFrame:updateContent()
-    self.currentGroups = g_currentMission.todoList:getGroupListForCurrentFarm()
+    self.currentGroups = g_currentMission.taskList:getGroupListForCurrentFarm()
 
     if next(self.currentGroups) == nil then
         self.tableContainer:setVisible(false)
@@ -105,7 +105,7 @@ function ManageGroupsFrame:onClickDelete(sender)
     YesNoDialog.show(
         function(self, clickOk)
             if clickOk then
-                g_currentMission.todoList:deleteGroup(self.currentGroups[self.selectedGroupIndex].id)
+                g_currentMission.taskList:deleteGroup(self.currentGroups[self.selectedGroupIndex].id)
             end
         end, self,
         g_i18n:getText("ui_confirm_deletion"))
@@ -119,12 +119,12 @@ function ManageGroupsFrame:onNewGroupNameSet(name, clickOk)
             return
         end
 
-        if g_currentMission.todoList:groupExistsForCurrentFarm(name) then
+        if g_currentMission.taskList:groupExistsForCurrentFarm(name) then
             InfoDialog.show(g_i18n:getText("ui_group_exists_error"))
             return
         end
 
-        g_currentMission.todoList:addGroupForCurrentFarm(name)
+        g_currentMission.taskList:addGroupForCurrentFarm(name)
         return
     end
 end
@@ -137,12 +137,12 @@ function ManageGroupsFrame:onCopyGroupNameSet(name, clickOk, copyIndex)
             return
         end
 
-        if g_currentMission.todoList:groupExistsForCurrentFarm(name) then
+        if g_currentMission.taskList:groupExistsForCurrentFarm(name) then
             InfoDialog.show(g_i18n:getText("ui_group_exists_error"))
             return
         end
 
-        g_currentMission.todoList:copyGroupForCurrentFarm(name, self.currentGroups[self.selectedGroupIndex].id)
+        g_currentMission.taskList:copyGroupForCurrentFarm(name, self.currentGroups[self.selectedGroupIndex].id)
         return
     end
 end
