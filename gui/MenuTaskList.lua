@@ -10,7 +10,7 @@ function MenuTaskList.new(i18n, messageCenter)
     self.messageCenter = messageCenter
     self.selectedRow = -1;
 
-    self.dataBindings = {} -- TODO check if removable
+    self.dataBindings = {}
 
     self.btnBack = {
         inputAction = InputAction.MENU_BACK
@@ -95,7 +95,7 @@ function MenuTaskList:updateContent()
     -- if nextMonth > 12 then
     --     nextMonth = 1
     -- end
-    -- local nextMonthTasks = g_currentMission.todoList:getTasksForPeriodForCurrentFarm(nextMonth)
+    -- local nextMonthTasks = g_currentMission.taskList:getTasksForPeriodForCurrentFarm(nextMonth)
     if next(g_currentMission.taskList.taskGroups) == nil then
         self.tableContainer:setVisible(false)
         self.noDataContainer:setVisible(false)
