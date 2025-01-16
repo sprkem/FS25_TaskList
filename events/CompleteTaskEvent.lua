@@ -38,7 +38,6 @@ function CompleteTaskEvent:run(connection)
     local sourceTask = g_currentMission.todoList.taskGroups[self.groupId].tasks[self.taskId]
     if sourceTask ~= nil and sourceTask.shouldRecur == false then
         g_currentMission.todoList.taskGroups[self.groupId].tasks[self.taskId] = nil
-        DebugUtil.printTableRecursively(g_currentMission.todoList.taskGroups[self.groupId],".",0,5)
         g_messageCenter:publish(MessageType.TASK_GROUPS_UPDATED)
     end
 

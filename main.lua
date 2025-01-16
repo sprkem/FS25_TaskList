@@ -153,7 +153,6 @@ function TodoList:loadFromXMLFile()
         local i = 0
         while true do
             local groupKey = string.format(key .. ".taskGroups.group(%d)", i)
-            print("Loading groupkey " .. groupKey)
             if not hasXMLProperty(xmlFile, groupKey) then
                 break
             end
@@ -167,7 +166,6 @@ function TodoList:loadFromXMLFile()
         local j = 0
         while true do
             local activeTaskKey = string.format("%s.activeTasks.tasks(%d)", key, j)
-            print("Loading activeTaskKey " .. activeTaskKey)
             if not hasXMLProperty(xmlFile, activeTaskKey) then
                 break
             end
@@ -248,7 +246,6 @@ function TodoList.fixInGameMenu(frame, pageName, uvs, position, predicateFunc)
 end
 
 function TodoList:hourChanged()
-    print("Hour changed received")
     local period = math.floor(g_currentMission.environment.currentPeriod)
     if period ~= g_currentMission.todoList.currentPeriod then
         g_currentMission.todoList:onPeriodChanged()
@@ -256,7 +253,6 @@ function TodoList:hourChanged()
 end
 
 function TodoList:onPeriodChanged()
-    print("Month changed, updating tasks")
     for _, group in pairs(self.taskGroups) do
         self:addGroupTasksForCurrentPeriod(group)
     end

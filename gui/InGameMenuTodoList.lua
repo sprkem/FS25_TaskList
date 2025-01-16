@@ -88,10 +88,8 @@ end
 
 function InGameMenuTodoList:updateContent()
     -- Get the current farm
-    print("Fetching groups/tasks for farm")
 
     -- local currentPeriod = math.floor(g_currentMission.environment.currentPeriod)
-    -- print("Fetching tasks for next month: " .. currentPeriod)
 
     -- local nextMonth = currentPeriod + 1
     -- if nextMonth > 12 then
@@ -112,7 +110,6 @@ function InGameMenuTodoList:updateContent()
 
     self.currentTasks = g_currentMission.todoList:getActiveTasksForCurrentFarm()
     table.sort(self.currentTasks, InGameMenuTodoList.sortingFunction)
-    -- DebugUtil.printTableRecursively(self.currentTasks,".",0,5)
 
     if next(self.currentTasks) == nil then
         self.tableContainer:setVisible(false)
@@ -128,24 +125,20 @@ function InGameMenuTodoList:updateContent()
 end
 
 function InGameMenuTodoList:getNumberOfSections()
-    print("InGameMenuTodoList:getNumberOfSections")
     return 1
 end
 
 function InGameMenuTodoList:getNumberOfItemsInSection(list, section)
-    print("InGameMenuTodoList:getNumberOfItemsInSection")
     local count = 0
     for _ in pairs(self.currentTasks) do count = count + 1 end
     return count
 end
 
 function InGameMenuTodoList:getTitleForSectionHeader(list, section)
-    print("InGameMenuTodoList:getTitleForSectionHeader: " .. section)
     return ""
 end
 
 function InGameMenuTodoList:populateCellForItemInSection(list, section, index, cell)
-    print("InGameMenuTodoList:populateCellForItemInSection" .. section)
     local task = self.currentTasks[index]
     cell:getAttribute("group"):setText(task.groupName)
     cell:getAttribute("detail"):setText(task.detail)
@@ -183,11 +176,9 @@ end
 
 -- Functions opening dialogs
 function InGameMenuTodoList:showManageGroups()
-    print("InGameMenuTodoList:showManageGroups")
     local dialog = g_gui:showDialog("manageGroupsFrame")
 end
 
 function InGameMenuTodoList:manageTasks()
-    print("InGameMenuTodoList:manageTasks")
     local dialog = g_gui:showDialog("manageTasksFrame")
 end

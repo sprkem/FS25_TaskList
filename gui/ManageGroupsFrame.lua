@@ -76,7 +76,6 @@ function ManageGroupsFrame:onClickBack(sender)
 end
 
 function ManageGroupsFrame:onClickAdd(sender)
-    print("Got Add button call")
     TextInputDialog.show(
         ManageGroupsFrame.onNewGroupNameSet, self,
         "",
@@ -85,7 +84,6 @@ function ManageGroupsFrame:onClickAdd(sender)
 end
 
 function ManageGroupsFrame:onClickCopy(sender)
-    print("Got copy button call")
     if self.selectedGroupIndex == -1 then
         InfoDialog.show(g_i18n:getText("ui_no_group_selected_error"))
         return

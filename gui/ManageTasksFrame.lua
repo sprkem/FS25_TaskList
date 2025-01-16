@@ -71,7 +71,6 @@ function ManageTasksFrame:updateContent()
 
     -- Check if any tasks on the current Group. If not hide the table and return
     if next(self.currentGroup.tasks) == nil then
-        print("No tasks so hiding visuals")
         self.tasksContainer:setVisible(false)
         self.noTasksContainer:setVisible(true)
         return
@@ -232,7 +231,6 @@ function ManageTasksFrame:onNewTaskRequestPeriod(newTask)
         callback = function(_, index)
             if index > 0 then
                 newTask.period = TaskListUtils.convertMonthNumberToPeriod(index)
-                print("new taks period: " .. newTask.period)
                 self:onNewTaskJourneyComplete(newTask)
             end
         end
