@@ -17,7 +17,7 @@ function InGameMenuTodoList.new(i18n, messageCenter)
     }
 
     self.btnManageGroups = {
-        text = self.i18n:getText("ui_btn_manage_groups"),
+        text = self.i18n:getText("ui_manage_groups"),
         inputAction = InputAction.MENU_EXTRA_1,
         callback = function()
             self:showManageGroups()
@@ -33,7 +33,7 @@ function InGameMenuTodoList.new(i18n, messageCenter)
     }
 
     self.btnManageTasks = {
-        text = self.i18n:getText("ui_btn_manage_tasks"),
+        text = self.i18n:getText("ui_manage_tasks"),
         inputAction = InputAction.MENU_ACTIVATE,
         callback = function()
             self:manageTasks()

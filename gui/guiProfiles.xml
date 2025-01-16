@@ -6,11 +6,11 @@
         <Preset name="colorGrayHeader" value="0.4 0.4 0.4 1"/>
         <Preset name="colorListHeaderBackground" value="0 0 0 0.35" />
     </Presets>
-    <Profile name="ingameMenuTodoListMenuHeaderIcon" extends="baseReference" with="anchorMiddleCenter">
+    <Profile name="TaskListMenuHeaderIcon" extends="baseReference" with="anchorMiddleCenter">
         <imageSliceId value="gui.icon_ingameMenu_contracts" />
         <imageColor value="$preset_fs25_colorMainDark" />
     </Profile>
-    <Profile name="ingameMenuTodoListHeader" extends="baseReference">
+    <Profile name="TaskListHeader" extends="baseReference">
         <imageColor value="0 0 0 0" />
         <textFocusedColor value="$preset_fs25_colorMainHighlight" />
         <textHighlightedColor value="$preset_fs25_colorMainHighlight" />
@@ -29,7 +29,7 @@
         <textColor value="$preset_colorWhite_50" />
         <textAlignment value="left" />
     </Profile>
-    <Profile name="ingameMenuTodoListHeaderRight" extends="baseReference">
+    <Profile name="TaskListHeaderRight" extends="baseReference">
         <imageColor value="0 0 0 0" />
         <textFocusedColor value="$preset_fs25_colorMainHighlight" />
         <textHighlightedColor value="$preset_fs25_colorMainHighlight" />
@@ -40,14 +40,14 @@
         <textAlignment value="right" />
         <textDisabledColor value="$preset_colorDisabled" />
     </Profile>
-    <Profile name="ingameMenuTodoListTable" extends="emptyPanel" with="anchorStretchingYLeft pivotTopLeft" />
-    <Profile name="ingameMenuTodoListListItem" extends="baseReference" with="anchorTopStretchingX alternating">
+    <Profile name="TaskListTable" extends="emptyPanel" with="anchorStretchingYLeft pivotTopLeft" />
+    <Profile name="TaskListListItem" extends="baseReference" with="anchorTopStretchingX alternating">
         <height value="32px"/>
         <imageColor value="$preset_fs25_colorGrey" />
         <imageSelectedColor value="$preset_fs25_colorMainHighlight" />
         <alternateBackgroundColor value="$preset_fs25_colorGreyDark_50" />
     </Profile>
-    <Profile name="ingameMenuTodoListRowCellLeft" extends="baseReference" with="anchorStretchingYLeft">
+    <Profile name="TaskListRowCellLeft" extends="baseReference" with="anchorStretchingYLeft">
         <textBold value="false" />
         <textSize value="15px" />
         <textAlignment value="left" />
@@ -55,7 +55,7 @@
         <textSelectedColor value="$preset_fs25_colorMainDark" />
         <textDisabledColor value="$preset_colorDisabled" />
     </Profile>
-    <Profile name="ingameMenuTodoListRowCellRight" extends="ingameMenuTodoListRowCellLeft">
+    <Profile name="TaskListRowCellRight" extends="TaskListRowCellLeft">
         <textAlignment value="right" />
     </Profile>
     <Profile name="todoListGroupsSliderBox" extends="fs25_listSliderBox" with="anchorTopRight" />

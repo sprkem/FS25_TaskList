@@ -180,7 +180,7 @@ end
 function ManageTasksFrame:onNewTaskRequestRecurMode(newTask)
     local allowedValues = {
         g_i18n:getText("ui_set_task_recur_mode_monthly"),
-        g_i18n:getText("ui_set_task_recur_mode_daily")
+        g_i18n:getText("ui_task_due_daily")
     }
 
     TaskListUtils.showOptionDialog({

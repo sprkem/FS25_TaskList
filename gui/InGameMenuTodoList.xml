@@ -3,9 +3,9 @@
     <GuiElement profile="fs25_menuContainer">
         <GuiElement profile="fs25_menuHeaderPanel">
 			<Bitmap profile="fs25_menuHeaderIconBg">
-				<Bitmap profile="ingameMenuTodoListMenuHeaderIcon" size="50px 50px"/>
+				<Bitmap profile="TaskListMenuHeaderIcon" size="50px 50px"/>
             </Bitmap>
-			<Text profile="fs25_menuHeaderTitle" id="categoryHeaderText" text="$l10n_ui_ingameMenuTodoList"/>
+			<Text profile="fs25_menuHeaderTitle" id="categoryHeaderText" text="$l10n_ui_TaskList"/>
 		</GuiElement>
 
         <GuiElement id="noGroupsContainer" profile="fs25_statisticsHeaderBox">
@@ -19,20 +19,20 @@
         
         <GuiElement id="tableContainer">
             <GuiElement profile="fs25_statisticsHeaderBox">
-                <Button profile="ingameMenuTodoListHeader" position="40px 0px" text="$l10n_ui_header_group" handleFocus="false" />
-                <Button profile="ingameMenuTodoListHeader" position="240px 0px" text="$l10n_ui_header_detail" handleFocus="false" />
-                <Button profile="ingameMenuTodoListHeader" position="720px 0px" text="$l10n_ui_header_due" handleFocus="false" />
-                <Button profile="ingameMenuTodoListHeader" position="870px 0px" text="$l10n_ui_header_overdue" handleFocus="false" />
-                <Button profile="ingameMenuTodoListHeaderRight" position="970px 0px" size="100px 32px" text="$l10n_ui_header_priority" handleFocus="false" />
+                <Button profile="TaskListHeader" position="40px 0px" text="$l10n_ui_header_group" handleFocus="false" />
+                <Button profile="TaskListHeader" position="240px 0px" text="$l10n_ui_header_detail" handleFocus="false" />
+                <Button profile="TaskListHeader" position="720px 0px" text="$l10n_ui_header_due" handleFocus="false" />
+                <Button profile="TaskListHeader" position="870px 0px" text="$l10n_ui_header_overdue" handleFocus="false" />
+                <Button profile="TaskListHeaderRight" position="970px 0px" size="100px 32px" text="$l10n_ui_header_priority" handleFocus="false" />
             </GuiElement>
 
-            <SmoothList profile="ingameMenuTodoListTable" id="currentTasksTable" position="0px -40px">
-                <ListItem profile="ingameMenuTodoListListItem">
-                    <Text profile="ingameMenuTodoListRowCellLeft" position="40px 0px" size="200px 32px" name="group"/>
-                    <Text profile="ingameMenuTodoListRowCellLeft" position="240px 0px" size="480px 32px" name="detail"/>
-                    <Text profile="ingameMenuTodoListRowCellLeft" position="720px 0px" size="150px 32px" name="due"/>
-                    <Text profile="ingameMenuTodoListRowCellLeft" position="870px 0px" size="100px 32px" name="overdue"/>
-                    <Text profile="ingameMenuTodoListRowCellRight" position="970px 0px" size="100px 32px" name="priority"/>                                    
+            <SmoothList profile="TaskListTable" id="currentTasksTable" position="0px -40px">
+                <ListItem profile="TaskListListItem">
+                    <Text profile="TaskListRowCellLeft" position="40px 0px" size="200px 32px" name="group"/>
+                    <Text profile="TaskListRowCellLeft" position="240px 0px" size="480px 32px" name="detail"/>
+                    <Text profile="TaskListRowCellLeft" position="720px 0px" size="150px 32px" name="due"/>
+                    <Text profile="TaskListRowCellLeft" position="870px 0px" size="100px 32px" name="overdue"/>
+                    <Text profile="TaskListRowCellRight" position="970px 0px" size="100px 32px" name="priority"/>                                    
                 </ListItem>
             </SmoothList>
 

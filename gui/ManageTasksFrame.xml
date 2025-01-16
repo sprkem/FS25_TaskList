@@ -8,7 +8,7 @@
         <ThreePartBitmap profile="fs25_dialogBgBottom" />
         <GuiElement profile="fs25_dialogContentContainer">
             <Animation profile="fs25_dialogLoading" id="iconLoadingElement" />
-            <Text profile="dialogTitle" text="$l10n_ui_header_manage_tasks" position="0px -30px" />
+            <Text profile="dialogTitle" text="$l10n_ui_manage_tasks" position="0px -30px" />
 
             <!-- <MultiTextOption profile="fs25_subCategorySelectorTabbed" id="groupSelector" position="0px -80px" size="450px 50px" onClick="OnGroupSelectChange" disableButtonsOnSingleText="false" > -->
             <MultiTextOption profile="fs25_subCategorySelectorTabbed" id="groupSelector" position="0px -80px" size="450px 50px" onClick="OnGroupSelectChange" >
@@ -17,16 +17,16 @@
 
             <GuiElement id="tasksContainer">
                 <GuiElement profile="fs25_statisticsHeaderBox">
-                    <Button profile="ingameMenuTodoListHeader" position="60px -145px" text="$l10n_ui_header_detail" handleFocus="false" />
-                    <Button profile="ingameMenuTodoListHeader" position="540px -145px" text="$l10n_ui_header_due" handleFocus="false" />
-                    <Button profile="ingameMenuTodoListHeader" position="690px -145px" text="$l10n_ui_header_priority" handleFocus="false" />
+                    <Button profile="TaskListHeader" position="60px -145px" text="$l10n_ui_header_detail" handleFocus="false" />
+                    <Button profile="TaskListHeader" position="540px -145px" text="$l10n_ui_header_due" handleFocus="false" />
+                    <Button profile="TaskListHeader" position="690px -145px" text="$l10n_ui_header_priority" handleFocus="false" />
                 </GuiElement>
 
-                <SmoothList id="tasksTable" profile="ingameMenuTodoListTable" position="40px -180px" size="750px 520px">
-                    <ListItem profile="ingameMenuTodoListListItem">
-                        <Text profile="ingameMenuTodoListRowCellLeft" position="20px 0px" size="480px 32px" name="detail"/>
-                        <Text profile="ingameMenuTodoListRowCellLeft" position="500px 0px" size="150px 32px" name="due"/>
-                        <Text profile="ingameMenuTodoListRowCellRight" position="650px 0px" size="60px 32px" name="priority"/>
+                <SmoothList id="tasksTable" profile="TaskListTable" position="40px -180px" size="750px 520px">
+                    <ListItem profile="TaskListListItem">
+                        <Text profile="TaskListRowCellLeft" position="20px 0px" size="480px 32px" name="detail"/>
+                        <Text profile="TaskListRowCellLeft" position="500px 0px" size="150px 32px" name="due"/>
+                        <Text profile="TaskListRowCellRight" position="650px 0px" size="60px 32px" name="priority"/>
                     </ListItem>
                 </SmoothList>
 

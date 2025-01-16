@@ -8,16 +8,16 @@
         <ThreePartBitmap profile="fs25_dialogBgBottom" />
         <GuiElement profile="fs25_dialogContentContainer">
             <Animation profile="fs25_dialogLoading" id="iconLoadingElement" />
-            <Text profile="dialogTitle" text="$l10n_ui_header_manage_groups" position="0px -30px" />
+            <Text profile="dialogTitle" text="$l10n_ui_manage_groups" position="0px -30px" />
 
             <GuiElement id="tableContainer">
                 <GuiElement profile="fs25_statisticsHeaderBox">
-                    <Button profile="ingameMenuTodoListHeader" position="60px -75px" size="155px 32px" text="$l10n_ui_header_group" handleFocus="false" />
+                    <Button profile="TaskListHeader" position="60px -75px" size="155px 32px" text="$l10n_ui_header_group" handleFocus="false" />
                 </GuiElement>
 
-                <SmoothList id="groupsTable" profile="ingameMenuTodoListTable" position="40px -110px" size="650px 550px">
-                    <ListItem profile="ingameMenuTodoListListItem">
-                        <Text profile="ingameMenuTodoListRowCellLeft" position="20px 0px" size="155px 32px" name="group"/>
+                <SmoothList id="groupsTable" profile="TaskListTable" position="40px -110px" size="650px 550px">
+                    <ListItem profile="TaskListListItem">
+                        <Text profile="TaskListRowCellLeft" position="20px 0px" size="155px 32px" name="group"/>
                     </ListItem>
                 </SmoothList>
 

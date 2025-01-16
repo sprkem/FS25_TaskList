@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="92">
-    <author>HerrWasser</author>
+    <author>Ozz</author>
     <version>1.0.0.0</version>
-    <iconFilename>icon_todoList.dds</iconFilename>
+    <iconFilename>icon_taskList.dds</iconFilename>
     <title>
-        <en>Todo List</en>
+        <en>Task List</en>
         <de>Todo-Liste</de>
     </title>
     <description>
