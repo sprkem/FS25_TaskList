@@ -2,6 +2,7 @@ Task = {}
 local Group_mt = Class(Task)
 
 Task.RECUR_MODE = {
+    NONE = 0,
     MONTHLY = 1,
     DAILY = 2
 }
@@ -17,8 +18,8 @@ function Task.new(customMt)
     self.detail = ""
     self.priority = 1
     self.period = 1
-    self.shouldRecur = false
-    self.recurMode = Task.RECUR_MODE.MONTHLY
+    self.shouldRecur = true
+    self.recurMode = Task.RECUR_MODE.NONE
 
     return self
 end

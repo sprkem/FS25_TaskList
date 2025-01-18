@@ -123,6 +123,10 @@ end
 -- New Task Step
 function ManageTasksFrame:onClickAdd(sender)
     local newTask = Task.new()
+    self:onNewTaskRequestDetail(newTask)
+end
+
+function ManageTasksFrame:onNewTaskRequestDetail(newTask)
     TextInputDialog.show(
         function(self, value, clickOk)
             if clickOk then
@@ -136,9 +140,9 @@ function ManageTasksFrame:onClickAdd(sender)
                 self:onNewTaskRequestPriority(newTask)
             end
         end, self,
-        "",
+        newTask.detail,
         g_i18n:getText("ui_set_task_detail"),
-        "", Task.MAX_DETAIL_LENGTH, g_i18n:getText("ui_btn_ok"))
+        "xzz", Task.MAX_DETAIL_LENGTH, g_i18n:getText("ui_btn_ok"))
 end
 
 -- New Task Step
@@ -149,7 +153,7 @@ function ManageTasksFrame:onNewTaskRequestPriority(newTask)
         title = "",
         defaultText = "",
         options = allowedValues,
-        defaultOption = 1,
+        defaultOption = newTask.priority,
         target = self,
         args = {},
         callback = function(_, index)
@@ -157,6 +161,9 @@ function ManageTasksFrame:onNewTaskRequestPriority(newTask)
                 local value = allowedValues[index]
                 newTask.priority = tonumber(value)
                 self:onNewTaskRequestShouldRecur(newTask)
+            else
+                -- Go back
+                self:onNewTaskRequestDetail(newTask)
             end
         end
     })
@@ -164,15 +171,33 @@ end
 
 -- New Task Step
 function ManageTasksFrame:onNewTaskRequestShouldRecur(newTask)
-    YesNoDialog.show(
-        function(self, clickYes)
-            newTask.shouldRecur = clickYes
-            if newTask.shouldRecur == true then
-                self:onNewTaskRequestRecurMode(newTask)
+    local allowedValues = { "YES", "NO" }
+    local default = 1
+    if newTask.shouldRecur == false then
+        default = 2
+    end
+    TaskListUtils.showOptionDialog({
+        text = g_i18n:getText("ui_set_task_should_recur"),
+        title = "",
+        defaultText = "",
+        options = allowedValues,
+        defaultOption = default,
+        target = self,
+        args = {},
+        callback = function(_, index)
+            if index > 0 then
+                newTask.shouldRecur = index == 1
+                if newTask.shouldRecur then
+                    self:onNewTaskRequestRecurMode(newTask)
+                else
+                    self:onNewTaskRequestPeriod(newTask)
+                end
             else
-                self:onNewTaskRequestPeriod(newTask)
+                -- Go back
+                self:onNewTaskRequestPriority(newTask)
             end
-        end, self, g_i18n:getText("ui_set_task_should_recur"))
+        end
+    })
 end
 
 -- New Task Step
@@ -182,12 +207,16 @@ function ManageTasksFrame:onNewTaskRequestRecurMode(newTask)
         g_i18n:getText("ui_task_due_daily")
     }
 
+    local default = 1
+    if newTask.recurMode ~= Task.RECUR_MODE.NONE then
+        default = newTask.recurMode
+    end
     TaskListUtils.showOptionDialog({
         text = g_i18n:getText("ui_set_task_recur_mode"),
         title = "",
         defaultText = "",
         options = allowedValues,
-        defaultOption = 1,
+        defaultOption = default,
         target = self,
         args = {},
         callback = function(_, index)
@@ -199,6 +228,9 @@ function ManageTasksFrame:onNewTaskRequestRecurMode(newTask)
                 elseif newTask.recurMode == Task.RECUR_MODE.DAILY then
                     self:onNewTaskJourneyComplete(newTask)
                 end
+            else
+                -- Go back
+                self:onNewTaskRequestShouldRecur(newTask)
             end
         end
     })
@@ -221,6 +253,9 @@ function ManageTasksFrame:onNewTaskRequestPeriod(newTask)
         g_i18n:getText("ui_month12")
     }
     local default = TaskListUtils.convertPeriodToMonthNumber(g_currentMission.environment.currentPeriod)
+    if newTask.period ~= 1 then
+        default = newTask.period
+    end
     TaskListUtils.showOptionDialog({
         text = g_i18n:getText("ui_set_task_period"),
         title = "",
@@ -233,6 +268,12 @@ function ManageTasksFrame:onNewTaskRequestPeriod(newTask)
             if index > 0 then
                 newTask.period = TaskListUtils.convertMonthNumberToPeriod(index)
                 self:onNewTaskJourneyComplete(newTask)
+            else
+                if newTask.shouldRecur then
+                    self:onNewTaskRequestRecurMode(newTask)
+                else
+                    self:onNewTaskRequestShouldRecur(newTask)
+                end
             end
         end
     })
