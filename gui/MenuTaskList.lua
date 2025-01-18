@@ -150,9 +150,9 @@ function MenuTaskList:populateCellForItemInSection(list, section, index, cell)
     end
 
     if overdue then
-        cell:getAttribute("overdue"):setText(g_i18n:getText("ui_overdue_yes"))
+        cell:getAttribute("overdue"):setText(g_i18n:getText("ui_yes"))
     else
-        cell:getAttribute("overdue"):setText(g_i18n:getText("ui_overdue_no"))
+        cell:getAttribute("overdue"):setText(g_i18n:getText("ui_no"))
     end
 
     local monthString = TaskListUtils.formatPeriodFullMonthName(task.period)

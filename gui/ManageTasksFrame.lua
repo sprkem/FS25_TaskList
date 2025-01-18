@@ -171,7 +171,7 @@ end
 
 -- New Task Step
 function ManageTasksFrame:onNewTaskRequestShouldRecur(newTask)
-    local allowedValues = { "YES", "NO" }
+    local allowedValues = { g_i18n:getText("ui_yes"), g_i18n:getText("ui_no") }
     local default = 1
     if newTask.shouldRecur == false then
         default = 2
@@ -254,7 +254,7 @@ function ManageTasksFrame:onNewTaskRequestPeriod(newTask)
     }
     local default = TaskListUtils.convertPeriodToMonthNumber(g_currentMission.environment.currentPeriod)
     if newTask.period ~= 1 then
-        default = newTask.period
+        default = TaskListUtils.convertPeriodToMonthNumber(newTask.period)
     end
     TaskListUtils.showOptionDialog({
         text = g_i18n:getText("ui_set_task_period"),
