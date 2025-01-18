@@ -220,12 +220,13 @@ function ManageTasksFrame:onNewTaskRequestPeriod(newTask)
         g_i18n:getText("ui_month11"),
         g_i18n:getText("ui_month12")
     }
+    local default = TaskListUtils.convertPeriodToMonthNumber(g_currentMission.environment.currentPeriod)
     TaskListUtils.showOptionDialog({
         text = g_i18n:getText("ui_set_task_period"),
         title = "",
         defaultText = "",
         options = allowedValues,
-        defaultOption = 1,
+        defaultOption = default,
         target = self,
         args = {},
         callback = function(_, index)

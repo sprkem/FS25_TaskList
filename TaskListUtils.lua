@@ -24,6 +24,14 @@ function TaskListUtils.convertMonthNumberToPeriod(month)
     return month
 end
 
+function TaskListUtils.convertPeriodToMonthNumber(period)
+    period = period + 2
+    if period > 12 then
+        period = period - 12
+    end
+    return period
+end
+
 function TaskListUtils.formatPeriodFullMonthName(period)
     if period == 1 then
         return g_i18n:getText("ui_month3")
@@ -69,10 +77,9 @@ function TaskListUtils.showOptionDialog(parameters)
 
     local defaultOption = parameters.defaultOption or 1
 
-    optionDialog.optionElement:setState( defaultOption)
+    optionDialog.optionElement:setState(defaultOption)
 
     if parameters.callback and (type(parameters.callback)) == "function" then
         optionDialog:setCallback(parameters.callback, parameters.target, parameters.args)
     end
-
 end
