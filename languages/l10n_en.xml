@@ -25,7 +25,7 @@
 		<text name="ui_intro_text_1" text="To get started, use Manage Groups to create a Group. A group is a logical container for related tasks, for example Field 10, or General Farm Tasks."/>
 		<text name="ui_intro_text_2" text="Once you have made a group, use Manage Tasks to define things you need to do and when."/>
 		<text name="ui_intro_text_3" text="A task is just plain text, such as Feed the Cows, or Harvest. "/>
-		<text name="ui_intro_text_4" text="Tasks can recur on a given month, daily, or be one time jobs due at some point.  "/>
+		<text name="ui_intro_text_4" text="Tasks can one off things or recur by month or day, or by a multiple of months of days. "/>
 		<text name="ui_intro_text_5" text="When a task is due it will show here. Use Complete Task when it is done. If it is a recurring task, it will show again when due."/>
 		<text name="ui_intro_text_6" text="A group and all of its tasks can be easily copied to a new group if needed."/>
 		<text name="ui_intro_text_7" text="You can view tasks currently due while playing by pressing T."/>
@@ -38,8 +38,14 @@
 		<text name="ui_set_task_period" text="When is the task due?"/>
 		<text name="ui_set_task_recur_mode" text="When should the task recur?"/>
 		<text name="ui_set_task_recur_mode_monthly" text="On a specific month"/>
+		<text name="ui_set_task_recur_mode_n_months" text="Every N months"/>
+		<text name="ui_set_task_recur_mode_n_days" text="Every N days"/>
 		<text name="ui_task_due_daily" text="Daily"/>
 		<text name="ui_task_due_monthly" text="Every %s"/>
+		<text name="ui_task_due_n_months" text="Every %s months"/>
+		<text name="ui_task_due_n_days" text="Every %s days"/>
+		<text name="ui_set_task_n_months" text="How frequent in months should the task be completed?"/>
+		<text name="ui_set_task_n_days" text="How frequent in days should the task be completed?"/>
 		<text name="ui_group_exists_error" text="A group with this name already exists"/>
 		<text name="ui_no_name_specified_error" text="No name for the group was specified"/>
 		<text name="ui_no_detail_specified_error" text="No task detail was specified"/>

@@ -109,6 +109,10 @@ function ManageTasksFrame:populateCellForItemInSection(list, section, index, cel
         cell:getAttribute("due"):setText(g_i18n:getText("ui_task_due_daily"))
     elseif task.recurMode == Task.RECUR_MODE.MONTHLY then
         cell:getAttribute("due"):setText(string.format(g_i18n:getText("ui_task_due_monthly"), monthString))
+    elseif task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
+        cell:getAttribute("due"):setText(string.format(g_i18n:getText("ui_task_due_n_days"), task.n))
+    elseif task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
+        cell:getAttribute("due"):setText(string.format(g_i18n:getText("ui_task_due_n_months"), task.n))
     end
 end
 
@@ -204,7 +208,9 @@ end
 function ManageTasksFrame:onNewTaskRequestRecurMode(newTask)
     local allowedValues = {
         g_i18n:getText("ui_set_task_recur_mode_monthly"),
-        g_i18n:getText("ui_task_due_daily")
+        g_i18n:getText("ui_task_due_daily"),
+        g_i18n:getText("ui_set_task_recur_mode_n_months"),
+        g_i18n:getText("ui_set_task_recur_mode_n_days")
     }
 
     local default = 1
@@ -223,6 +229,13 @@ function ManageTasksFrame:onNewTaskRequestRecurMode(newTask)
             if index > 0 then
                 newTask.recurMode = index
 
+                if newTask.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS or newTask.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
+                    self:onNewTaskRequestN(newTask)
+                    return
+                end
+
+                newTask.n = 0
+                newTask.nextN = 0
                 if newTask.recurMode == Task.RECUR_MODE.MONTHLY then
                     self:onNewTaskRequestPeriod(newTask)
                 elseif newTask.recurMode == Task.RECUR_MODE.DAILY then
@@ -231,6 +244,45 @@ function ManageTasksFrame:onNewTaskRequestRecurMode(newTask)
             else
                 -- Go back
                 self:onNewTaskRequestShouldRecur(newTask)
+            end
+        end
+    })
+end
+
+function ManageTasksFrame:onNewTaskRequestN(newTask)
+    local allowedValues = { "1", "2", "3", "4", "5" }
+    local default = 1
+    if newTask.n ~= 0 then
+        default = newTask.n
+    end
+
+    local text = ""
+    if newTask.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
+        text = g_i18n:getText("ui_set_task_n_months")
+    elseif newTask.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
+        text = g_i18n:getText("ui_set_task_n_days")
+    end
+
+    TaskListUtils.showOptionDialog({
+        text = text,
+        title = "",
+        defaultText = "",
+        options = allowedValues,
+        defaultOption = default,
+        target = self,
+        args = {},
+        callback = function(_, index)
+            if index > 0 then
+                local increment = tonumber(allowedValues[index])
+                newTask.n = increment
+                if newTask.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
+                    newTask.nextN = g_currentMission.environment.currentPeriod
+                elseif newTask.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
+                    newTask.nextN = g_currentMission.environment.currentDay
+                end
+                self:onNewTaskJourneyComplete(newTask)
+            else
+                self:onNewTaskRequestRecurMode(newTask)
             end
         end
     })

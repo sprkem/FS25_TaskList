@@ -87,6 +87,7 @@ function TaskList:saveToXmlFile()
         local activeTaskKey = string.format("%s.activeTasks.tasks(%d)", key, j)
         setXMLString(xmlFile, activeTaskKey .. "#id", activeTask.id)
         setXMLString(xmlFile, activeTaskKey .. "#groupId", activeTask.groupId)
+        setXMLInt(xmlFile, activeTaskKey .. "#createdMarker", activeTask.createdMarker)
         j = j + 1
     end
 
@@ -129,7 +130,8 @@ function TaskList:loadFromXMLFile()
 
             local taskId = getXMLString(xmlFile, activeTaskKey .. "#id")
             local groupId = getXMLString(xmlFile, activeTaskKey .. "#groupId")
-            g_currentMission.taskList:addActiveTask(groupId, taskId)
+            local task = g_currentMission.taskList:addActiveTask(groupId, taskId)
+            task.createdMarker = getXMLInt(xmlFile, activeTaskKey .. "#createdMarker")
             j = j + 1
         end
 
@@ -240,9 +242,9 @@ function TaskList:addGroupTasksForCurrentPeriod(group)
     local currentPeriod = g_currentMission.environment.currentPeriod
     local additions = false
     for _, task in pairs(group.tasks) do
-        if task.recurMode ~= Task.RECUR_MODE.DAILY and task.period == currentPeriod then
-            self:addActiveTask(group.id, task.id)
-            additions = true
+        if task.recurMode == Task.RECUR_MODE.MONTHLY or task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
+            local didAdd = self:checkAndAddTaskIfDue(group.id, task)
+            if didAdd then additions = true end
         end
     end
     if additions == true then
@@ -253,14 +255,41 @@ end
 function TaskList:addDailyTasks(group)
     local additions = false
     for _, task in pairs(group.tasks) do
-        if task.recurMode == Task.RECUR_MODE.DAILY then
-            self:addActiveTask(group.id, task.id)
-            additions = true
+        if task.recurMode == Task.RECUR_MODE.DAILY or task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
+            local didAdd = self:checkAndAddTaskIfDue(group.id, task)
+            if didAdd then additions = true end
         end
     end
     if additions == true then
         g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
     end
+end
+
+function TaskList:checkAndAddTaskIfDue(groupId, task)
+    local currentDay = g_currentMission.environment.currentDay
+    local currentPeriod = g_currentMission.environment.currentPeriod
+    local shouldAdd = false
+    if task.recurMode == Task.RECUR_MODE.DAILY then
+        shouldAdd = true
+    elseif task.recurMode == Task.RECUR_MODE.MONTHLY and task.period == currentPeriod then
+        shouldAdd = true
+    elseif task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS and task.nextN == currentDay then
+        shouldAdd = true
+    elseif task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS and task.nextN == currentPeriod then
+        shouldAdd = true
+    end
+
+    if shouldAdd then
+        self:addActiveTask(groupId, task.id)
+        if task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS or task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
+            task.nextN = task.nextN + task.n
+            print("Yielded EVERY_N_XXX task " .. task.id .. " and nextN is now " .. task.nextN)
+        end
+        return true
+    end
+
+
+    return false
 end
 
 function TaskList:addActiveTask(groupId, taskId)
@@ -270,8 +299,15 @@ function TaskList:addActiveTask(groupId, taskId)
     taskCopy.groupName = group.name
     taskCopy.groupId = group.id
 
+    if task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
+        taskCopy.createdMarker = g_currentMission.environment.currentDay
+    elseif task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
+        taskCopy.createdMarker = g_currentMission.environment.currentPeriod
+    end
+
     self.activeTasks[taskCopy.id] = taskCopy
     -- Expect caller to raise ACTIVE_TASKS_UPDATED as this is called repeatedly
+    return taskCopy
 end
 
 function TaskList:getActiveTasksForCurrentFarm()

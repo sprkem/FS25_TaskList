@@ -31,4 +31,5 @@ function NewTaskGroupEvent:run(connection)
     g_currentMission.taskList.taskGroups[self.taskGroup.id] = self.taskGroup
     g_messageCenter:publish(MessageType.TASK_GROUPS_UPDATED)
     g_currentMission.taskList:addGroupTasksForCurrentPeriod(self.taskGroup)
+    g_currentMission.taskList:addDailyTasks(self.taskGroup)
 end
