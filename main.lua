@@ -50,8 +50,8 @@ function TaskList:loadMap()
     g_currentMission.taskList = self
     self.taskGroups = {}
     self.activeTasks = {}
-    self.currentPeriod = math.floor(g_currentMission.environment.currentPeriod)
-    self.currentDay = math.floor(g_currentMission.environment.currentDay)
+    self.currentPeriod = g_currentMission.environment.currentPeriod
+    self.currentDay = g_currentMission.environment.currentDay
 
     FSBaseMission.saveSavegame = Utils.appendedFunction(FSBaseMission.saveSavegame, TaskList.saveToXmlFile)
     self:loadFromXMLFile()
@@ -203,16 +203,21 @@ function TaskList.fixInGameMenu(frame, pageName, uvs, position, predicateFunc)
 end
 
 function TaskList:hourChanged()
-    local period = math.floor(g_currentMission.environment.currentPeriod)
+    local period = g_currentMission.environment.currentPeriod
     if period ~= g_currentMission.taskList.currentPeriod then
         g_currentMission.taskList:onPeriodChanged()
         return
     end
-    local day = math.floor(g_currentMission.environment.currentDay)
+    local day = g_currentMission.environment.currentDay
     if day ~= g_currentMission.taskList.currentDay then
         g_currentMission.taskList:onDayChanged()
         return
     end
+end
+
+function TaskList:playerFarmChanged()
+    g_messageCenter:publish(MessageType.TASK_GROUPS_UPDATED)
+    g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
 end
 
 function TaskList:onPeriodChanged()
@@ -220,7 +225,7 @@ function TaskList:onPeriodChanged()
         self:addGroupTasksForCurrentPeriod(group)
         self:addDailyTasks(group)
     end
-    g_currentMission.taskList.currentPeriod = math.floor(g_currentMission.environment.currentPeriod)
+    g_currentMission.taskList.currentPeriod = g_currentMission.environment.currentPeriod
 end
 
 function TaskList:onDayChanged()
@@ -228,11 +233,11 @@ function TaskList:onDayChanged()
     for _, group in pairs(self.taskGroups) do
         self:addDailyTasks(group)
     end
-    g_currentMission.taskList.currentDay = math.floor(g_currentMission.environment.currentDay)
+    g_currentMission.taskList.currentDay = g_currentMission.environment.currentDay
 end
 
 function TaskList:addGroupTasksForCurrentPeriod(group)
-    local currentPeriod = math.floor(g_currentMission.environment.currentPeriod)
+    local currentPeriod = g_currentMission.environment.currentPeriod
     local additions = false
     for _, task in pairs(group.tasks) do
         if task.recurMode ~= Task.RECUR_MODE.DAILY and task.period == currentPeriod then
@@ -426,51 +431,44 @@ function TaskList:generateId()
     end))
 end
 
-g_messageCenter:subscribe(MessageType.HOUR_CHANGED, TaskList.hourChanged)
-addModEventListener(TaskList)
-
 function TaskList:sendInitialClientState(connection, user, farm)
     connection:sendEvent(InitialClientStateEvent.new())
 end
 
-function TaskList:onInputOpenMenu(actionName, inputValue, callbackState, isAnalog, isMouse, deviceCategory, binding)
-    print("Open TaskList")
+function TaskList.ShowActiveTaskNotifications()
+    if g_currentMission.taskList.lastNotificationTime ~= nil and g_time - g_currentMission.taskList.lastNotificationTime < 12000 then
+        return
+    end
+
+    local hasTasks = false
+    for _, activeTask in pairs(g_currentMission.taskList.activeTasks) do
+        local description = string.format("%s - %s", activeTask.groupName, activeTask.detail)
+        g_currentMission:addIngameNotification(FSBaseMission.INGAME_NOTIFICATION_INFO, description)
+        hasTasks = true
+    end
+    if not hasTasks then
+        g_currentMission:addIngameNotification(FSBaseMission.INGAME_NOTIFICATION_INFO,
+            g_i18n:getText("ui_no_active_tasks"))
+    end
+
+    g_currentMission.taskList.lastNotificationTime = g_time
 end
 
-function TaskList:registerActionEvents(mission)
-    local _, eventId = mission.inputManager:registerActionEvent(InputAction.TL_SHOW_TASKS, self, self.onInputOpenMenu,
-        false, true, false, true)
-    mission.inputManager:setActionEventTextVisibility(eventId, false)
-end
-
-function TaskList:unregisterActionEvents(mission)
-    mission.inputManager:removeActionEventsByTarget(self)
+local function addPlayerActionEvents(self, superFunc, ...)
+    superFunc(self, ...)
+    local _, id = g_inputBinding:registerActionEvent(InputAction.TL_SHOW_TASKS, self,
+        TaskList.ShowActiveTaskNotifications, false, true, false,
+        true)
+    g_inputBinding:setActionEventTextVisibility(id, false)
 end
 
 FSBaseMission.sendInitialClientState = Utils.appendedFunction(FSBaseMission.sendInitialClientState,
     TaskList.sendInitialClientState)
 
-local function addPlayerActionEvents(self, superFunc, ...)
-    superFunc(self, ...)
-    local _, id = g_inputBinding:registerActionEvent(InputAction.TL_SHOW_TASKS, self, function()
-        if g_currentMission.taskList.lastNotificationTime ~= nil and g_time - g_currentMission.taskList.lastNotificationTime < 12000 then
-            return
-        end
-
-        local hasTasks = false
-        for _, activeTask in pairs(g_currentMission.taskList.activeTasks) do
-            local description = string.format("%s - %s", activeTask.groupName, activeTask.detail)
-            g_currentMission:addIngameNotification(FSBaseMission.INGAME_NOTIFICATION_INFO, description)
-            hasTasks = true
-        end
-        if not hasTasks then
-            g_currentMission:addIngameNotification(FSBaseMission.INGAME_NOTIFICATION_INFO,
-                g_i18n:getText("ui_no_active_tasks"))
-        end
-
-        g_currentMission.taskList.lastNotificationTime = g_time
-    end, false, true, false, true)
-    g_inputBinding:setActionEventTextVisibility(id, false)
-end
 PlayerInputComponent.registerGlobalPlayerActionEvents = Utils.overwrittenFunction(
     PlayerInputComponent.registerGlobalPlayerActionEvents, addPlayerActionEvents)
+
+g_messageCenter:subscribe(MessageType.HOUR_CHANGED, TaskList.hourChanged)
+g_messageCenter:subscribe(MessageType.PLAYER_FARM_CHANGED, TaskList.playerFarmChanged)
+
+addModEventListener(TaskList)

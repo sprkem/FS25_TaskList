@@ -89,7 +89,7 @@ end
 function MenuTaskList:updateContent()
     -- Get the current farm
 
-    -- local currentPeriod = math.floor(g_currentMission.environment.currentPeriod)
+    -- local currentPeriod = g_currentMission.environment.currentPeriod
 
     -- local nextMonth = currentPeriod + 1
     -- if nextMonth > 12 then
@@ -144,7 +144,7 @@ function MenuTaskList:populateCellForItemInSection(list, section, index, cell)
     cell:getAttribute("detail"):setText(task.detail)
     cell:getAttribute("priority"):setText(task.priority)
 
-    local overdue = task.period ~= math.floor(g_currentMission.environment.currentPeriod)
+    local overdue = task.period ~= g_currentMission.environment.currentPeriod
     if task.recurMode == Task.RECUR_MODE.DAILY then
         overdue = false
     end

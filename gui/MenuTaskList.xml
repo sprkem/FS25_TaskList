@@ -16,6 +16,7 @@
             <Text profile="taskListIntroText" text="$l10n_ui_intro_text_4" position="0px -260px" />
             <Text profile="taskListIntroText" text="$l10n_ui_intro_text_5" position="0px -300px" />
             <Text profile="taskListIntroText" text="$l10n_ui_intro_text_6" position="0px -340px" />
+            <Text profile="taskListIntroText" text="$l10n_ui_intro_text_7" position="0px -380px" />
         </GuiElement>
         
         <GuiElement id="tableContainer">
