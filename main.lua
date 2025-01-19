@@ -81,7 +81,7 @@ function TaskList:saveToXmlFile()
         group:saveToXmlFile(xmlFile, groupKey)
         i = i + 1
     end
-    
+
     local j = 0
     for _, activeTask in pairs(g_currentMission.taskList.activeTasks) do
         local activeTaskKey = string.format("%s.activeTasks.tasks(%d)", key, j)
@@ -224,6 +224,7 @@ function TaskList:onPeriodChanged()
 end
 
 function TaskList:onDayChanged()
+    print("Day changed " .. g_currentMission.environment.currentDay)
     for _, group in pairs(self.taskGroups) do
         self:addDailyTasks(group)
     end
@@ -432,5 +433,44 @@ function TaskList:sendInitialClientState(connection, user, farm)
     connection:sendEvent(InitialClientStateEvent.new())
 end
 
+function TaskList:onInputOpenMenu(actionName, inputValue, callbackState, isAnalog, isMouse, deviceCategory, binding)
+    print("Open TaskList")
+end
+
+function TaskList:registerActionEvents(mission)
+    local _, eventId = mission.inputManager:registerActionEvent(InputAction.TL_SHOW_TASKS, self, self.onInputOpenMenu,
+        false, true, false, true)
+    mission.inputManager:setActionEventTextVisibility(eventId, false)
+end
+
+function TaskList:unregisterActionEvents(mission)
+    mission.inputManager:removeActionEventsByTarget(self)
+end
+
 FSBaseMission.sendInitialClientState = Utils.appendedFunction(FSBaseMission.sendInitialClientState,
     TaskList.sendInitialClientState)
+
+local function addPlayerActionEvents(self, superFunc, ...)
+    superFunc(self, ...)
+    local _, id = g_inputBinding:registerActionEvent(InputAction.TL_SHOW_TASKS, self, function()
+        if g_currentMission.taskList.lastNotificationTime ~= nil and g_time - g_currentMission.taskList.lastNotificationTime < 12000 then
+            return
+        end
+
+        local hasTasks = false
+        for _, activeTask in pairs(g_currentMission.taskList.activeTasks) do
+            local description = string.format("%s - %s", activeTask.groupName, activeTask.detail)
+            g_currentMission:addIngameNotification(FSBaseMission.INGAME_NOTIFICATION_INFO, description)
+            hasTasks = true
+        end
+        if not hasTasks then
+            g_currentMission:addIngameNotification(FSBaseMission.INGAME_NOTIFICATION_INFO,
+                g_i18n:getText("ui_no_active_tasks"))
+        end
+
+        g_currentMission.taskList.lastNotificationTime = g_time
+    end, false, true, false, true)
+    g_inputBinding:setActionEventTextVisibility(id, false)
+end
+PlayerInputComponent.registerGlobalPlayerActionEvents = Utils.overwrittenFunction(
+    PlayerInputComponent.registerGlobalPlayerActionEvents, addPlayerActionEvents)

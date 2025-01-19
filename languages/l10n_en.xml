@@ -2,6 +2,7 @@
 <l10n>
     <translationContributors/>
 	<texts>
+		<text name="input_TL_SHOW_TASKS" text="Show tasks"/>
 		<text name="ui_intro_text_header" text="Welcome to Task List"/>
         <text name="ui_TaskList" text="Task List"/>
         <text name="ui_header_icon" text=""/>
@@ -49,6 +50,6 @@
 		<text name="ui_task_not_found_error" text="Could not find the task. Check the task was not deleted"/>
 		<text name="ui_no_groups_exist" text="You don't have any groups yet"/>
 		<text name="ui_no_tasks_exist_for_group" text="You don't have any tasks yet"/>
-		<text name="ui_no_active_tasks" text="You don't have any tasks due"/>
+		<text name="ui_no_active_tasks" text="You don't have any tasks due"/>		
 	</texts>
 </l10n>

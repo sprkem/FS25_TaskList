@@ -20,4 +20,12 @@
     </extraSourceFiles>
     <multiplayer supported="true"/>
     <l10n filenamePrefix="languages/l10n" />
+    <inputBinding>
+        <actionBinding action="TL_SHOW_TASKS">
+            <binding device="KB_MOUSE_DEFAULT" input="KEY_t" />
+        </actionBinding>
+    </inputBinding>
+    <actions>
+        <action name="TL_SHOW_TASKS" />
+    </actions>
 </modDesc>
