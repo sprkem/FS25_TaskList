@@ -231,7 +231,6 @@ function TaskList:onPeriodChanged()
 end
 
 function TaskList:onDayChanged()
-    print("Day changed " .. g_currentMission.environment.currentDay)
     for _, group in pairs(self.taskGroups) do
         self:addDailyTasks(group)
     end
@@ -283,7 +282,6 @@ function TaskList:checkAndAddTaskIfDue(groupId, task)
         self:addActiveTask(groupId, task.id)
         if task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS or task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
             task.nextN = task.nextN + task.n
-            print("Yielded EVERY_N_XXX task " .. task.id .. " and nextN is now " .. task.nextN)
         end
         return true
     end
