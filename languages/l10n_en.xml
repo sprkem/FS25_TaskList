@@ -18,7 +18,9 @@
 		<text name="ui_btn_close" text="Close"/>
 		<text name="ui_btn_ok" text="OK"/>
 		<text name="ui_btn_copy" text="Copy"/>
+		<text name="ui_btn_edit" text="Edit"/>
 		<text name="ui_btn_delete" text="Delete"/>
+		<text name="ui_btn_rename" text="Rename"/>
 		<text name="ui_btn_add_group" text="Add Group"/>
 		<text name="ui_btn_add_task" text="Add Task"/>
 		<text name="ui_btn_select_group" text="Change group"/>

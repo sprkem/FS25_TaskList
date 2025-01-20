@@ -40,7 +40,7 @@ function NewTaskEvent:run(connection)
 
     group.tasks[self.task.id] = self.task
 
-    local didAdd = g_currentMission.taskList:checkAndAddTaskIfDue(group.id, self.task)
+    local didAdd = g_currentMission.taskList:checkAndAddActiveTaskIfDue(group.id, self.task)
     if didAdd then
         g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
     end

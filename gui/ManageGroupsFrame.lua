@@ -83,6 +83,30 @@ function ManageGroupsFrame:onClickAdd(sender)
         nil, TaskGroup.MAX_NAME_LENGTH, g_i18n:getText("ui_btn_ok"))
 end
 
+function ManageGroupsFrame:onClickRename(sender)
+    TextInputDialog.show(
+        function(self, name, clickOk)
+            if clickOk then
+                name = string.gsub(name, '^%s*(.-)%s*$', '%1')
+                if name == "" then
+                    InfoDialog.show(g_i18n:getText("ui_no_name_specified_error"))
+                    return
+                end
+
+                if g_currentMission.taskList:groupExistsForCurrentFarm(name) then
+                    InfoDialog.show(g_i18n:getText("ui_group_exists_error"))
+                    return
+                end
+
+                g_currentMission.taskList:renameGroup(self.currentGroups[self.selectedGroupIndex].id, name)
+                return
+            end
+        end, self,
+        self.currentGroups[self.selectedGroupIndex].name,
+        g_i18n:getText("ui_set_group_name"),
+        nil, TaskGroup.MAX_NAME_LENGTH, g_i18n:getText("ui_btn_ok"))
+end
+
 function ManageGroupsFrame:onClickCopy(sender)
     if self.selectedGroupIndex == -1 then
         InfoDialog.show(g_i18n:getText("ui_no_group_selected_error"))

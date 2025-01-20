@@ -28,6 +28,7 @@ source(TaskList.dir .. "events/NewTaskGroupEvent.lua")
 source(TaskList.dir .. "events/CompleteTaskEvent.lua")
 source(TaskList.dir .. "events/DeleteTaskEvent.lua")
 source(TaskList.dir .. "events/NewTaskEvent.lua")
+source(TaskList.dir .. "events/RenameGroupEvent.lua")
 
 function TaskList:loadMap()
     MessageType.ACTIVE_TASKS_UPDATED = nextMessageTypeId()
@@ -242,7 +243,7 @@ function TaskList:addGroupTasksForCurrentPeriod(group)
     local additions = false
     for _, task in pairs(group.tasks) do
         if task.recurMode == Task.RECUR_MODE.MONTHLY or task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
-            local didAdd = self:checkAndAddTaskIfDue(group.id, task)
+            local didAdd = self:checkAndAddActiveTaskIfDue(group.id, task)
             if didAdd then additions = true end
         end
     end
@@ -255,7 +256,7 @@ function TaskList:addDailyTasks(group)
     local additions = false
     for _, task in pairs(group.tasks) do
         if task.recurMode == Task.RECUR_MODE.DAILY or task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
-            local didAdd = self:checkAndAddTaskIfDue(group.id, task)
+            local didAdd = self:checkAndAddActiveTaskIfDue(group.id, task)
             if didAdd then additions = true end
         end
     end
@@ -264,7 +265,7 @@ function TaskList:addDailyTasks(group)
     end
 end
 
-function TaskList:checkAndAddTaskIfDue(groupId, task)
+function TaskList:checkAndAddActiveTaskIfDue(groupId, task)
     local currentDay = g_currentMission.environment.currentDay
     local currentPeriod = g_currentMission.environment.currentPeriod
     local shouldAdd = false
@@ -361,11 +362,14 @@ function TaskList:deleteTask(groupId, taskId)
     g_client:getServerConnection():sendEvent(DeleteTaskEvent.new(groupId, taskId))
 end
 
-function TaskList:addTask(groupId, task)
-    local group = self.taskGroups[groupId]
-    if group == nil then
+function TaskList:addTask(groupId, task, isEdit)
+    if self.taskGroups[groupId] == nil then
         InfoDialog.show(g_i18n:getText("ui_group_not_found_error"))
         return
+    end
+
+    if isEdit then
+        g_client:getServerConnection():sendEvent(DeleteTaskEvent.new(groupId, task.id))
     end
 
     g_client:getServerConnection():sendEvent(NewTaskEvent.new(groupId, task))
@@ -385,6 +389,17 @@ function TaskList:addGroupForCurrentFarm(name)
     local group = TaskGroup.new()
     group.name = name
     g_client:getServerConnection():sendEvent(NewTaskGroupEvent.new(group))
+end
+
+function TaskList:renameGroup(groupId, newName)
+    local group = self.taskGroups[groupId]
+    if group == nil then
+        InfoDialog.show(g_i18n:getText("ui_group_not_found_error"))
+        return
+    end
+
+    group.name = newName
+    g_client:getServerConnection():sendEvent(RenameGroupEvent.new(groupId, newName))
 end
 
 function TaskList:copyGroupForCurrentFarm(newName, groupToCopyId)

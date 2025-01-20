@@ -9,6 +9,7 @@ function ManageTasksFrame.new(target, custom_mt)
     self.i18n = g_i18n
     self.selectedTaskIndex = -1
     self.currentGroupId = -1
+    self.isEdit = false
     return self
 end
 
@@ -127,10 +128,21 @@ end
 -- New Task Step
 function ManageTasksFrame:onClickAdd(sender)
     local newTask = Task.new()
-    self:onNewTaskRequestDetail(newTask)
+    self.isEdit = false
+    self:onAddEditTaskRequestDetail(newTask)
 end
 
-function ManageTasksFrame:onNewTaskRequestDetail(newTask)
+function ManageTasksFrame:onClickEdit(sender)
+    if self.selectedTaskIndex == -1 then
+        InfoDialog.show(g_i18n:getText("ui_no_task_selected"))
+        return
+    end
+    local task = self.currentGroup.tasks[self.selectedTaskIndex]
+    self.isEdit = true
+    self:onAddEditTaskRequestDetail(task)
+end
+
+function ManageTasksFrame:onAddEditTaskRequestDetail(newTask)
     TextInputDialog.show(
         function(self, value, clickOk)
             if clickOk then
@@ -141,7 +153,7 @@ function ManageTasksFrame:onNewTaskRequestDetail(newTask)
                 end
 
                 newTask.detail = detail
-                self:onNewTaskRequestPriority(newTask)
+                self:onAddEditTaskRequestPriority(newTask)
             end
         end, self,
         newTask.detail,
@@ -150,7 +162,7 @@ function ManageTasksFrame:onNewTaskRequestDetail(newTask)
 end
 
 -- New Task Step
-function ManageTasksFrame:onNewTaskRequestPriority(newTask)
+function ManageTasksFrame:onAddEditTaskRequestPriority(newTask)
     local allowedValues = { "1", "2", "3", "4", "5" }
     TaskListUtils.showOptionDialog({
         text = g_i18n:getText("ui_set_task_priority"),
@@ -164,17 +176,17 @@ function ManageTasksFrame:onNewTaskRequestPriority(newTask)
             if index > 0 then
                 local value = allowedValues[index]
                 newTask.priority = tonumber(value)
-                self:onNewTaskRequestShouldRecur(newTask)
+                self:onAddEditTaskRequestShouldRecur(newTask)
             else
                 -- Go back
-                self:onNewTaskRequestDetail(newTask)
+                self:onAddEditTaskRequestDetail(newTask)
             end
         end
     })
 end
 
 -- New Task Step
-function ManageTasksFrame:onNewTaskRequestShouldRecur(newTask)
+function ManageTasksFrame:onAddEditTaskRequestShouldRecur(newTask)
     local allowedValues = { g_i18n:getText("ui_yes"), g_i18n:getText("ui_no") }
     local default = 1
     if newTask.shouldRecur == false then
@@ -192,20 +204,20 @@ function ManageTasksFrame:onNewTaskRequestShouldRecur(newTask)
             if index > 0 then
                 newTask.shouldRecur = index == 1
                 if newTask.shouldRecur then
-                    self:onNewTaskRequestRecurMode(newTask)
+                    self:onAddEditTaskRequestRecurMode(newTask)
                 else
-                    self:onNewTaskRequestPeriod(newTask)
+                    self:onAddEditTaskRequestPeriod(newTask)
                 end
             else
                 -- Go back
-                self:onNewTaskRequestPriority(newTask)
+                self:onAddEditTaskRequestPriority(newTask)
             end
         end
     })
 end
 
 -- New Task Step
-function ManageTasksFrame:onNewTaskRequestRecurMode(newTask)
+function ManageTasksFrame:onAddEditTaskRequestRecurMode(newTask)
     local allowedValues = {
         g_i18n:getText("ui_set_task_recur_mode_monthly"),
         g_i18n:getText("ui_task_due_daily"),
@@ -230,26 +242,26 @@ function ManageTasksFrame:onNewTaskRequestRecurMode(newTask)
                 newTask.recurMode = index
 
                 if newTask.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS or newTask.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
-                    self:onNewTaskRequestN(newTask)
+                    self:onAddEditTaskRequestN(newTask)
                     return
                 end
 
                 newTask.n = 0
                 newTask.nextN = 0
                 if newTask.recurMode == Task.RECUR_MODE.MONTHLY then
-                    self:onNewTaskRequestPeriod(newTask)
+                    self:onAddEditTaskRequestPeriod(newTask)
                 elseif newTask.recurMode == Task.RECUR_MODE.DAILY then
-                    self:onNewTaskJourneyComplete(newTask)
+                    self:onAddEditTaskJourneyComplete(newTask)
                 end
             else
                 -- Go back
-                self:onNewTaskRequestShouldRecur(newTask)
+                self:onAddEditTaskRequestShouldRecur(newTask)
             end
         end
     })
 end
 
-function ManageTasksFrame:onNewTaskRequestN(newTask)
+function ManageTasksFrame:onAddEditTaskRequestN(newTask)
     local allowedValues = { "1", "2", "3", "4", "5" }
     local default = 1
     if newTask.n ~= 0 then
@@ -280,16 +292,16 @@ function ManageTasksFrame:onNewTaskRequestN(newTask)
                 elseif newTask.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
                     newTask.nextN = g_currentMission.environment.currentDay
                 end
-                self:onNewTaskJourneyComplete(newTask)
+                self:onAddEditTaskJourneyComplete(newTask)
             else
-                self:onNewTaskRequestRecurMode(newTask)
+                self:onAddEditTaskRequestRecurMode(newTask)
             end
         end
     })
 end
 
 -- New Task Step
-function ManageTasksFrame:onNewTaskRequestPeriod(newTask)
+function ManageTasksFrame:onAddEditTaskRequestPeriod(newTask)
     local allowedValues = {
         g_i18n:getText("ui_month1"),
         g_i18n:getText("ui_month2"),
@@ -319,12 +331,12 @@ function ManageTasksFrame:onNewTaskRequestPeriod(newTask)
         callback = function(_, index)
             if index > 0 then
                 newTask.period = TaskListUtils.convertMonthNumberToPeriod(index)
-                self:onNewTaskJourneyComplete(newTask)
+                self:onAddEditTaskJourneyComplete(newTask)
             else
                 if newTask.shouldRecur then
-                    self:onNewTaskRequestRecurMode(newTask)
+                    self:onAddEditTaskRequestRecurMode(newTask)
                 else
-                    self:onNewTaskRequestShouldRecur(newTask)
+                    self:onAddEditTaskRequestShouldRecur(newTask)
                 end
             end
         end
@@ -332,14 +344,10 @@ function ManageTasksFrame:onNewTaskRequestPeriod(newTask)
 end
 
 -- New Task Final Step
-function ManageTasksFrame:onNewTaskJourneyComplete(newTask)
-    g_currentMission.taskList:addTask(self.currentGroup.id, newTask)
+function ManageTasksFrame:onAddEditTaskJourneyComplete(newTask)
+    g_currentMission.taskList:addTask(self.currentGroup.id, newTask, self.isEdit)
+    self.isEdit = false
 end
-
--- Unsure if copy makes sense. Awaiting feedback
--- function ManageTasksFrame:onClickCopy(sender)
---     print("Got copy button call")
--- end
 
 function ManageTasksFrame:onClickDelete(sender)
     if self.selectedTaskIndex == -1 then
