@@ -8,12 +8,34 @@
         <de>Aufgabenliste</de>
     </title>
     <description>
-        <en>
-            <![CDATA[A mod to define tasks and be reminded to do them.]]>
-        </en>
-        <de>
-            <![CDATA[Ein Mod, um Aufgaben zu definieren und daran erinnert zu werden, sie zu erledigen.]]>
-        </de>
+            <en><![CDATA[Task List
+
+If you find yourself taking notes of what tasks you need to do, or even using external software, then Task List is here to help.
+
+On the main menu, just above Settings, you will find a new menu with a clipboard icon. Use this menu to get started with the following features:
+
+- Create groups to contain related tasks, such as Field 10 or General Farm Tasks.
+- Create one-off tasks or tasks that recur daily, monthly, every N months, or every N days.
+- Give tasks a priority so you know what to do first.
+- Buy a new field and want to copy tasks from an existing field? No problem, you can do this in seconds.
+- View currently due tasks in the menu and mark them complete when you've done them.
+- View currently due tasks without checking the menu by pressing T
+
+]]></en>		
+    <de><![CDATA[Task List
+
+Wenn Sie Notizen über die Aufgaben machen, die Sie erledigen müssen, oder sogar externe Software verwenden, dann ist Task List hier, um Ihnen zu helfen.
+
+Auf dem Hauptmenü, direkt oberhalb von Einstellungen, finden Sie ein neues Menü mit einem Klarstreifen-Symbol. Verwenden Sie dieses Menü, um mit den folgenden Funktionen zu beginnen:
+
+- Gruppen erstellen, um verwandte Aufgaben zu enthalten, wie zum Beispiel Feld 10 oder allgemeine Landwirtschaftliche Aufgaben.
+- Eine Aufgabe erstellen oder eine wiederkehrende Aufgabe, die täglich, monatlich, jeden N. Monat oder jeden N. Tag wiederholt.
+- Aufgaben eine Priorität geben, damit Sie wissen, was zuerst erledigt werden muss.
+- Ein neues Feld kaufen und Aufgaben von einem bestehenden Feld kopieren? Kein Problem, Sie können dies in Sekunden tun.
+- Die aktuellen fälligen Aufgaben im Menü ansehen und sie als erledigt markieren, wenn Sie sie erledigt haben.
+- Die aktuellen fälligen Aufgaben ohne das Menü ansehen, indem Sie T drücken.
+
+]]></de>	
     </description>
 	<extraSourceFiles>
         <sourceFile filename="main.lua"/>

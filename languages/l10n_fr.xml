@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<l10n>
+    <translationContributors/>
+    <texts>
+        <text name="input_TL_SHOW_TASKS" text="Afficher les tâches"/>
+        <text name="ui_intro_text_header" text="Bienvenue dans la liste de tâches"/>
+        <text name="ui_TaskList" text="Liste de tâches"/>
+        <text name="ui_header_icon" text=""/>
+        <text name="ui_header_group" text="Groupe"/>
+        <text name="ui_header_detail" text="Tâche"/>
+        <text name="ui_header_overdue" text="En retard"/>
+        <text name="ui_header_priority" text="Priorité"/>
+        <text name="ui_header_due" text="Dû"/>
+        <text name="ui_manage_groups" text="Gérer les groupes"/>
+        <text name="ui_manage_tasks" text="Gérer les tâches"/>
+        <text name="ui_header_current_group" text="Tâches pour le groupe : %s"/>
+        <text name="ui_btn_complete_task" text="Terminer la tâche"/>
+        <text name="ui_btn_close" text="Fermer"/>
+        <text name="ui_btn_ok" text="OK"/>
+        <text name="ui_btn_copy" text="Copier"/>
+        <text name="ui_btn_edit" text="Éditer"/>
+        <text name="ui_btn_delete" text="Supprimer"/>
+        <text name="ui_btn_rename" text="Renommer"/>
+        <text name="ui_btn_add_group" text="Ajouter un groupe"/>
+        <text name="ui_btn_add_task" text="Ajouter une tâche"/>
+        <text name="ui_btn_select_group" text="Changer de groupe"/>
+		<text name="ui_intro_text_1" text="Pour commencer, utilisez Gérer les groupes pour créer un groupe. Un groupe est un conteneur logique pour les tâches liées, par exemple Champ 10, ou Tâches générales des fermes."/>
+        <text name="ui_intro_text_2" text="Une fois que vous avez créé un groupe, utilisez Gérer les tâches pour définir les choses que vous devez faire et quand elles le sont."/>
+        <text name="ui_intro_text_3" text="Une tâche est juste un texte ordinaire, par exemple Faire les vaches, ou Récolter."/>
+        <text name="ui_intro_text_4" text="Les tâches peuvent être des choses uniques ou se répéter chaque mois ou jour, ou par un multiple de mois ou de jours."/>
+        <text name="ui_intro_text_5" text="Lorsqu'une tâche est dûe, elle apparaîtra ici. Utilisez Terminer la tâche lorsque c'est fait. Si c'est une tâche récurrente, elle apparaîtra à nouveau lorsque c'est dû."/>
+        <text name="ui_intro_text_6" text="Un groupe et toutes ses tâches peuvent être facilement copiés dans un nouveau groupe si besoin."/>
+        <text name="ui_intro_text_7" text="Vous pouvez afficher les tâches actuellement dûes en jouant en appuyant sur T."/>
+        <text name="ui_yes" text="Oui"/>
+        <text name="ui_no" text="Non"/>
+        <text name="ui_set_group_name" text="Choisissez un nom de groupe"/>
+        <text name="ui_set_task_detail" text="Désignez la tâche"/>
+        <text name="ui_set_task_priority" text="Fixez la priorité de la tâche"/>
+        <text name="ui_set_task_should_recur" text="Est-ce que la tâche est récurrente?"/>
+        <text name="ui_set_task_period" text="Quand est la tâche dûe?"/>
+        <text name="ui_set_task_recur_mode" text="Quand doit la tâche se répéter?"/>
+        <text name="ui_set_task_recur_mode_monthly" text="Sur un mois spécifique"/>
+        <text name="ui_set_task_recur_mode_n_months" text="Tous les N mois"/>
+        <text name="ui_set_task_recur_mode_n_days" text="Tous les N jours"/>
+        <text name="ui_task_due_daily" text="Journellement"/>
+        <text name="ui_task_due_monthly" text="Tous les %s"/>
+        <text name="ui_task_due_n_months" text="Tous les %s mois"/>
+        <text name="ui_task_due_n_days" text="Tous les %s jours"/>
+        <text name="ui_set_task_n_months" text="Combien de mois devrait la tâche être complétée?"/>
+        <text name="ui_set_task_n_days" text="Combien de jours devrait la tâche être complétée?"/>
+        <text name="ui_group_exists_error" text="Un groupe avec ce nom existe déjà"/>
+        <text name="ui_no_name_specified_error" text="Aucun nom pour le groupe n'a été spécifié"/>
+        <text name="ui_no_detail_specified_error" text="Aucun détail de tâche n'a été spécifié"/>
+        <text name="ui_no_group_selected_error" text="Aucun groupe sélectionné pour copier"/>
+        <text name="ui_no_task_selected" text="Aucune tâche sélectionnée"/>
+        <text name="ui_no_group_selected" text="Aucun groupe sélectionné"/>
+        <text name="ui_confirm_deletion" text="Soyez sûr de vouloir supprimer?"/>
+        <text name="ui_group_not_found_error" text="Le groupe n'a pas été trouvé. Vérifiez que le groupe n'a pas été supprimé"/>
+        <text name="ui_task_not_found_error" text="La tâche n'a pas été trouvée. Vérifiez que la tâche n'a pas été supprimée"/>
+        <text name="ui_no_groups_exist" text="Vous n'avez pas encore de groupes"/>
+        <text name="ui_no_tasks_exist_for_group" text="Vous n'avez pas encore de tâches pour ce groupe"/>
+        <text name="ui_no_active_tasks" text="Vous n'avez pas encore de tâches dûes"/>
+	</texts>
+</l10n>

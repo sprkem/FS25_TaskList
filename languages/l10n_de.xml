@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<l10n>
+    <translationContributors/>
+	<texts>
+        <text name="input_TL_SHOW_TASKS" text="Aufgaben anzeigen"/>
+        <text name="ui_intro_text_header" text="Willkommen in der Aufgabenliste"/>
+        <text name="ui_TaskList" text="Aufgabenliste"/>
+        <text name="ui_header_icon" text=""/>
+        <text name="ui_header_group" text="Gruppe"/>
+        <text name="ui_header_detail" text="Aufgabe"/>
+        <text name="ui_header_overdue" text="Überfällig"/>
+        <text name="ui_header_priority" text="Priorität"/>
+        <text name="ui_header_due" text="Fällig"/>
+        <text name="ui_manage_groups" text="Gruppen verwalten"/>
+        <text name="ui_manage_tasks" text="Aufgaben verwalten"/>
+        <text name="ui_header_current_group" text="Aufgaben für den Gruppen: %s"/>
+        <text name="ui_btn_complete_task" text="Aufgabe abschließen"/>
+        <text name="ui_btn_close" text="Schließen"/>
+        <text name="ui_btn_ok" text="OK"/>
+        <text name="ui_btn_copy" text="Kopieren"/>
+        <text name="ui_btn_edit" text="Bearbeiten"/>
+        <text name="ui_btn_delete" text="Löschen"/>
+        <text name="ui_btn_rename" text="Name ändern"/>
+        <text name="ui_btn_add_group" text="Gruppe hinzufügen"/>
+        <text name="ui_btn_add_task" text="Aufgabe hinzufügen"/>
+        <text name="ui_btn_select_group" text="Gruppen ändern"/>
+        <text name="ui_intro_text_1" text="Um anzufangen, verwenden Sie Gérer Gruppen, um einen Gruppen zu erstellen. Ein Gruppen ist ein logischer Behälter für verwandte Aufgaben, zum Beispiel Feld 10 oder allgemeine Landwirtschaftliche Aufgaben."/>
+        <text name="ui_intro_text_2" text="Sobald Sie einen Gruppen erstellt haben, können Sie mit Gérer Aufgaben die Dinge definieren, die Sie tun müssen und wann."/>
+        <text name="ui_intro_text_3" text="Eine Aufgabe ist einfach nur Text, zum Beispiel Füttern der Kühe oder Ernte."/>
+        <text name="ui_intro_text_4" text="Aufgaben können entweder einmalige Dinge sein oder monatlich oder täglich wiederholt werden, oder durch ein Vielfaches von Monaten oder Tagen."/>
+        <text name="ui_intro_text_5" text="Wenn eine Aufgabe fällig ist, wird sie hier angezeigt. Verwenden Sie den Button 'Aufgabe abschließen', wenn sie fertig ist. Wenn es sich um eine wiederkehrende Aufgabe handelt, wird sie wiederholt, wenn sie fällig ist."/>
+        <text name="ui_intro_text_6" text="Ein Gruppen und alle seiner Aufgaben können leicht in einen neuen Gruppen kopiert werden, wenn es notwendig ist."/>
+        <text name="ui_intro_text_7" text="Sie können Aufgaben, die derzeit fällig sind, während Sie spielen, mit T ansehen."/>
+        <text name="ui_yes" text="Ja"/>
+        <text name="ui_no" text="Nein"/>
+        <text name="ui_set_group_name" text="Wählen Sie einen Namen für den Gruppen"/>
+        <text name="ui_set_task_detail" text="Beschreiben Sie die Aufgabe"/>
+        <text name="ui_set_task_priority" text="Setzen Sie die Priorität der Aufgabe"/>
+        <text name="ui_set_task_should_recur" text="Ist die Aufgabe wiederkehrend?"/>
+        <text name="ui_set_task_period" text="Wann ist die Aufgabe fällig?"/>
+        <text name="ui_set_task_recur_mode" text="Wann sollte die Aufgabe wiederkehren?"/>
+        <text name="ui_set_task_recur_mode_monthly" text="Auf einem bestimmten Monat"/>
+        <text name="ui_set_task_recur_mode_n_months" text="Jeden N Monaten"/>
+        <text name="ui_set_task_recur_mode_n_days" text="Jeden N Tagen"/>
+        <text name="ui_task_due_daily" text="Täglich"/>
+        <text name="ui_task_due_monthly" text="Jeden %s"/>
+        <text name="ui_task_due_n_months" text="Jeden %s Monaten"/>
+        <text name="ui_task_due_n_days" text="Jeden %s Tagen"/>
+        <text name="ui_set_task_n_months" text="Wie häufig in Monaten sollte die Aufgabe erledigt werden?"/>
+        <text name="ui_set_task_n_days" text="Wie häufig in Tagen sollte die Aufgabe erledigt werden?"/>
+        <text name="ui_group_exists_error" text="Ein Gruppenmitglied mit diesem Namen existiert bereits"/>
+        <text name="ui_no_name_specified_error" text="Kein Name für den Gruppen wurde angegeben"/>
+        <text name="ui_no_detail_specified_error" text="Kein Detail für die Aufgabe wurde angegeben"/>
+        <text name="ui_no_group_selected_error" text="Kein Gruppen wurde ausgewählt, um zu kopieren"/>
+        <text name="ui_no_task_selected" text="Keine Aufgabe wurde ausgewählt"/>
+        <text name="ui_no_group_selected" text="Kein Gruppen wurde ausgewählt"/>
+        <text name="ui_confirm_deletion" text="Sind Sie sicher, dass Sie löschen möchten?"/>
+        <text name="ui_group_not_found_error" text="Der Gruppen konnte nicht gefunden werden. Überprüfen Sie, ob der Gruppen nicht gelöscht wurde"/>
+        <text name="ui_task_not_found_error" text="Die Aufgabe konnte nicht gefunden werden. Überprüfen Sie, ob die Aufgabe nicht gelöscht wurde"/>
+        <text name="ui_no_groups_exist" text="Keine Gruppen existieren noch"/>
+        <text name="ui_no_tasks_exist_for_group" text="Keine Aufgaben existieren noch für diesen Gruppen"/>
+        <text name="ui_no_active_tasks" text="Keine Aufgaben sind dauerhaft dûes"/>
+	</texts>
+</l10n>
