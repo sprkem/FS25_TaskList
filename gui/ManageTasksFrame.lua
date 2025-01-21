@@ -3,17 +3,6 @@ ManageTasksFrame.availableGroups = {}
 local ManageTasksFrame_mt = Class(ManageTasksFrame, MessageDialog)
 ManageTasksFrame.groupSortingFunction = function(k1, k2) return k1.name < k2.name end
 
-ManageTasksFrame.taskSortingFunction = function(t1, t2)
-    if t1.period == nil or t2.period == nil then
-        return false
-    end
-
-    if t1.period == t2.period then
-        return t1.priority < t2.priority
-    end
-    return t1.period < t2.period
-end
-
 function ManageTasksFrame.new(target, custom_mt)
     local self = MessageDialog.new(target, custom_mt or ManageTasksFrame_mt)
     self.i18n = g_i18n
@@ -86,7 +75,7 @@ function ManageTasksFrame:updateContent()
         self.noTasksContainer:setVisible(true)
         return
     end
-    table.sort(self.currentGroup.tasks, ManageTasksFrame.taskSortingFunction)
+    table.sort(self.currentGroup.tasks, TaskListUtils.taskSortingFunction)
 
     self.tasksContainer:setVisible(true)
     self.noTasksContainer:setVisible(false)

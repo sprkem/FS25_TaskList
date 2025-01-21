@@ -490,14 +490,20 @@ function TaskList.ShowActiveTaskNotifications()
     end
 
     local hasTasks = false
-    for _, activeTask in pairs(g_currentMission.taskList.activeTasks) do
-        local description = string.format("%s - %s", activeTask.groupName, activeTask.detail)
-        g_currentMission:addIngameNotification(FSBaseMission.INGAME_NOTIFICATION_INFO, description)
+    local tempActive = {}
+    for _, activeTask in pairs(g_currentMission.taskList.activeTasks) do        
+        table.insert(tempActive, activeTask)
         hasTasks = true
     end
     if not hasTasks then
         g_currentMission:addIngameNotification(FSBaseMission.INGAME_NOTIFICATION_INFO,
             g_i18n:getText("ui_no_active_tasks"))
+    else
+        table.sort(tempActive, TaskListUtils.taskSortingFunction)
+        for _, activeTask in pairs(tempActive) do
+            local description = string.format("%s - %s", activeTask.groupName, activeTask.detail)
+            g_currentMission:addIngameNotification(FSBaseMission.INGAME_NOTIFICATION_INFO, description)
+        end
     end
 
     g_currentMission.taskList.lastNotificationTime = g_time

@@ -83,3 +83,14 @@ function TaskListUtils.showOptionDialog(parameters)
         optionDialog:setCallback(parameters.callback, parameters.target, parameters.args)
     end
 end
+
+TaskListUtils.taskSortingFunction = function(t1, t2)
+    if t1.period == nil or t2.period == nil then
+        return false
+    end
+
+    if t1.period == t2.period then
+        return t1.priority < t2.priority
+    end
+    return t1.period < t2.period
+end
