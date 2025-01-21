@@ -36,6 +36,20 @@ Auf dem Hauptmenü, direkt oberhalb von Einstellungen, finden Sie ein neues Men�
 - Ansicht der derzeitigen Aufgaben ohne die Menüprüfung durch Drücken von Shift + T
 
 ]]></de>	
+    <fr><![CDATA[Task List
+
+Si vous vous retrouvez à prendre des notes des tâches que vous devez accomplir, ou même à utiliser un logiciel externe, alors Task List est là pour vous aider.
+
+Sur le menu principal, juste au-dessus des Paramètres, vous trouverez un nouveau menu avec un icône de papier-collant. Utilisez ce menu pour commencer avec les fonctionnalités suivantes :
+
+Créez des groupes pour contenir des tâches liées, telles que le champ 10 ou les tâches générales de ferme.
+Créez des tâches uniques ou des tâches qui se répètent quotidiennement, mensuellement, tous les N mois ou tous les N jours.
+Donnez des priorités aux tâches afin de savoir ce que faire en premier.
+Vous voulez acheter un nouveau champ et voulez copier des tâches d'un champ existant ? Pas de problème, vous pouvez le faire en quelques secondes.
+Consultez les tâches qui sont en retard dans le menu et marquez-les comme terminées lorsque vous les avez effectuées.
+Consultez les tâches qui sont en retard sans vérifier le menu en appuyant sur Shift + T
+
+]]></fr>	
     </description>
 	<extraSourceFiles>
         <sourceFile filename="main.lua"/>
