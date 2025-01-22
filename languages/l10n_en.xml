@@ -17,6 +17,7 @@
 		<text name="ui_btn_complete_task" text="Complete Task"/>
 		<text name="ui_btn_close" text="Close"/>
 		<text name="ui_btn_ok" text="OK"/>
+		<text name="ui_btn_cancel" text="Cancel"/>
 		<text name="ui_btn_copy" text="Copy"/>
 		<text name="ui_btn_edit" text="Edit"/>
 		<text name="ui_btn_delete" text="Delete"/>

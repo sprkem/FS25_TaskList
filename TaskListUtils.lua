@@ -84,6 +84,34 @@ function TaskListUtils.showOptionDialog(parameters)
     end
 end
 
+-- Courtesy of PowerTools
+function TaskListUtils.showTextInputDialog(parameters)
+    local textInputDialog = TextInputDialog.new()
+    local imePrompt = nil
+
+    if parameters.isPasswordDialog then
+        g_gui:loadGui("dataS/gui/dialogs/PasswordDialog.xml", "TextInputDialog", textInputDialog)
+    else
+        g_gui:loadGui("dataS/gui/dialogs/TextInputDialog.xml", "TextInputDialog", textInputDialog)
+    end
+
+    if parameters.callback and (type(parameters.callback)) == "function" then
+        textInputDialog:setCallback(parameters.callback, parameters.target, parameters.defaultText, parameters.text,
+            imePrompt, parameters.maxCharacters, parameters.args, parameters.isPasswordDialog, parameters.disableFilter)
+    end
+
+    if parameters.okButtonText ~= nil or parameters.cancelButtonText ~= nil then
+        textInputDialog:setButtonTexts(parameters.okButtonText, parameters.cancelButtonText)
+    end
+
+    textInputDialog:setTitle(parameters.title or "") --NOTE: title is not used yet
+
+    local textHeight, _ = textInputDialog.dialogTextElement:getTextHeight()
+    textInputDialog:resizeDialog(textHeight)
+
+    textInputDialog:show()
+end
+
 TaskListUtils.taskSortingFunction = function(t1, t2)
     if t1.period == nil or t2.period == nil then
         return false

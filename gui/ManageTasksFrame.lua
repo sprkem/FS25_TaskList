@@ -143,8 +143,16 @@ function ManageTasksFrame:onClickEdit(sender)
 end
 
 function ManageTasksFrame:onAddEditTaskRequestDetail(newTask)
-    TextInputDialog.show(
-        function(self, value, clickOk)
+    TaskListUtils.showTextInputDialog({
+        text = g_i18n:getText("ui_set_task_detail"),
+        target = self,
+        defaultText = newTask.detail,
+        maxCharacters = Task.MAX_DETAIL_LENGTH,
+        args = {},
+        disableFilter = false,
+        okButtonText = g_i18n:getText("ui_btn_ok"),
+        cancelButtonText = g_i18n:getText("ui_btn_cancel"),
+        callback = function(self, value, clickOk)
             if clickOk then
                 local detail = string.gsub(value, '^%s*(.-)%s*$', '%1')
                 if detail == "" then
@@ -155,10 +163,8 @@ function ManageTasksFrame:onAddEditTaskRequestDetail(newTask)
                 newTask.detail = detail
                 self:onAddEditTaskRequestPriority(newTask)
             end
-        end, self,
-        newTask.detail,
-        g_i18n:getText("ui_set_task_detail"),
-        "xzz", Task.MAX_DETAIL_LENGTH, g_i18n:getText("ui_btn_ok"))
+        end,
+    })
 end
 
 -- New Task Step
