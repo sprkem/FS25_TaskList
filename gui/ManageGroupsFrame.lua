@@ -173,7 +173,7 @@ end
 
 function ManageGroupsFrame:onCopyGroupNameSet(name, clickOk, copyIndex)
     if clickOk then
-        name = string.gsub(name, "%s+", "")
+        name = string.gsub(name, '^%s*(.-)%s*$', '%1')
         if name == "" then
             InfoDialog.show(g_i18n:getText("ui_no_name_specified_error"))
             return
