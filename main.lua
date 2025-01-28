@@ -242,7 +242,7 @@ function TaskList:addGroupTasksForCurrentPeriod(group)
     local currentPeriod = g_currentMission.environment.currentPeriod
     local additions = false
     for _, task in pairs(group.tasks) do
-        if task.recurMode == Task.RECUR_MODE.MONTHLY or task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
+        if task.recurMode == Task.RECUR_MODE.NONE or task.recurMode == Task.RECUR_MODE.MONTHLY or task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
             local didAdd = self:checkAndAddActiveTaskIfDue(group.id, task)
             if didAdd then additions = true end
         end
@@ -270,6 +270,8 @@ function TaskList:checkAndAddActiveTaskIfDue(groupId, task)
     local currentPeriod = g_currentMission.environment.currentPeriod
     local shouldAdd = false
     if task.recurMode == Task.RECUR_MODE.DAILY then
+        shouldAdd = true
+    elseif task.recurMode == Task.RECUR_MODE.NONE and task.period == currentPeriod then
         shouldAdd = true
     elseif task.recurMode == Task.RECUR_MODE.MONTHLY and task.period == currentPeriod then
         shouldAdd = true
@@ -491,7 +493,7 @@ function TaskList.ShowActiveTaskNotifications()
 
     local hasTasks = false
     local tempActive = {}
-    for _, activeTask in pairs(g_currentMission.taskList.activeTasks) do        
+    for _, activeTask in pairs(g_currentMission.taskList.activeTasks) do
         table.insert(tempActive, activeTask)
         hasTasks = true
     end
