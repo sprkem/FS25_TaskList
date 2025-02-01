@@ -27,6 +27,7 @@ source(TaskList.dir .. "events/DeleteGroupEvent.lua")
 source(TaskList.dir .. "events/NewTaskGroupEvent.lua")
 source(TaskList.dir .. "events/CompleteTaskEvent.lua")
 source(TaskList.dir .. "events/DeleteTaskEvent.lua")
+source(TaskList.dir .. "events/EditTaskEvent.lua")
 source(TaskList.dir .. "events/NewTaskEvent.lua")
 source(TaskList.dir .. "events/RenameGroupEvent.lua")
 
@@ -302,7 +303,7 @@ function TaskList:addActiveTask(groupId, taskId)
 
     if task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
         taskCopy.createdMarker = g_currentMission.environment.currentDay
-    elseif task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
+    else
         taskCopy.createdMarker = g_currentMission.environment.currentPeriod
     end
 
@@ -371,10 +372,10 @@ function TaskList:addTask(groupId, task, isEdit)
     end
 
     if isEdit then
-        g_client:getServerConnection():sendEvent(DeleteTaskEvent.new(groupId, task.id))
+        g_client:getServerConnection():sendEvent(EditTaskEvent.new(groupId, task))
+    else
+        g_client:getServerConnection():sendEvent(NewTaskEvent.new(groupId, task))
     end
-
-    g_client:getServerConnection():sendEvent(NewTaskEvent.new(groupId, task))
 end
 
 function TaskList:deleteGroup(groupId)

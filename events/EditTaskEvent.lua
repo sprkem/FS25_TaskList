@@ -1,34 +1,34 @@
-NewTaskEvent = {}
-local NewTaskEvent_mt = Class(NewTaskEvent, Event)
+EditTaskEvent = {}
+local EditTaskEvent_mt = Class(EditTaskEvent, Event)
 
-InitEventClass(NewTaskEvent, "NewTaskEvent")
+InitEventClass(EditTaskEvent, "EditTaskEvent")
 
-function NewTaskEvent.emptyNew()
-    return Event.new(NewTaskEvent_mt)
+function EditTaskEvent.emptyNew()
+    return Event.new(EditTaskEvent_mt)
 end
 
-function NewTaskEvent.new(groupId, task)
-    local self = NewTaskEvent.emptyNew()
+function EditTaskEvent.new(groupId, task)
+    local self = EditTaskEvent.emptyNew()
     self.groupId = groupId
     self.task = task
     return self
 end
 
-function NewTaskEvent:writeStream(streamId, connection)
+function EditTaskEvent:writeStream(streamId, connection)
     streamWriteString(streamId, self.groupId)
     self.task:writeStream(streamId, connection)
 end
 
-function NewTaskEvent:readStream(streamId, connection)
+function EditTaskEvent:readStream(streamId, connection)
     self.groupId = streamReadSring(streamId)
     self.task:readStream(streamId, connection)
 
     self:run(connection)
 end
 
-function NewTaskEvent:run(connection)
+function EditTaskEvent:run(connection)
     if not connection:getIsServer() then
-        g_server:broadcastEvent(NewTaskEvent.new(self.groupId, self.task))
+        g_server:broadcastEvent(EditTaskEvent.new(self.groupId, self.task))
     end
 
     local group = g_currentMission.taskList.taskGroups[self.groupId]
@@ -37,7 +37,7 @@ function NewTaskEvent:run(connection)
         return
     end
 
-    group.tasks[self.task.id] = self.task
+    group.tasks[self.task.id]:copyValuesFromTask(self.task)
 
     local didAdd = g_currentMission.taskList:checkAndAddActiveTaskIfDue(group.id, self.task)
     if didAdd then
