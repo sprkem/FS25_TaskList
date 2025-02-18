@@ -76,30 +76,16 @@ function ManageGroupsFrame:onClickBack(sender)
 end
 
 function ManageGroupsFrame:onClickAdd(sender)
-    TaskListUtils.showTextInputDialog({
-        text = g_i18n:getText("ui_set_group_name"),
-        target = self,
-        defaultText = "",
-        maxCharacters = TaskGroup.MAX_NAME_LENGTH,
-        args = {},
-        disableFilter = false,
-        okButtonText = g_i18n:getText("ui_btn_ok"),
-        cancelButtonText = g_i18n:getText("ui_btn_cancel"),
-        callback = ManageGroupsFrame.onNewGroupNameSet,
-    })
+    TextInputDialog.show(
+        ManageGroupsFrame.onNewGroupNameSet, self,
+        "",
+        g_i18n:getText("ui_set_group_name"),
+        nil, TaskGroup.MAX_NAME_LENGTH, g_i18n:getText("ui_btn_ok"))
 end
 
 function ManageGroupsFrame:onClickRename(sender)
-    TaskListUtils.showTextInputDialog({
-        text = g_i18n:getText("ui_set_group_name"),
-        target = self,
-        defaultText = "",
-        maxCharacters = TaskGroup.MAX_NAME_LENGTH,
-        args = {},
-        disableFilter = false,
-        okButtonText = g_i18n:getText("ui_btn_ok"),
-        cancelButtonText = g_i18n:getText("ui_btn_cancel"),
-        callback = function(self, name, clickOk)
+    TextInputDialog.show(
+        function(self, name, clickOk)
             if clickOk then
                 name = string.gsub(name, '^%s*(.-)%s*$', '%1')
                 if name == "" then
@@ -115,8 +101,10 @@ function ManageGroupsFrame:onClickRename(sender)
                 g_currentMission.taskList:renameGroup(self.currentGroups[self.selectedGroupIndex].id, name)
                 return
             end
-        end
-    })
+        end, self,
+        self.currentGroups[self.selectedGroupIndex].name,
+        g_i18n:getText("ui_set_group_name"),
+        nil, TaskGroup.MAX_NAME_LENGTH, g_i18n:getText("ui_btn_ok"))
 end
 
 function ManageGroupsFrame:onClickCopy(sender)
@@ -125,17 +113,11 @@ function ManageGroupsFrame:onClickCopy(sender)
         return
     end
 
-    TaskListUtils.showTextInputDialog({
-        text = g_i18n:getText("ui_set_group_name"),
-        target = self,
-        defaultText = "",
-        maxCharacters = TaskGroup.MAX_NAME_LENGTH,
-        args = {},
-        disableFilter = false,
-        okButtonText = g_i18n:getText("ui_btn_ok"),
-        cancelButtonText = g_i18n:getText("ui_btn_cancel"),
-        callback = ManageGroupsFrame.onCopyGroupNameSet,
-    })
+    TextInputDialog.show(
+        ManageGroupsFrame.onCopyGroupNameSet, self,
+        "",
+        g_i18n:getText("ui_set_group_name"),
+        nil, TaskGroup.MAX_NAME_LENGTH, g_i18n:getText("ui_btn_ok"))
 end
 
 function ManageGroupsFrame:onClickDelete(sender)
@@ -171,7 +153,7 @@ function ManageGroupsFrame:onNewGroupNameSet(name, clickOk)
     end
 end
 
-function ManageGroupsFrame:onCopyGroupNameSet(name, clickOk, copyIndex)
+function ManageGroupsFrame:onCopyGroupNameSet(name, clickOk)
     if clickOk then
         name = string.gsub(name, '^%s*(.-)%s*$', '%1')
         if name == "" then
