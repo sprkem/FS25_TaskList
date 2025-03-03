@@ -16,6 +16,10 @@ function InitialClientStateEvent:writeStream(streamId, connection)
     for _ in pairs(g_currentMission.taskList.taskGroups) do groupCount = groupCount + 1 end
     streamWriteInt32(streamId, groupCount)
 
+    for _, group in pairs(g_currentMission.taskList.taskGroups) do
+        group:writeStream(streamId, connection)
+    end
+
     local activeTaskCount = 0
     for _ in pairs(g_currentMission.taskList.activeTasks) do activeTaskCount = activeTaskCount + 1 end
     streamWriteInt32(streamId, activeTaskCount)
@@ -36,8 +40,8 @@ function InitialClientStateEvent:readStream(streamId, connection)
 
     local activeTaskCount = streamReadInt32(streamId)
     for i = 1, activeTaskCount do
-        local taskId = streamReadInt32(streamId)
-        local groupId = streamReadInt32(streamId)
+        local taskId = streamReadSring(streamId)
+        local groupId = streamReadSring(streamId)
         g_currentMission.taskList:addActiveTask(groupId, taskId)
     end
 

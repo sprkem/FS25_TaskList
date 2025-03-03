@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="94">
     <author>Ozz</author>
-    <version>1.0.0.0</version>
+    <version>1.0.1.0</version>
     <iconFilename>icon_taskList.dds</iconFilename>
     <title>
         <en>Task List</en>

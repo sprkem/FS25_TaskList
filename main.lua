@@ -6,8 +6,8 @@
 -- @Version: 1.0.0.0
 --
 -- Changelog:
---  v1.0.0.0 (16.01.2024):
---  - Initial Release
+--  1.0.0 (16.01.2024): Initial Release
+--  1.0.1 (03/03/2025): Multiplayer fixes
 --
 math.randomseed(g_time or os.clock())
 
