@@ -51,8 +51,8 @@ function Task:writeStream(streamId, connection)
 end
 
 function Task:readStream(streamId, connection)
-    self.id = streamReadSring(streamId)
-    self.detail = streamReadSring(streamId)
+    self.id = streamReadString(streamId)
+    self.detail = streamReadString(streamId)
     self.priority = streamReadInt32(streamId)
     self.period = streamReadInt32(streamId)
     self.shouldRecur = streamReadBool(streamId)

@@ -39,9 +39,9 @@ function TaskGroup:writeStream(streamId, connection)
 end
 
 function TaskGroup:readStream(streamId, connection)
-    self.id = streamReadSring(streamId)
+    self.id = streamReadString(streamId)
     self.farmId = streamReadInt32(streamId)
-    self.name = streamReadSring(streamId)
+    self.name = streamReadString(streamId)
 
     local taskCount = streamReadInt32(streamId)
     for j = 1, taskCount do

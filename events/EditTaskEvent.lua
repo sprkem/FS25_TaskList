@@ -20,7 +20,8 @@ function EditTaskEvent:writeStream(streamId, connection)
 end
 
 function EditTaskEvent:readStream(streamId, connection)
-    self.groupId = streamReadSring(streamId)
+    self.groupId = streamReadString(streamId)
+    self.task = Task.new()
     self.task:readStream(streamId, connection)
 
     self:run(connection)

@@ -18,7 +18,7 @@ function DeleteGroupEvent:writeStream(streamId, connection)
 end
 
 function DeleteGroupEvent:readStream(streamId, connection)
-    self.id = streamReadSring(streamId)
+    self.id = streamReadString(streamId)
 
     self:run(connection)
 end

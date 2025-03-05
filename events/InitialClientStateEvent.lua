@@ -40,8 +40,8 @@ function InitialClientStateEvent:readStream(streamId, connection)
 
     local activeTaskCount = streamReadInt32(streamId)
     for i = 1, activeTaskCount do
-        local taskId = streamReadSring(streamId)
-        local groupId = streamReadSring(streamId)
+        local taskId = streamReadString(streamId)
+        local groupId = streamReadString(streamId)
         g_currentMission.taskList:addActiveTask(groupId, taskId)
     end
 

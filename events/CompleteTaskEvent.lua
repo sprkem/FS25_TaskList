@@ -20,8 +20,8 @@ function CompleteTaskEvent:writeStream(streamId, connection)
 end
 
 function CompleteTaskEvent:readStream(streamId, connection)
-    self.groupId = streamReadSring(streamId)
-    self.taskId = streamReadSring(streamId)
+    self.groupId = streamReadString(streamId)
+    self.taskId = streamReadString(streamId)
 
     self:run(connection)
 end

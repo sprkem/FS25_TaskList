@@ -20,8 +20,8 @@ function RenameGroupEvent:writeStream(streamId, connection)
 end
 
 function RenameGroupEvent:readStream(streamId, connection)
-    self.groupId = streamReadSring(streamId)
-    self.newName = streamReadSring(streamId)
+    self.groupId = streamReadString(streamId)
+    self.newName = streamReadString(streamId)
 
     self:run(connection)
 end
