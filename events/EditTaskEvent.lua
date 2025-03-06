@@ -38,7 +38,7 @@ function EditTaskEvent:run(connection)
         return
     end
 
-    group.tasks[self.task.id]:copyValuesFromTask(self.task)
+    group.tasks[self.task.id]:copyValuesFromTask(self.task, false)
 
     local didAdd = g_currentMission.taskList:checkAndAddActiveTaskIfDue(group.id, self.task)
     if didAdd then

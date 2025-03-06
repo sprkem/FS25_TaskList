@@ -28,7 +28,7 @@ function Task.new(customMt)
     return self
 end
 
-function Task:copyValuesFromTask(sourceTask)
+function Task:copyValuesFromTask(sourceTask, includeId)
     self.detail = sourceTask.detail
     self.priority = sourceTask.priority
     self.period = sourceTask.period
@@ -36,6 +36,10 @@ function Task:copyValuesFromTask(sourceTask)
     self.recurMode = sourceTask.recurMode
     self.nextN = sourceTask.nextN
     self.n = sourceTask.n
+
+    if includeId then
+        self.id = sourceTask.id
+    end
 end
 
 function Task:writeStream(streamId, connection)

@@ -61,5 +61,6 @@
         <text name="ui_no_groups_exist" text="Keine Gruppen existieren noch"/>
         <text name="ui_no_tasks_exist_for_group" text="Keine Aufgaben existieren noch für diesen Gruppen"/>
         <text name="ui_no_active_tasks" text="Keine Aufgaben sind dauerhaft dûes"/>
+        <text name="ui_confirm_complete_task" text="Bestätigen Sie die Abschluss der Aufgabe: %s"/>
 	</texts>
 </l10n>

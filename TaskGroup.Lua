@@ -18,7 +18,7 @@ end
 function TaskGroup:copyTasksFromGroup(sourceGroup)
     for _, task in pairs(sourceGroup.tasks) do
         local newTask = Task.new()
-        newTask:copyValuesFromTask(task)
+        newTask:copyValuesFromTask(task, false)
         self.tasks[newTask.id] = newTask
     end
 end

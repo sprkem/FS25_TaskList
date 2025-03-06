@@ -61,5 +61,6 @@
         <text name="ui_no_groups_exist" text="Vous n'avez pas encore de groupes"/>
         <text name="ui_no_tasks_exist_for_group" text="Vous n'avez pas encore de tâches pour ce groupe"/>
         <text name="ui_no_active_tasks" text="Vous n'avez pas encore de tâches dûes"/>
+        <text name="ui_confirm_complete_task" text="Vérifiez la fin de la tâche : %s"/>
 	</texts>
 </l10n>

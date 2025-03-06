@@ -185,7 +185,15 @@ function MenuTaskList:completeTask()
         return
     end
     local task = self.currentTasks[self.selectedRow]
-    g_currentMission.taskList:completeTask(task.groupId, task.id)
+
+    YesNoDialog.show(
+        function(self, clickOk)
+            if clickOk then                
+                g_currentMission.taskList:completeTask(task.groupId, task.id)
+            end
+        end, self,
+        string.format(g_i18n:getText("ui_confirm_complete_task"), task.detail))
+
 end
 
 -- Functions opening dialogs

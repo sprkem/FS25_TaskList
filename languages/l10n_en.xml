@@ -60,6 +60,7 @@
 		<text name="ui_task_not_found_error" text="Could not find the task. Check the task was not deleted"/>
 		<text name="ui_no_groups_exist" text="You don't have any groups yet"/>
 		<text name="ui_no_tasks_exist_for_group" text="You don't have any tasks yet"/>
-		<text name="ui_no_active_tasks" text="You don't have any tasks due"/>		
+		<text name="ui_no_active_tasks" text="You don't have any tasks due"/>
+		<text name="ui_confirm_complete_task" text="Confirm completion of task: %s"/>
 	</texts>
 </l10n>

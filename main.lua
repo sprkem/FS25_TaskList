@@ -447,7 +447,8 @@ function TaskList:getGroupById(groupId, showInfoIfNotFound)
     local groupCopy = TaskListUtils.deepcopy(group)
     groupCopy.tasks = {}
     for _, task in pairs(group.tasks) do
-        local taskCopy = TaskListUtils.deepcopy(task)
+        local taskCopy = Task.new()
+        taskCopy:copyValuesFromTask(task, true)
         table.insert(groupCopy.tasks, taskCopy)
     end
 
