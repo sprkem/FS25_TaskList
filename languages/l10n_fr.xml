@@ -32,8 +32,6 @@
         <text name="ui_intro_text_5" text="Lorsqu'une tâche est dûe, elle apparaîtra ici. Utilisez Terminer la tâche lorsque c'est fait. Si c'est une tâche récurrente, elle apparaîtra à nouveau lorsque c'est dû."/>
         <text name="ui_intro_text_6" text="Un groupe et toutes ses tâches peuvent être facilement copiés dans un nouveau groupe si besoin."/>
         <text name="ui_intro_text_7" text="Vous pouvez afficher les tâches en cours de délai tout en jouant en appuyant sur Shift + T."/>
-        <text name="ui_yes" text="Oui"/>
-        <text name="ui_no" text="Non"/>
         <text name="ui_set_group_name" text="Choisissez un nom de groupe"/>
         <text name="ui_set_task_detail" text="Désignez la tâche"/>
         <text name="ui_set_task_priority" text="Fixez la priorité de la tâche"/>

@@ -32,8 +32,6 @@
         <text name="ui_intro_text_5" text="Wenn eine Aufgabe fällig ist, wird sie hier angezeigt. Verwenden Sie den Button 'Aufgabe abschließen', wenn sie fertig ist. Wenn es sich um eine wiederkehrende Aufgabe handelt, wird sie wiederholt, wenn sie fällig ist."/>
         <text name="ui_intro_text_6" text="Ein Gruppen und alle seiner Aufgaben können leicht in einen neuen Gruppen kopiert werden, wenn es notwendig ist."/>
         <text name="ui_intro_text_7" text="Sie können die derzeitigen Aufgaben ansehen, während Sie spielen, indem Sie Shift + T drücken."/>
-        <text name="ui_yes" text="Ja"/>
-        <text name="ui_no" text="Nein"/>
         <text name="ui_set_group_name" text="Wählen Sie einen Namen für den Gruppen"/>
         <text name="ui_set_task_detail" text="Beschreiben Sie die Aufgabe"/>
         <text name="ui_set_task_priority" text="Setzen Sie die Priorität der Aufgabe"/>

@@ -32,8 +32,6 @@
 		<text name="ui_intro_text_5" text="When a task is due it will show here. Use Complete Task when it is done. If it is a recurring task, it will show again when due."/>
 		<text name="ui_intro_text_6" text="A group and all of its tasks can be easily copied to a new group if needed."/>
 		<text name="ui_intro_text_7" text="You can view tasks currently due while playing by pressing Shift + T."/>
-		<text name="ui_yes" text="Yes"/>
-		<text name="ui_no" text="No"/>
 		<text name="ui_set_group_name" text="Choose A Group Name"/>
 		<text name="ui_set_task_detail" text="Describe the task"/>
 		<text name="ui_set_task_priority" text="Set the task priority"/>
