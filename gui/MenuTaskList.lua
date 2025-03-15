@@ -126,7 +126,7 @@ function MenuTaskList:onHourChanged()
     self:updateTodayBar()
 end
 
-function ManageTasksFrame:OnMonthSelectorChange(index)
+function MenuTaskList:OnMonthSelectorChange(index)
     self.selectedMonthlyTasksMonth = index
     self:updateContent()
 end
@@ -196,6 +196,14 @@ function MenuTaskList:draw()
 end
 
 function MenuTaskList:updateWorkload()
+    local texts = {}
+    for i = 1, 12 do
+        local value = TaskListUtils.convertMonthNumberToPeriod(i)
+        table.insert(texts, g_i18n:formatPeriod(value, true))
+    end
+    self.monthSelector:setTexts(texts)
+
+    FocusManager:setFocus(self.monthSelector)
     self.currentlyDueView:setVisible(false)
     self.workloadView:setVisible(true)
     local tasks = g_currentMission.taskList:getTasksForNextYear()
