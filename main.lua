@@ -21,6 +21,7 @@ source(TaskList.dir .. "Task.lua")
 source(TaskList.dir .. "gui/MenuTaskList.lua")
 source(TaskList.dir .. "gui/ManageGroupsFrame.lua")
 source(TaskList.dir .. "gui/ManageTasksFrame.lua")
+source(TaskList.dir .. "gui/tableRenderers/TaskRenderer.lua")
 source(TaskList.dir .. "events/InitialClientStateEvent.lua")
 source(TaskList.dir .. "events/NewTaskGroupEvent.lua")
 source(TaskList.dir .. "events/DeleteGroupEvent.lua")
@@ -38,7 +39,7 @@ function TaskList:loadMap()
     g_gui:loadProfiles(TaskList.dir .. "gui/guiProfiles.xml")
 
     local guiTaskList = MenuTaskList.new(g_i18n)
-    g_gui:loadGui(TaskList.dir .. "gui/MenuTaskList.xml", "menuTaskList", guiTaskList, true)
+    g_gui:loadGui(TaskList.dir .. "gui/MenuTaskList.xml", "menuTaskList", guiTaskList, false)
 
     local manageGroupsFrame = ManageGroupsFrame.new(g_i18n)
     g_gui:loadGui(TaskList.dir .. "gui/ManageGroupsFrame.xml", "manageGroupsFrame", manageGroupsFrame)
@@ -286,6 +287,9 @@ function TaskList:checkAndAddActiveTaskIfDue(groupId, task)
         self:addActiveTask(groupId, task.id)
         if task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS or task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
             task.nextN = task.nextN + task.n
+            if task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS and task.nextN > 12 then
+                task.nextN = task.nextN - 12
+            end
         end
         return true
     end
@@ -323,15 +327,87 @@ function TaskList:getActiveTasksForCurrentFarm()
     return result
 end
 
-function TaskList:getTasksForPeriodForCurrentFarm(period)
+function TaskList:getTasksForNextYear()
     local result = {}
+    for i = 1, 12 do
+        result[i] = {}
+    end
     for _, group in pairs(self.taskGroups) do
-        if group.farmId == currentFarmId or not g_currentMission.missionDynamicInfo.isMultiplayer then
-            for _, task in pairs(group.tasks) do
-                if task.period == period then
-                    local taskCopy = TaskListUtils.deepcopy(task)
-                    taskCopy.groupName = group.name
-                    table.insert(result, taskCopy)
+        for _, task in pairs(group.tasks) do
+            if task.recurMode == Task.RECUR_MODE.MONTHLY then
+                local month = TaskListUtils.convertPeriodToMonthNumber(task.period)
+                table.insert(result[month], { groupId = group.id, taskId = task.id })
+            elseif task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
+                local currentMonth = TaskListUtils.convertPeriodToMonthNumber(g_currentMission.environment.currentPeriod)
+                local firstMonth = TaskListUtils.convertPeriodToMonthNumber(task.nextN)
+                local count = firstMonth - currentMonth
+                if count < 0 then
+                    firstMonth = firstMonth + 12
+                end
+                table.insert(result[firstMonth], { groupId = group.id, taskId = task.id })
+
+                local lastAdded = firstMonth
+                while true do
+                    count = count + task.n
+                    if count >= 12 then
+                        break
+                    end
+
+                    local next = lastAdded + task.n
+                    if next > 12 then
+                        next = next - 12
+                    end
+
+                    table.insert(result[next], { groupId = group.id, taskId = task.id })
+                    lastAdded = next
+                end
+            elseif task.recurMode == Task.RECUR_MODE.DAILY or task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
+                local startMonth = TaskListUtils.convertPeriodToMonthNumber(g_currentMission.environment.currentPeriod)
+                local currentMonth = startMonth
+                local daysPerPeriod = g_currentMission.environment.daysPerPeriod
+                local plannedDaysPerPeriod = g_currentMission.environment.plannedDaysPerPeriod
+                local currentDayInPeriod = g_currentMission.environment.currentDayInPeriod
+                local currentDay = g_currentMission.environment.currentDay
+                local startSeason = g_currentMission.environment:getSeasonAtDay(currentDay)
+                local seasonChanged = false
+
+                local increment = 1
+                local firstDay = currentDay
+                if task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
+                    increment = task.n
+                    firstDay = task.nextN
+                end
+
+                if currentDayInPeriod + increment > daysPerPeriod then
+                    currentMonth = currentMonth + 1
+                    currentDayInPeriod = daysPerPeriod - (currentDayInPeriod + increment)
+                    if currentMonth > 12 then
+                        currentMonth = currentMonth - 12
+                    end
+                end
+
+                table.insert(result[currentMonth], { groupId = group.id, taskId = task.id })
+                local lastAdded = firstDay
+                while true do
+                    if not seasonChanged and startSeason ~= g_currentMission.environment:getSeasonAtDay(lastAdded) then
+                        daysPerPeriod = plannedDaysPerPeriod
+                        seasonChanged = true
+                    end
+
+                    if currentDayInPeriod + increment > daysPerPeriod then
+                        currentMonth = currentMonth + 1
+                        currentDayInPeriod = daysPerPeriod - (currentDayInPeriod + increment)
+                        if currentMonth > 12 then
+                            currentMonth = currentMonth - 12
+                        end
+                    end
+
+                    if currentMonth == startMonth then
+                        break
+                    end
+
+                    table.insert(result[currentMonth], { groupId = group.id, taskId = task.id })
+                    lastAdded = lastAdded + increment
                 end
             end
         end

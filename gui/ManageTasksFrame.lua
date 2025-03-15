@@ -365,7 +365,3 @@ function ManageTasksFrame:onRespondToDeletePrompt(clickOk)
     end
 end
 
-function ManageTasksFrame:OnGroupSelectChange(index)
-    self.currentGroupId = self.availableGroups[index].id
-    self:updateContent()
-end

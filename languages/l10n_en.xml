@@ -60,5 +60,9 @@
 		<text name="ui_no_tasks_exist_for_group" text="You don't have any tasks yet"/>
 		<text name="ui_no_active_tasks" text="You don't have any tasks due"/>
 		<text name="ui_confirm_complete_task" text="Confirm completion of task: %s"/>
+		
+		<text name="ui_tasks_over_time" text="Workload over time"/>
+
+
 	</texts>
 </l10n>
