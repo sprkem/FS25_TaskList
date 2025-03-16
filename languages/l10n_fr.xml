@@ -60,5 +60,8 @@
         <text name="ui_no_tasks_exist_for_group" text="Vous n'avez pas encore de tâches pour ce groupe"/>
         <text name="ui_no_active_tasks" text="Vous n'avez pas encore de tâches dûes"/>
         <text name="ui_confirm_complete_task" text="Vérifiez la fin de la tâche : %s"/>
+        <text name="ui_tasks_over_time" text="Charge de travail au fil du temp"/>
+		<text name="ui_header_effort" text="Effort"/>
+		<text name="ui_set_task_effort" text="Fixer le niveau d'effort pour cette tâche, afin de différencier les tâches petites et grandes lors de la calcul de la charge de travail au fil du temps."/>
 	</texts>
 </l10n>

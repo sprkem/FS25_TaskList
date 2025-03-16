@@ -60,5 +60,8 @@
         <text name="ui_no_tasks_exist_for_group" text="Keine Aufgaben existieren noch für diesen Gruppen"/>
         <text name="ui_no_active_tasks" text="Keine Aufgaben sind dauerhaft dûes"/>
         <text name="ui_confirm_complete_task" text="Bestätigen Sie die Abschluss der Aufgabe: %s"/>
+        <text name="ui_tasks_over_time" text="Lastenüberwachung im Laufe der Zeit"/>
+		<text name="ui_header_effort" text="Anstrengung"/>
+		<text name="ui_set_task_effort" text="Den Effortswert für diese Aufgabe festlegen, um Aufgaben klein und groß voneinander zu unterscheiden bei der Berechnung der Arbeitslast im Laufe der Zeit."/>
 	</texts>
 </l10n>

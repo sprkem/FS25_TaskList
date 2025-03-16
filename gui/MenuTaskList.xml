@@ -24,18 +24,20 @@
                 <GuiElement profile="fs25_statisticsHeaderBox">
                     <Button profile="taskListHeader" position="40px 0px" text="$l10n_ui_header_group" handleFocus="false" />
                     <Button profile="taskListHeader" position="240px 0px" text="$l10n_ui_header_detail" handleFocus="false" />
-                    <Button profile="taskListHeader" position="720px 0px" text="$l10n_ui_header_due" handleFocus="false" />
-                    <Button profile="taskListHeader" position="870px 0px" text="$l10n_ui_header_overdue" handleFocus="false" />
-                    <Button profile="taskListHeaderRight" position="970px 0px" size="100px 32px" text="$l10n_ui_header_priority" handleFocus="false" />
+                    <Button profile="taskListHeader" position="640px 0px" text="$l10n_ui_header_due" handleFocus="false" />
+                    <Button profile="taskListHeader" position="790px 0px" text="$l10n_ui_header_overdue" handleFocus="false" />
+                    <Button profile="taskListHeaderRight" position="890px 0px" size="80px 32px" text="$l10n_ui_header_effort" handleFocus="false" />
+                    <Button profile="taskListHeaderRight" position="970px 0px" size="80px 32px" text="$l10n_ui_header_priority" handleFocus="false" />
                 </GuiElement>
 
                 <SmoothList profile="taskListTable" id="currentTasksTable" position="0px -40px">
                     <ListItem profile="taskListListItem">
                         <Text profile="taskListRowCellLeft" position="40px 0px" size="200px 32px" name="group"/>
-                        <Text profile="taskListRowCellLeft" position="240px 0px" size="480px 32px" name="detail"/>
-                        <Text profile="taskListRowCellLeft" position="720px 0px" size="150px 32px" name="due"/>
-                        <Text profile="taskListRowCellLeft" position="870px 0px" size="100px 32px" name="overdue"/>
-                        <Text profile="taskListRowCellRight" position="970px 0px" size="100px 32px" name="priority"/>                                    
+                        <Text profile="taskListRowCellLeft" position="240px 0px" size="400px 32px" name="detail"/>
+                        <Text profile="taskListRowCellLeft" position="640px 0px" size="150px 32px" name="due"/>
+                        <Text profile="taskListRowCellLeft" position="790px 0px" size="100px 32px" name="overdue"/>
+                        <Text profile="taskListRowCellRight" position="890px 0px" size="80px 32px" name="effort"/>                                    
+                        <Text profile="taskListRowCellRight" position="970px 0px" size="80px 32px" name="priority"/>                                    
                     </ListItem>
                 </SmoothList>
 
@@ -52,44 +54,50 @@
         <GuiElement id="workloadView">
 
             <GuiElement id="monthlyData">
-                <MultiTextOption profile="fs25_subCategorySelectorTabbed" id="monthSelector" position="0px -80px" size="450px 50px" onClick="OnMonthSelectorChange" >
+                <MultiTextOption profile="fs25_subCategorySelectorTabbed" id="monthSelector" position="0px 0px" size="450px 50px" onClick="OnMonthSelectorChange" >
                     <Text profile="fs25_multiTextOptionText" name="text" />
                 </MultiTextOption>
 
-                <GuiElement profile="fs25_statisticsHeaderBox">
-                    <Button profile="taskListHeader" position="60px -145px" text="$l10n_ui_header_group" handleFocus="false" />
-                    <Button profile="taskListHeader" position="540px -145px" text="$l10n_ui_header_detail" handleFocus="false" />
-                    <Button profile="taskListHeader" position="690px -145px" text="$l10n_ui_header_priority" handleFocus="false" />
+                <GuiElement id="monthlyTasksContainer">
+                    <GuiElement profile="fs25_statisticsHeaderBox">
+                        <Button profile="taskListHeader" position="60px -60px" text="$l10n_ui_header_group" handleFocus="false" />
+                        <Button profile="taskListHeader" position="210px -60px" text="$l10n_ui_header_detail" handleFocus="false" />
+                        <Button profile="taskListHeader" position="690px -60px" text="$l10n_ui_header_effort" handleFocus="false" />
+                        <Button profile="taskListHeader" position="790px -60px" text="$l10n_ui_header_priority" handleFocus="false" />
+                    </GuiElement>
+
+                    <SmoothList id="monthlyTasksTable" profile="taskListTable" position="40px -95px" size="1480px 290px">
+                        <ListItem profile="taskListListItem">
+                            <Text profile="taskListRowCellLeft" position="20px 0px" size="150px 32px" name="group"/>
+                            <Text profile="taskListRowCellLeft" position="170px 0px" size="480px 32px" name="detail"/>
+                            <Text profile="taskListRowCellRight" position="650px 0px" size="60px 32px" name="effort"/>
+                            <Text profile="taskListRowCellRight" position="750px 0px" size="60px 32px" name="priority"/>
+                        </ListItem>
+                    </SmoothList>
+
+                    <ThreePartBitmap profile="taskListGroupsSliderBox" position="0px -90px" size="6px 290px">
+                        <Slider profile="fs25_listSlider" dataElementId="monthlyTasksTable" />
+                    </ThreePartBitmap>
                 </GuiElement>
 
-                <SmoothList id="monthlyTasksTable" profile="taskListTable" position="40px -180px" size="750px 520px">
-                    <ListItem profile="taskListListItem">
-                        <Text profile="taskListRowCellLeft" position="20px 0px" size="480px 32px" name="group"/>
-                        <Text profile="taskListRowCellLeft" position="500px 0px" size="150px 32px" name="detail"/>
-                        <Text profile="taskListRowCellRight" position="650px 0px" size="60px 32px" name="priority"/>
-                    </ListItem>
-                </SmoothList>
-
-                <ThreePartBitmap profile="taskListGroupsSliderBox" position="-20px -140px" size="6px 520px">
-                    <Slider profile="fs25_listSlider" dataElementId="monthlyTasksTable" />
-                </ThreePartBitmap>
+                <GuiElement id="noMonthlyTasksContainer">
+                    <Text profile="dialogTitle" text="$l10n_ui_no_active_tasks" position="0px -40px" />
+                </GuiElement>
             </GuiElement>
 
-
-            <GuiElement id="fluctuations">
-                <Text profile="fs25_statisticsHeaderText" text="$l10n_ui_tasks_over_time"/>
+            <Text profile="fs25_statisticsHeaderText" text="$l10n_ui_tasks_over_time" position="0px 10px"/>
+            <GuiElement id="fluctuations" position="80px 0px">
                 <Bitmap profile="fs25_pricesSeparator" id="separatorTemplate"/>
-                <Text profile="fs25_pricesMonthText" id="monthTextTemplate"/>
-                <BoxLayout profile="fs25_pricesFluctuationsLayoutBg" id="fluctuationsLayoutBg"/>
+                <Text profile="taskListpricesMonthText" id="monthTextTemplate"/>
+                <BoxLayout profile="fs25_pricesFluctuationsLayoutBg" id="fluctuationsLayoutBg" anchors="0 0 0 0" pivot="0 0"/>
                 <GuiElement profile="fs25_pricesFluctuationsContainer" id="fluctuationsContainer">
-                    <Bitmap profile="fs25_pricesFluctuationsTodayBar" id="todayBar"/>
-                    <Text profile="fs25_pricesFluctuationsPrice" id="fluctuationHigh" position="0px 340px">
-                        <ThreePartBitmap profile="fs25_pricesFluctuationsPriceBg"/>
-                    </Text>
-                    <Text profile="fs25_pricesFluctuationsPrice" id="fluctuationLow">
-                        <ThreePartBitmap profile="fs25_pricesFluctuationsPriceBg"/>
-                    </Text>
-                </GuiElement>
+                <Text profile="fs25_pricesFluctuationsPrice" id="fluctuationHigh" position="0px 340px">
+                    <ThreePartBitmap profile="fs25_pricesFluctuationsPriceBg"/>
+                </Text>
+                <Text profile="fs25_pricesFluctuationsPrice" id="fluctuationLow">
+                    <ThreePartBitmap profile="fs25_pricesFluctuationsPriceBg"/>
+                </Text>
+            </GuiElement>
             </GuiElement>
         </GuiElement>
     </GuiElement>

@@ -91,7 +91,6 @@ function MenuTaskList:initialize()
     self.separatorTemplate:unlinkElement()
     for i = 1, 12 do
         local period = TaskListUtils.convertMonthNumberToPeriod(i)
-        -- local period = i
         local clone = self.monthTextTemplate:clone(self.fluctuationsLayoutBg)
         clone:setText(g_i18n:formatPeriod(period, true))
         table.insert(self.clonedPricesElements, clone)
@@ -100,12 +99,18 @@ function MenuTaskList:initialize()
         table.insert(self.clonedPricesElements, separatorClone)
     end
     self.fluctuationsLayoutBg:invalidateLayout()
+
+    local texts = {}
+    for i = 1, 12 do
+        local value = TaskListUtils.convertMonthNumberToPeriod(i)
+        table.insert(texts, TaskListUtils.formatPeriodFullMonthName(value))
+    end
+    self.monthSelector:setTexts(texts)
 end
 
 function MenuTaskList:onFrameOpen()
     MenuTaskList:superClass().onFrameOpen(self)
 
-    self:updateTodayBar()
     g_messageCenter:subscribe(MessageType.ACTIVE_TASKS_UPDATED, function(menu)
         self:updateContent()
     end, self)
@@ -113,17 +118,21 @@ function MenuTaskList:onFrameOpen()
         self:updateContent()
     end, self)
     g_messageCenter:subscribe(MessageType.HOUR_CHANGED, self.onHourChanged, self)
+
+    -- Force the view to next month tasks
+    local nextPeriod = g_currentMission.environment.currentPeriod + 1
+    if nextPeriod > 12 then
+        nextPeriod = nextPeriod - 12
+    end
+    self.selectedMonthlyTasksMonth = TaskListUtils.convertPeriodToMonthNumber(nextPeriod)
+    self.monthSelector:setState(self.selectedMonthlyTasksMonth, false)
+
     self:updateContent()
-    FocusManager:setFocus(self.currentTasksTable)
 end
 
 function MenuTaskList:onFrameClose()
     MenuTaskList:superClass().onFrameClose(self)
     g_messageCenter:unsubscribeAll(self)
-end
-
-function MenuTaskList:onHourChanged()
-    self:updateTodayBar()
 end
 
 function MenuTaskList:OnMonthSelectorChange(index)
@@ -149,6 +158,7 @@ function MenuTaskList:updateContent()
 end
 
 function MenuTaskList:updateCurrentlyDue()
+    FocusManager:setFocus(self.currentTasksTable)
     self.currentlyDueView:setVisible(true)
     self.workloadView:setVisible(false)
     if next(g_currentMission.taskList.taskGroups) == nil then
@@ -181,8 +191,6 @@ function MenuTaskList:draw()
     MenuTaskList:superClass().draw(self)
 
     if self.viewMode == MenuTaskList.VIEW_MODE.WORKLOAD then
-        drawDashedLine(self.todayBar.absPosition[1], self.todayBar.absPosition[2] + self.todayBar.absSize[2],
-            self.todayBar.absSize[1], self.todayBar.absSize[2], -7 * g_pixelSizeY, -6 * g_pixelSizeY, 1, 1, 1, 1, false)
         for k, v in pairs(self.fluctuationPoints) do
             local next = self.fluctuationPoints[k + 1]
             if next ~= nil then
@@ -196,14 +204,6 @@ function MenuTaskList:draw()
 end
 
 function MenuTaskList:updateWorkload()
-    local texts = {}
-    for i = 1, 12 do
-        local value = TaskListUtils.convertMonthNumberToPeriod(i)
-        table.insert(texts, g_i18n:formatPeriod(value, true))
-    end
-    self.monthSelector:setTexts(texts)
-
-    FocusManager:setFocus(self.monthSelector)
     self.currentlyDueView:setVisible(false)
     self.workloadView:setVisible(true)
     local tasks = g_currentMission.taskList:getTasksForNextYear()
@@ -212,46 +212,42 @@ function MenuTaskList:updateWorkload()
 
     local min = math.huge
     local max = 0
+    local effortMap = {}
     for i = 1, 12 do
-        local val = #tasks[i]
-        min = math.min(min, val)
-        max = math.max(max, val)
+        local totalEffort = 0
+        for _, task in pairs(tasks[i]) do
+            totalEffort = totalEffort + task.effort
+        end
+        effortMap[i] = totalEffort
+        min = math.min(min, totalEffort)
+        max = math.max(max, totalEffort)
     end
 
     self.fluctuationPoints = {}
     local high = 0
     local low = math.huge
     for i = 1, 12 do
-        local count = #tasks[i]
-        local normalized = (count - min) / (max - min) * 0.6 + 0.2
+        local effort = effortMap[i]
+        local normalized = (effort - min) / (max - min) * 0.6 + 0.2
 
         self.fluctuationPoints[i] = normalized * self.fluctuationsContainer.absSize[2]
-        if count < low then
+        if effort < low then
             local p = self.monthTexts[i].absPosition[1] + self.monthTexts[i].absSize[1] * 0.5 -
                 self.fluctuationLow.absSize[1] * 0.5
             self.fluctuationLow:setAbsolutePosition(p, nil)
-            low = count
+            low = effort
         end
-        if high < count then
+        if high < effort then
             local p = self.monthTexts[i].absPosition[1] + self.monthTexts[i].absSize[1] * 0.5 -
                 self.fluctuationHigh.absSize[1] * 0.5
             self.fluctuationHigh:setAbsolutePosition(p, nil)
-            high = count
+            high = effort
         end
     end
     self.fluctuationHigh:setText(high)
     self.fluctuationLow:setText(low)
 
-    DebugUtil.printTableRecursively(tasks)
-end
-
-function MenuTaskList:updateTodayBar()
-    local environment = g_currentMission.environment
-    local seasonBase = environment.currentSeason - 1
-    local seasonProgress = (environment.currentDayInSeason - 1) / environment:getDaysPerSeason()
-    local pos = seasonBase * 0.25 + seasonProgress * 0.25
-    local x = self.todayBar.parent.size[1]
-    self.todayBar:setPosition(x * pos + x / (environment:getDaysPerSeason() * 4) * 0.5, nil)
+    FocusManager:setFocus(self.monthSelector)
 end
 
 function MenuTaskList:getNumberOfSections()
@@ -272,6 +268,7 @@ function MenuTaskList:populateCellForItemInSection(list, section, index, cell)
     local task = self.currentTasks[index]
     cell:getAttribute("group"):setText(task.groupName)
     cell:getAttribute("detail"):setText(task.detail)
+    cell:getAttribute("effort"):setText(task.effort)
     cell:getAttribute("priority"):setText(task.priority)
 
     local currentPeriod = g_currentMission.environment.currentPeriod

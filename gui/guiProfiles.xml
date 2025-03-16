@@ -59,4 +59,7 @@
         <textAlignment value="right" />
     </Profile>
     <Profile name="taskListGroupsSliderBox" extends="fs25_listSliderBox" with="anchorTopRight" />
+    <Profile name="taskListpricesMonthText" extends="fs25_pricesMonthText">
+        <width value="122px" />
+    </Profile>
 </GUIProfiles>

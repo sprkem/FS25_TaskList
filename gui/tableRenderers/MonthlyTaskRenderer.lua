@@ -35,6 +35,7 @@ function MonthlyTaskRenderer:populateCellForItemInSection(list, section, index, 
     cell:getAttribute("group"):setText(group.name)
     cell:getAttribute("detail"):setText(task.detail)
     cell:getAttribute("priority"):setText(task.priority)
+    cell:getAttribute("effort"):setText(task.effort)
 end
 
 function MonthlyTaskRenderer:onListSelectionChanged(list, section, index)

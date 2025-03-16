@@ -336,7 +336,8 @@ function TaskList:getTasksForNextYear()
         for _, task in pairs(group.tasks) do
             if task.recurMode == Task.RECUR_MODE.MONTHLY then
                 local month = TaskListUtils.convertPeriodToMonthNumber(task.period)
-                table.insert(result[month], { groupId = group.id, taskId = task.id })
+                table.insert(result[month],
+                    { groupId = group.id, taskId = task.id, effort = task.effort, priority = task.priority })
             elseif task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
                 local currentMonth = TaskListUtils.convertPeriodToMonthNumber(g_currentMission.environment.currentPeriod)
                 local firstMonth = TaskListUtils.convertPeriodToMonthNumber(task.nextN)
@@ -344,7 +345,8 @@ function TaskList:getTasksForNextYear()
                 if count < 0 then
                     firstMonth = firstMonth + 12
                 end
-                table.insert(result[firstMonth], { groupId = group.id, taskId = task.id })
+                table.insert(result[firstMonth],
+                    { groupId = group.id, taskId = task.id, effort = task.effort, priority = task.priority })
 
                 local lastAdded = firstMonth
                 while true do
@@ -358,7 +360,8 @@ function TaskList:getTasksForNextYear()
                         next = next - 12
                     end
 
-                    table.insert(result[next], { groupId = group.id, taskId = task.id })
+                    table.insert(result[next],
+                        { groupId = group.id, taskId = task.id, effort = task.effort, priority = task.priority })
                     lastAdded = next
                 end
             elseif task.recurMode == Task.RECUR_MODE.DAILY or task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
@@ -386,7 +389,8 @@ function TaskList:getTasksForNextYear()
                     end
                 end
 
-                table.insert(result[currentMonth], { groupId = group.id, taskId = task.id })
+                table.insert(result[currentMonth],
+                    { groupId = group.id, taskId = task.id, effort = task.effort, priority = task.priority })
                 local lastAdded = firstDay
                 while true do
                     if not seasonChanged and startSeason ~= g_currentMission.environment:getSeasonAtDay(lastAdded) then
@@ -406,12 +410,18 @@ function TaskList:getTasksForNextYear()
                         break
                     end
 
-                    table.insert(result[currentMonth], { groupId = group.id, taskId = task.id })
+                    table.insert(result[currentMonth],
+                        { groupId = group.id, taskId = task.id, effort = task.effort, priority = task.priority })
                     lastAdded = lastAdded + increment
                 end
             end
         end
     end
+    -- Sort each months tasks by priority
+    for i = 1, 12 do
+        table.sort(result[i], function(k1, k2) return k1.priority < k2.priority end)
+    end
+
     return result
 end
 
