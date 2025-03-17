@@ -34,7 +34,7 @@
 		<text name="ui_intro_text_7" text="You can view tasks currently due while playing by pressing Shift + T."/>
 		<text name="ui_set_group_name" text="Choose A Group Name"/>
 		<text name="ui_set_task_detail" text="Describe the task"/>
-		<text name="ui_set_task_priority" text="Set the task priority"/>
+		<text name="ui_set_task_priority" text="Set the task priority. This is used for ordering tasks so you know what to do first."/>
 		<text name="ui_set_task_should_recur" text="Is the task recurring?"/>
 		<text name="ui_set_task_period" text="When is the task due?"/>
 		<text name="ui_set_task_recur_mode" text="When should the task recur?"/>
@@ -60,5 +60,9 @@
 		<text name="ui_no_tasks_exist_for_group" text="You don't have any tasks yet"/>
 		<text name="ui_no_active_tasks" text="You don't have any tasks due"/>
 		<text name="ui_confirm_complete_task" text="Confirm completion of task: %s"/>
+		<text name="ui_tasks_over_time" text="Workload over time"/>
+		<text name="ui_header_effort" text="Effort"/>
+		<text name="ui_set_task_effort" text="Set the effort level for this task. This is used to differentiate small and large tasks when calculating workload over time."/>
+		<text name="ui_tasks_due_now" text="Tasks Due Now"/>
 	</texts>
 </l10n>

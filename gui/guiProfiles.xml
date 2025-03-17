@@ -21,6 +21,7 @@
         <textAlignment value="left" />
         <textDisabledColor value="$preset_colorDisabled" />
     </Profile>
+    <Profile name="taskListDueNowText" extends="fs25_statisticsHeaderText" with="anchorTopLeft" />
     <Profile name="taskListIntroText" extends="baseReference" with="anchorTopLeft">
         <imageColor value="0 0 0 0" />
         <textFocusedColor value="$preset_fs25_colorMainHighlight" />
@@ -59,4 +60,7 @@
         <textAlignment value="right" />
     </Profile>
     <Profile name="taskListGroupsSliderBox" extends="fs25_listSliderBox" with="anchorTopRight" />
+    <Profile name="taskListpricesMonthText" extends="fs25_pricesMonthText">
+        <width value="122px" />
+    </Profile>
 </GUIProfiles>

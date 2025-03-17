@@ -153,12 +153,35 @@ function ManageTasksFrame:onAddEditTaskRequestDetail(newTask)
                 end
 
                 newTask.detail = detail
-                self:onAddEditTaskRequestPriority(newTask)
+                self:onAddEditTaskEffort(newTask)
             end
         end, self,
         newTask.detail,
         g_i18n:getText("ui_set_task_detail"),
         nil, Task.MAX_DETAIL_LENGTH, g_i18n:getText("ui_btn_ok"))
+end
+
+function ManageTasksFrame:onAddEditTaskEffort(newTask)
+    local allowedValues = { "1", "2", "3", "4", "5" }
+    TaskListUtils.showOptionDialog({
+        text = g_i18n:getText("ui_set_task_effort"),
+        title = "",
+        defaultText = "",
+        options = allowedValues,
+        defaultOption = newTask.effort,
+        target = self,
+        args = {},
+        callback = function(_, index)
+            if index > 0 then
+                local value = allowedValues[index]
+                newTask.effort = tonumber(value)
+                self:onAddEditTaskRequestPriority(newTask)
+            else
+                -- Go back
+                self:onAddEditTaskRequestDetail(newTask)
+            end
+        end
+    })
 end
 
 -- New Task Step

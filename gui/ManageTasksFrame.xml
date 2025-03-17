@@ -10,7 +10,6 @@
             <Animation profile="fs25_dialogLoading" id="iconLoadingElement" />
             <Text profile="dialogTitle" text="$l10n_ui_manage_tasks" position="0px -30px" />
 
-            <!-- <MultiTextOption profile="fs25_subCategorySelectorTabbed" id="groupSelector" position="0px -80px" size="450px 50px" onClick="OnGroupSelectChange" disableButtonsOnSingleText="false" > -->
             <MultiTextOption profile="fs25_subCategorySelectorTabbed" id="groupSelector" position="0px -80px" size="450px 50px" onClick="OnGroupSelectChange" >
                 <Text profile="fs25_multiTextOptionText" name="text" />
             </MultiTextOption>

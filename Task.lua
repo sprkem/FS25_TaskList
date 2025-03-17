@@ -20,6 +20,7 @@ function Task.new(customMt)
     self.detail = ""
     self.priority = 1
     self.period = 1
+    self.effort = 1
     self.shouldRecur = true
     self.recurMode = Task.RECUR_MODE.NONE
     self.nextN = 0
@@ -32,6 +33,7 @@ function Task:copyValuesFromTask(sourceTask, includeId)
     self.detail = sourceTask.detail
     self.priority = sourceTask.priority
     self.period = sourceTask.period
+    self.effort = sourceTask.effort
     self.shouldRecur = sourceTask.shouldRecur
     self.recurMode = sourceTask.recurMode
     self.nextN = sourceTask.nextN
@@ -51,7 +53,7 @@ function Task:writeStream(streamId, connection)
     streamWriteInt32(streamId, self.recurMode)
     streamWriteInt32(streamId, self.nextN)
     streamWriteInt32(streamId, self.n)
-
+    streamWriteInt32(streamId, self.effort)
 end
 
 function Task:readStream(streamId, connection)
@@ -63,6 +65,7 @@ function Task:readStream(streamId, connection)
     self.recurMode = streamReadInt32(streamId)
     self.nextN = streamReadInt32(streamId)
     self.n = streamReadInt32(streamId)
+    self.effort = streamReadInt32(streamId)
 end
 
 function Task:saveToXmlFile(xmlFile, key)
@@ -74,6 +77,7 @@ function Task:saveToXmlFile(xmlFile, key)
     setXMLBool(xmlFile, key .. "#shouldRecur", self.shouldRecur)
     setXMLInt(xmlFile, key .. "#nextN", self.nextN)
     setXMLInt(xmlFile, key .. "#n", self.n)
+    setXMLInt(xmlFile, key .. "#effort", self.effort)
 end
 
 function Task:loadFromXMLFile(xmlFile, key)
@@ -85,4 +89,5 @@ function Task:loadFromXMLFile(xmlFile, key)
     self.shouldRecur = getXMLBool(xmlFile, key .. "#shouldRecur")
     self.nextN = getXMLInt(xmlFile, key .. "#nextN")
     self.n = getXMLInt(xmlFile, key .. "#n")
+    self.effort = getXMLInt(xmlFile, key .. "#effort") or 1
 end
