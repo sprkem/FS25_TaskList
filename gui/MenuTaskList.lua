@@ -19,8 +19,7 @@ function MenuTaskList.new(i18n, messageCenter)
     self.clonedPricesElements = {}
     self.monthTexts = {}
     self.fluctuationPoints = {}
-    self.monthlyTaskRenderer = MonthlyTaskRenderer:new(self)
-
+    self.monthlyTaskRenderer = MonthlyTaskRenderer.new(self)
     self.btnBack = {
         inputAction = InputAction.MENU_BACK
     }

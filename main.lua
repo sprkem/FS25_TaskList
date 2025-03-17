@@ -39,7 +39,7 @@ function TaskList:loadMap()
     g_gui:loadProfiles(TaskList.dir .. "gui/guiProfiles.xml")
 
     local guiTaskList = MenuTaskList.new(g_i18n)
-    g_gui:loadGui(TaskList.dir .. "gui/MenuTaskList.xml", "menuTaskList", guiTaskList, false)
+    g_gui:loadGui(TaskList.dir .. "gui/MenuTaskList.xml", "menuTaskList", guiTaskList, true)
 
     local manageGroupsFrame = ManageGroupsFrame.new(g_i18n)
     g_gui:loadGui(TaskList.dir .. "gui/ManageGroupsFrame.xml", "manageGroupsFrame", manageGroupsFrame)
