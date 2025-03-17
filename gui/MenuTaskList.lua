@@ -69,6 +69,10 @@ function MenuTaskList.new(i18n, messageCenter)
 end
 
 function MenuTaskList:delete()
+    for k, v in pairs(self.clonedPricesElements) do
+        v:delete()
+        self.clonedPricesElements[k] = nil
+    end
     MenuTaskList:superClass().delete(self)
 end
 
@@ -117,7 +121,6 @@ function MenuTaskList:onFrameOpen()
     g_messageCenter:subscribe(MessageType.TASK_GROUPS_UPDATED, function(menu)
         self:updateContent()
     end, self)
-    g_messageCenter:subscribe(MessageType.HOUR_CHANGED, self.onHourChanged, self)
 
     -- Force the view to next month tasks
     local nextPeriod = g_currentMission.environment.currentPeriod + 1

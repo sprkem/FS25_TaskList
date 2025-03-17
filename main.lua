@@ -47,8 +47,8 @@ function TaskList:loadMap()
     local manageTasksFrame = ManageTasksFrame.new(g_i18n)
     g_gui:loadGui(TaskList.dir .. "gui/ManageTasksFrame.xml", "manageTasksFrame", manageTasksFrame)
 
-    TaskList.fixInGameMenu(guiTaskList, "menuTaskList", { 0, 0, 1024, 1024 }, 2,
-        TaskList:makeIsTaskListCheckEnabledPredicate())
+    TaskList.addIngameMenuPage(guiTaskList, "menuTaskList", { 0, 0, 1024, 1024 },
+        TaskList:makeIsTaskListCheckEnabledPredicate(), "pageSettings")
 
     g_currentMission.taskList = self
     self.taskGroups = {}
@@ -144,67 +144,63 @@ function TaskList:loadFromXMLFile()
 end
 
 -- from Courseplay
-function TaskList.fixInGameMenu(frame, pageName, uvs, position, predicateFunc)
-    local inGameMenu = g_gui.screenControllers[InGameMenu]
+function TaskList.addIngameMenuPage(frame, pageName, uvs, predicateFunc, insertAfter)
     local targetPosition = 0
 
     -- remove all to avoid warnings
     for k, v in pairs({ pageName }) do
-        inGameMenu.controlIDs[v] = nil
+        g_inGameMenu.controlIDs[v] = nil
     end
 
-    for i = 1, #inGameMenu.pagingElement.elements do
-        local child = inGameMenu.pagingElement.elements[i]
-        if child == inGameMenu["pageSettings"] then
-            targetPosition = i;
+    for i = 1, #g_inGameMenu.pagingElement.elements do
+        local child = g_inGameMenu.pagingElement.elements[i]
+        if child == g_inGameMenu[insertAfter] then
+            targetPosition = i + 1;
             break
         end
     end
 
-    if targetPosition == 0 then
-        targetPosition = position
-    end
+    g_inGameMenu[pageName] = frame
+    g_inGameMenu.pagingElement:addElement(g_inGameMenu[pageName])
 
-    inGameMenu[pageName] = frame
-    inGameMenu.pagingElement:addElement(inGameMenu[pageName])
+    g_inGameMenu:exposeControlsAsFields(pageName)
 
-    inGameMenu:exposeControlsAsFields(pageName)
-
-    for i = 1, #inGameMenu.pagingElement.elements do
-        local child = inGameMenu.pagingElement.elements[i]
-        if child == inGameMenu[pageName] then
-            table.remove(inGameMenu.pagingElement.elements, i)
-            table.insert(inGameMenu.pagingElement.elements, targetPosition, child)
+    for i = 1, #g_inGameMenu.pagingElement.elements do
+        local child = g_inGameMenu.pagingElement.elements[i]
+        if child == g_inGameMenu[pageName] then
+            table.remove(g_inGameMenu.pagingElement.elements, i)
+            table.insert(g_inGameMenu.pagingElement.elements, targetPosition, child)
             break
         end
     end
 
-    for i = 1, #inGameMenu.pagingElement.pages do
-        local child = inGameMenu.pagingElement.pages[i]
-        if child.element == inGameMenu[pageName] then
-            table.remove(inGameMenu.pagingElement.pages, i)
-            table.insert(inGameMenu.pagingElement.pages, targetPosition, child)
+    for i = 1, #g_inGameMenu.pagingElement.pages do
+        local child = g_inGameMenu.pagingElement.pages[i]
+        if child.element == g_inGameMenu[pageName] then
+            table.remove(g_inGameMenu.pagingElement.pages, i)
+            table.insert(g_inGameMenu.pagingElement.pages, targetPosition, child)
             break
         end
     end
 
-    inGameMenu.pagingElement:updateAbsolutePosition()
-    inGameMenu.pagingElement:updatePageMapping()
+    g_inGameMenu.pagingElement:updateAbsolutePosition()
+    g_inGameMenu.pagingElement:updatePageMapping()
 
-    inGameMenu:registerPage(inGameMenu[pageName], position, predicateFunc)
+    g_inGameMenu:registerPage(g_inGameMenu[pageName], nil, predicateFunc)
+
     local iconFileName = Utils.getFilename('images/menuIcon.dds', TaskList.dir)
-    inGameMenu:addPageTab(inGameMenu[pageName], iconFileName, GuiUtils.getUVs(uvs))
+    g_inGameMenu:addPageTab(g_inGameMenu[pageName], iconFileName, GuiUtils.getUVs(uvs))
 
-    for i = 1, #inGameMenu.pageFrames do
-        local child = inGameMenu.pageFrames[i]
-        if child == inGameMenu[pageName] then
-            table.remove(inGameMenu.pageFrames, i)
-            table.insert(inGameMenu.pageFrames, targetPosition, child)
+    for i = 1, #g_inGameMenu.pageFrames do
+        local child = g_inGameMenu.pageFrames[i]
+        if child == g_inGameMenu[pageName] then
+            table.remove(g_inGameMenu.pageFrames, i)
+            table.insert(g_inGameMenu.pageFrames, targetPosition, child)
             break
         end
     end
 
-    inGameMenu:rebuildTabList()
+    g_inGameMenu:rebuildTabList()
 end
 
 function TaskList:hourChanged()

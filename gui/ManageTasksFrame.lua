@@ -101,6 +101,7 @@ function ManageTasksFrame:populateCellForItemInSection(list, section, index, cel
     local task = self.currentGroup.tasks[index]
 
     cell:getAttribute("detail"):setText(task.detail)
+    cell:getAttribute("effort"):setText(task.effort)
     cell:getAttribute("priority"):setText(task.priority)
 
     local monthString = TaskListUtils.formatPeriodFullMonthName(task.period)
@@ -202,7 +203,7 @@ function ManageTasksFrame:onAddEditTaskRequestPriority(newTask)
                 self:onAddEditTaskRequestShouldRecur(newTask)
             else
                 -- Go back
-                self:onAddEditTaskRequestDetail(newTask)
+                self:onAddEditTaskEffort(newTask)
             end
         end
     })
