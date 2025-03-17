@@ -63,5 +63,6 @@
 		<text name="ui_tasks_over_time" text="Workload over time"/>
 		<text name="ui_header_effort" text="Effort"/>
 		<text name="ui_set_task_effort" text="Set the effort level for this task. This is used to differentiate small and large tasks when calculating workload over time."/>
+		<text name="ui_tasks_due_now" text="Tasks Due Now"/>
 	</texts>
 </l10n>

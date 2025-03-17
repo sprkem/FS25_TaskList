@@ -21,7 +21,8 @@
             </GuiElement>
             
             <GuiElement id="tableContainer">
-                <GuiElement profile="fs25_statisticsHeaderBox">
+                <Text profile="taskListDueNowText" text="$l10n_ui_tasks_due_now" />
+                <GuiElement profile="fs25_statisticsHeaderBox" position="0px -40px">
                     <Button profile="taskListHeader" position="40px 0px" text="$l10n_ui_header_group" handleFocus="false" />
                     <Button profile="taskListHeader" position="240px 0px" text="$l10n_ui_header_detail" handleFocus="false" />
                     <Button profile="taskListHeader" position="640px 0px" text="$l10n_ui_header_due" handleFocus="false" />
@@ -30,7 +31,7 @@
                     <Button profile="taskListHeaderRight" position="970px 0px" size="80px 32px" text="$l10n_ui_header_priority" handleFocus="false" />
                 </GuiElement>
 
-                <SmoothList profile="taskListTable" id="currentTasksTable" position="0px -40px">
+                <SmoothList profile="taskListTable" id="currentTasksTable" position="0px -80px">
                     <ListItem profile="taskListListItem">
                         <Text profile="taskListRowCellLeft" position="40px 0px" size="200px 32px" name="group"/>
                         <Text profile="taskListRowCellLeft" position="240px 0px" size="400px 32px" name="detail"/>
@@ -41,7 +42,7 @@
                     </ListItem>
                 </SmoothList>
 
-                <ThreePartBitmap profile="taskListGroupsSliderBox" position="28px -40px" size="6px 710px">
+                <ThreePartBitmap profile="taskListGroupsSliderBox" position="28px -80px" size="6px 670px">
                     <Slider profile="fs25_listSlider" dataElementId="currentTasksTable" />
                 </ThreePartBitmap>
             </GuiElement>
@@ -81,7 +82,7 @@
                 </GuiElement>
 
                 <GuiElement id="noMonthlyTasksContainer">
-                    <Text profile="dialogTitle" text="$l10n_ui_no_active_tasks" position="0px -40px" />
+                    <Text profile="fs25_statisticsHeaderText" text="$l10n_ui_noShopItems" position="0px -40px" />
                 </GuiElement>
             </GuiElement>
 

@@ -207,7 +207,18 @@ function MenuTaskList:updateWorkload()
     self.currentlyDueView:setVisible(false)
     self.workloadView:setVisible(true)
     local tasks = g_currentMission.taskList:getTasksForNextYear()
-    self.monthlyTaskRenderer:setData(tasks[self.selectedMonthlyTasksMonth])
+    local selectedMonthTasks = tasks[self.selectedMonthlyTasksMonth]
+
+    if #selectedMonthTasks == 0 then
+        self.monthlyTasksContainer:setVisible(false)
+        self.noMonthlyTasksContainer:setVisible(true)
+        return
+    end
+
+    self.monthlyTasksContainer:setVisible(true)
+    self.noMonthlyTasksContainer:setVisible(false)
+
+    self.monthlyTaskRenderer:setData(selectedMonthTasks)
     self.monthlyTasksTable:reloadData()
 
     local min = math.huge
