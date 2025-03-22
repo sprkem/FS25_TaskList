@@ -39,7 +39,16 @@ function ManageTasksFrame:onClose()
 end
 
 function ManageTasksFrame:updateContent()
-    self.availableGroups = g_currentMission.taskList:getGroupListForCurrentFarm()
+    local farmGroups = g_currentMission.taskList:getGroupListForCurrentFarm()
+
+    -- Limit shown groups to templates or standard groups
+    self.availableGroups = {}
+    for _, group in pairs(farmGroups) do
+        if group.type ~= TaskGroup.GROUP_TYPE.TemplateInstance then
+            table.insert(self.availableGroups, group)
+        end
+    end
+
     table.sort(self.availableGroups, ManageTasksFrame.groupSortingFunction)
 
     local texts = {}

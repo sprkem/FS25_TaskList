@@ -64,5 +64,14 @@
 		<text name="ui_header_effort" text="Effort"/>
 		<text name="ui_set_task_effort" text="Set the effort level for this task. This is used to differentiate small and large tasks when calculating workload over time."/>
 		<text name="ui_tasks_due_now" text="Tasks Due Now"/>
+
+		<text name="ui_header_group_type" text="Group Type"/>
+		<text name="ui_header_group_source_template" text="Template"/>
+		<text name="ui_group_type_standard" text="Standard"/>
+		<text name="ui_group_type_template" text="Template"/>
+		<text name="ui_group_type_template_instance" text="Template Instance"/>
+		<text name="ui_group_request_type_description" text="Choose a group type. A Standard group contains tasks that will be shown when due. A Template defines tasks as a template only. Then you can define multiple Template Instance groups that use the same Template and manage them in one place."/>
+		<text name="ui_group_request_source_group" text="Choose a Template to use for this group."/>
+		<text name="ui_confirm_deletion_template" text="Are you sure you want to delete? Deleting a Template will delete all Template Instance groups associated with it."/>
 	</texts>
 </l10n>

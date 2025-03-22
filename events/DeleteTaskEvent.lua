@@ -36,8 +36,20 @@ function DeleteTaskEvent:run(connection)
         return
     end
 
+    local group = g_currentMission.taskList.taskGroups[self.groupId]
+
     g_currentMission.taskList.taskGroups[self.groupId].tasks[self.taskId] = nil
-    g_currentMission.taskList.activeTasks[self.taskId] = nil
+    local key = self.groupId .. "_" .. self.taskId
+    g_currentMission.taskList.activeTasks[key] = nil
+
+    if group.type == TaskGroup.GROUP_TYPE.Template then
+        for _, tg in pairs(g_currentMission.taskList.taskGroups) do
+            if tg.type == TaskGroup.GROUP_TYPE.TemplateInstance and tg.templateGroupId == group.id then
+                local key = tg.id .. "_" .. self.taskId
+                g_currentMission.taskList.activeTasks[key] = nil
+            end
+        end
+    end
 
     g_messageCenter:publish(MessageType.TASK_GROUPS_UPDATED)
     g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)

@@ -31,8 +31,9 @@ function CompleteTaskEvent:run(connection)
         g_server:broadcastEvent(CompleteTaskEvent.new(self.groupId, self.taskId))
     end
 
-    -- Remove active task
-    g_currentMission.taskList.activeTasks[self.taskId] = nil
+    -- Remove active task (old and new format)
+    local key = self.groupId .. "_" .. self.taskId
+    g_currentMission.taskList.activeTasks[key] = nil
 
     -- Find the origin task and if it should not recur, delete it
     local sourceTask = g_currentMission.taskList.taskGroups[self.groupId].tasks[self.taskId]

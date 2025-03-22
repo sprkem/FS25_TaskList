@@ -12,12 +12,16 @@
 
             <GuiElement id="tableContainer">
                 <GuiElement profile="fs25_statisticsHeaderBox">
-                    <Button profile="taskListHeader" position="60px -75px" size="155px 32px" text="$l10n_ui_header_group" handleFocus="false" />
+                    <Button profile="taskListHeader" position="60px -75px" size="200px 32px" text="$l10n_ui_header_group" handleFocus="false" />
+                    <Button profile="taskListHeader" position="260px -75px" size="150px 32px" text="$l10n_ui_header_group_type" handleFocus="false" />
+                    <Button profile="taskListHeader" position="410px -75px" size="200px 32px" text="$l10n_ui_header_group_source_template" handleFocus="false" />
                 </GuiElement>
 
                 <SmoothList id="groupsTable" profile="taskListTable" position="40px -110px" size="680px 550px">
                     <ListItem profile="taskListListItem">
-                        <Text profile="taskListRowCellLeft" position="20px 0px" size="155px 32px" name="group"/>
+                        <Text profile="taskListRowCellLeft" position="20px 0px" size="200px 32px" name="group"/>
+                        <Text profile="taskListRowCellLeft" position="220px 0px" size="150px 32px" name="type"/>
+                        <Text profile="taskListRowCellLeft" position="370px 0px" size="200px 32px" name="source"/>
                     </ListItem>
                 </SmoothList>
 

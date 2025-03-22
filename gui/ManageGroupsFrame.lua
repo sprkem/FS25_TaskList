@@ -63,8 +63,17 @@ function ManageGroupsFrame:getTitleForSectionHeader(list, section)
 end
 
 function ManageGroupsFrame:populateCellForItemInSection(list, section, index, cell)
-    local entry = self.currentGroups[index]
-    cell:getAttribute("group"):setText(entry.name)
+    local group = self.currentGroups[index]
+    local typeString = TaskGroup.GROUP_TYPE_STRINGS[group.type]
+
+    local source = '-'
+    if group.type == TaskGroup.GROUP_TYPE.TemplateInstance then
+        source = g_currentMission.taskList.taskGroups[group.templateGroupId].name
+    end
+
+    cell:getAttribute("group"):setText(group.name)
+    cell:getAttribute("type"):setText(g_i18n:getText(typeString))
+    cell:getAttribute("source"):setText(source)
 end
 
 function ManageGroupsFrame:onListSelectionChanged(list, section, index)
@@ -76,11 +85,107 @@ function ManageGroupsFrame:onClickBack(sender)
 end
 
 function ManageGroupsFrame:onClickAdd(sender)
+    local newGroup = TaskGroup.new()
+    self:onAddGroupRequestName(newGroup)
+end
+
+function ManageGroupsFrame:onAddGroupRequestName(newGroup)
     TextInputDialog.show(
-        ManageGroupsFrame.onNewGroupNameSet, self,
-        "",
+        function(self, value, clickOk)
+            if clickOk then
+                local name = string.gsub(value, '^%s*(.-)%s*$', '%1')
+                if name == "" then
+                    InfoDialog.show(g_i18n:getText("ui_no_name_specified_error"))
+                    return
+                end
+
+                if g_currentMission.taskList:groupExistsForCurrentFarm(name) then
+                    InfoDialog.show(g_i18n:getText("ui_group_exists_error"))
+                    return
+                end
+                local group = TaskGroup.new()
+                group.name = name
+                self:onAddRequestType(group)
+            end
+        end, self,
+        newGroup.name,
         g_i18n:getText("ui_set_group_name"),
         nil, TaskGroup.MAX_NAME_LENGTH, g_i18n:getText("ui_btn_ok"))
+end
+
+function ManageGroupsFrame:onAddRequestType(newGroup)
+    local allowedValues = {}
+    table.insert(allowedValues, g_i18n:getText("ui_group_type_standard"))
+    table.insert(allowedValues, g_i18n:getText("ui_group_type_template"))
+
+    for _, group in pairs(g_currentMission.taskList.taskGroups) do
+        if group.type == TaskGroup.GROUP_TYPE.Template then
+            table.insert(allowedValues, g_i18n:getText("ui_group_type_template_instance"))
+            break
+        end
+    end
+
+    TaskListUtils.showOptionDialog({
+        text = g_i18n:getText("ui_group_request_type_description"),
+        title = "",
+        defaultText = "",
+        options = allowedValues,
+        defaultOption = newGroup.type,
+        target = self,
+        args = {},
+        callback = function(_, index)
+            if index > 0 then
+                newGroup.type = index
+
+                if newGroup.type == TaskGroup.GROUP_TYPE.TemplateInstance then
+                    self:onAddRequestTemplateGroup(newGroup)
+                else
+                    self:onAddJourneyComplete(newGroup)
+                end
+            else
+                -- Go back
+                self:onAddGroupRequestName(newGroup)
+            end
+        end
+    })
+end
+
+function ManageGroupsFrame:onAddRequestTemplateGroup(newGroup)
+    local allowedValues = {}
+    local allowedValuesGroupLookup = {}
+    local default = 1
+    for _, group in pairs(g_currentMission.taskList.taskGroups) do
+        if group.type == TaskGroup.GROUP_TYPE.Template then
+            table.insert(allowedValues, group.name)
+            table.insert(allowedValuesGroupLookup, group.id)
+            if group.id == newGroup.templateGroupId then
+                default = #allowedValues
+            end
+        end
+    end
+
+    TaskListUtils.showOptionDialog({
+        text = g_i18n:getText("ui_group_request_source_group"),
+        title = "",
+        defaultText = "",
+        options = allowedValues,
+        defaultOption = default,
+        target = self,
+        args = {},
+        callback = function(_, index)
+            if index > 0 then
+                newGroup.templateGroupId = allowedValuesGroupLookup[index]
+                self:onAddJourneyComplete(newGroup)
+            else
+                -- Go back
+                self:onAddRequestType(newGroup)
+            end
+        end
+    })
+end
+
+function ManageGroupsFrame:onAddJourneyComplete(newGroup)
+    g_currentMission.taskList:addGroupForCurrentFarm(newGroup)
 end
 
 function ManageGroupsFrame:onClickRename(sender)
@@ -124,6 +229,11 @@ function ManageGroupsFrame:onClickDelete(sender)
     if self.selectedGroupIndex == -1 then
         InfoDialog.show(g_i18n:getText("ui_no_group_selected_error"))
         return
+    end
+
+    local dialogText = g_i18n:getText("ui_confirm_deletion")
+    if self.currentGroups[self.selectedGroupIndex].type == TaskGroup.GROUP_TYPE.Template then
+        dialogText = g_i18n:getText("ui_confirm_deletion_template")
     end
 
     YesNoDialog.show(

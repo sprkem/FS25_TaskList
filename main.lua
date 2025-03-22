@@ -53,6 +53,7 @@ function TaskList:loadMap()
     g_currentMission.taskList = self
     self.taskGroups = {}
     self.activeTasks = {}
+    self.templateTasksAdded = {}
     self.currentPeriod = g_currentMission.environment.currentPeriod
     self.currentDay = g_currentMission.environment.currentDay
 
@@ -227,6 +228,8 @@ function TaskList:onPeriodChanged()
         self:addDailyTasks(group)
     end
     g_currentMission.taskList.currentPeriod = g_currentMission.environment.currentPeriod
+    g_currentMission.taskList.currentDay = g_currentMission.environment.currentDay
+    self:updateTemplateAddedTasks()
 end
 
 function TaskList:onDayChanged()
@@ -234,14 +237,21 @@ function TaskList:onDayChanged()
         self:addDailyTasks(group)
     end
     g_currentMission.taskList.currentDay = g_currentMission.environment.currentDay
+    self:updateTemplateAddedTasks()
 end
 
 function TaskList:addGroupTasksForCurrentPeriod(group)
-    local currentPeriod = g_currentMission.environment.currentPeriod
+    if group.type == TaskGroup.GROUP_TYPE.Template then return end
     local additions = false
-    for _, task in pairs(group.tasks) do
+
+    local tasks = group.tasks
+    if group.type == TaskGroup.GROUP_TYPE.TemplateInstance then
+        tasks = self.taskGroups[group.templateGroupId].tasks
+    end
+
+    for _, task in pairs(tasks) do
         if task.recurMode == Task.RECUR_MODE.NONE or task.recurMode == Task.RECUR_MODE.MONTHLY or task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
-            local didAdd = self:checkAndAddActiveTaskIfDue(group.id, task)
+            local didAdd = self:checkAndAddActiveTaskIfDue(group, task)
             if didAdd then additions = true end
         end
     end
@@ -251,10 +261,17 @@ function TaskList:addGroupTasksForCurrentPeriod(group)
 end
 
 function TaskList:addDailyTasks(group)
+    if group.type == TaskGroup.GROUP_TYPE.Template then return end
     local additions = false
-    for _, task in pairs(group.tasks) do
+
+    local tasks = group.tasks
+    if group.type == TaskGroup.GROUP_TYPE.TemplateInstance then
+        tasks = self.taskGroups[group.templateGroupId].tasks
+    end
+
+    for _, task in pairs(tasks) do
         if task.recurMode == Task.RECUR_MODE.DAILY or task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
-            local didAdd = self:checkAndAddActiveTaskIfDue(group.id, task)
+            local didAdd = self:checkAndAddActiveTaskIfDue(group, task)
             if didAdd then additions = true end
         end
     end
@@ -263,7 +280,7 @@ function TaskList:addDailyTasks(group)
     end
 end
 
-function TaskList:checkAndAddActiveTaskIfDue(groupId, task)
+function TaskList:checkAndAddActiveTaskIfDue(group, task)
     local currentDay = g_currentMission.environment.currentDay
     local currentPeriod = g_currentMission.environment.currentPeriod
     local shouldAdd = false
@@ -277,26 +294,51 @@ function TaskList:checkAndAddActiveTaskIfDue(groupId, task)
         shouldAdd = true
     elseif task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS and task.nextN == currentPeriod then
         shouldAdd = true
-    end
+    end    
 
     if shouldAdd then
-        self:addActiveTask(groupId, task.id)
+        self:addActiveTask(group.id, task.id)
         if task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS or task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
-            task.nextN = task.nextN + task.n
-            if task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS and task.nextN > 12 then
-                task.nextN = task.nextN - 12
+            if group.type == TaskGroup.GROUP_TYPE.Standard then
+                task.nextN = task.nextN + task.n
+                if task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS and task.nextN > 12 then
+                    task.nextN = task.nextN - 12
+                end
+            elseif group.type == TaskGroup.GROUP_TYPE.TemplateInstance then
+                if self.templateTasksAdded[group.templateGroupId] == nil then
+                    self.templateTasksAdded[group.templateGroupId] = {}
+                end
+                self.templateTasksAdded[group.templateGroupId][task.id] = true
             end
         end
         return true
     end
 
-
     return false
+end
+
+function TaskList:updateTemplateAddedTasks()
+    for groupId, tasks in pairs(self.templateTasksAdded) do
+        for taskId, _ in pairs(tasks) do
+            local task = self.taskGroups[groupId].tasks[taskId]
+            print("Updating template added task: " .. task.id)
+            task.nextN = task.nextN + task.n
+            if task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS and task.nextN > 12 then
+                task.nextN = task.nextN - 12
+            end
+        end
+    end
+    self.templateTasksAdded = {}
 end
 
 function TaskList:addActiveTask(groupId, taskId)
     local group = self.taskGroups[groupId]
+
     local task = group.tasks[taskId]
+    if group.type == TaskGroup.GROUP_TYPE.TemplateInstance then
+        task = self.taskGroups[group.templateGroupId].tasks[taskId]
+    end
+
     local taskCopy = TaskListUtils.deepcopy(task)
     taskCopy.groupName = group.name
     taskCopy.groupId = group.id
@@ -307,7 +349,8 @@ function TaskList:addActiveTask(groupId, taskId)
         taskCopy.createdMarker = g_currentMission.environment.currentPeriod
     end
 
-    self.activeTasks[taskCopy.id] = taskCopy
+    local key = taskCopy.groupId .. "_" .. taskCopy.id
+    self.activeTasks[key] = taskCopy
     -- Expect caller to raise ACTIVE_TASKS_UPDATED as this is called repeatedly
     return taskCopy
 end
@@ -422,7 +465,9 @@ function TaskList:getTasksForNextYear()
 end
 
 function TaskList:completeTask(groupId, taskId)
-    local task = self.activeTasks[taskId]
+    local key = groupId .. "_" .. taskId
+    local task = self.activeTasks[key]
+
     if task == nil then
         InfoDialog.show(g_i18n:getText("ui_task_not_found_error"))
         return
@@ -467,12 +512,18 @@ function TaskList:deleteGroup(groupId)
         return
     end
 
+    if group.type == TaskGroup.GROUP_TYPE.Template then
+        for _, tg in pairs(self.taskGroups) do
+            if tg.type == TaskGroup.GROUP_TYPE.TemplateInstance and tg.templateGroupId == group.id then
+                g_client:getServerConnection():sendEvent(DeleteGroupEvent.new(tg.id))
+            end
+        end
+    end
+
     g_client:getServerConnection():sendEvent(DeleteGroupEvent.new(groupId))
 end
 
-function TaskList:addGroupForCurrentFarm(name)
-    local group = TaskGroup.new()
-    group.name = name
+function TaskList:addGroupForCurrentFarm(group)
     g_client:getServerConnection():sendEvent(NewTaskGroupEvent.new(group))
 end
 
@@ -496,8 +547,8 @@ function TaskList:copyGroupForCurrentFarm(newName, groupToCopyId)
     end
 
     local group = TaskGroup.new()
+    group:copyValuesFromGroup(sourceGroup, false)
     group.name = newName
-    group:copyTasksFromGroup(sourceGroup)
 
     g_client:getServerConnection():sendEvent(NewTaskGroupEvent.new(group))
 end
@@ -509,7 +560,9 @@ function TaskList:getGroupListForCurrentFarm()
         if group.farmId == currentFarmId or not g_currentMission.missionDynamicInfo.isMultiplayer then
             table.insert(result, {
                 id = group.id,
-                name = group.name
+                name = group.name,
+                type = group.type,
+                templateGroupId = group.templateGroupId
             })
         end
     end

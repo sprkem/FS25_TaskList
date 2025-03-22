@@ -211,18 +211,6 @@ function MenuTaskList:updateWorkload()
     local tasks = g_currentMission.taskList:getTasksForNextYear()
     local selectedMonthTasks = tasks[self.selectedMonthlyTasksMonth]
 
-    if #selectedMonthTasks == 0 then
-        self.monthlyTasksContainer:setVisible(false)
-        self.noMonthlyTasksContainer:setVisible(true)
-        return
-    end
-
-    self.monthlyTasksContainer:setVisible(true)
-    self.noMonthlyTasksContainer:setVisible(false)
-
-    self.monthlyTaskRenderer:setData(selectedMonthTasks)
-    self.monthlyTasksTable:reloadData()
-
     local min = math.huge
     local max = 0
     local effortMap = {}
@@ -241,7 +229,10 @@ function MenuTaskList:updateWorkload()
     local low = math.huge
     for i = 1, 12 do
         local effort = effortMap[i]
-        local normalized = (effort - min) / (max - min) * 0.6 + 0.2
+        local normalized = 0.5
+        if min ~= max then
+            normalized = (effort - min) / (max - min) * 0.6 + 0.2
+        end
 
         self.fluctuationPoints[i] = normalized * self.fluctuationsContainer.absSize[2]
         if effort < low then
@@ -261,6 +252,18 @@ function MenuTaskList:updateWorkload()
     self.fluctuationLow:setText(low)
 
     FocusManager:setFocus(self.monthSelector)
+
+    if #selectedMonthTasks == 0 then
+        self.monthlyTasksContainer:setVisible(false)
+        self.noMonthlyTasksContainer:setVisible(true)
+        return
+    end
+
+    self.monthlyTasksContainer:setVisible(true)
+    self.noMonthlyTasksContainer:setVisible(false)
+
+    self.monthlyTaskRenderer:setData(selectedMonthTasks)
+    self.monthlyTasksTable:reloadData()
 end
 
 function MenuTaskList:getNumberOfSections()
@@ -316,15 +319,15 @@ function MenuTaskList:populateCellForItemInSection(list, section, index, cell)
 end
 
 function MenuTaskList:onListSelectionChanged(list, section, index)
-    self.selectedRow = index
+    self.selectedCurrentTaskRow = index
 end
 
 function MenuTaskList:completeTask()
-    if self.selectedRow == -1 then
+    if self.selectedCurrentTaskRow == -1 then
         InfoDialog.show(g_i18n:getText("ui_no_task_selected"))
         return
     end
-    local task = self.currentTasks[self.selectedRow]
+    local task = self.currentTasks[self.selectedCurrentTaskRow]
 
     YesNoDialog.show(
         function(self, clickOk)

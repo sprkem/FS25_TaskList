@@ -36,7 +36,9 @@ function DeleteGroupEvent:run(connection)
 
     -- Remove any active tasks for the group
     for _, task in pairs(group.tasks) do
-        g_currentMission.taskList.activeTasks[task.id] = nil
+        -- Remove active task (old and new format)
+        local key = group.id .. "_" .. task.id
+        g_currentMission.taskList.activeTasks[key] = nil
     end
 
     g_currentMission.taskList.taskGroups[self.id] = nil

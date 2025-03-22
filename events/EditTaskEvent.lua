@@ -40,7 +40,19 @@ function EditTaskEvent:run(connection)
 
     group.tasks[self.task.id]:copyValuesFromTask(self.task, false)
 
-    local didAdd = g_currentMission.taskList:checkAndAddActiveTaskIfDue(group.id, self.task)
+    local didAdd = false
+    if group.type == TaskGroup.GROUP_TYPE.Template then
+        for _, tg in pairs(g_currentMission.taskList.taskGroups) do
+            if tg.type == TaskGroup.GROUP_TYPE.TemplateInstance and tg.templateGroupId == group.id then
+                 if g_currentMission.taskList:checkAndAddActiveTaskIfDue(tg, self.task) then
+                    didAdd = true
+                 end
+            end
+        end
+    elseif group.type == TaskGroup.GROUP_TYPE.Standard then
+        didAdd = g_currentMission.taskList:checkAndAddActiveTaskIfDue(group, self.task)
+    end
+
     if didAdd then
         g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
     end

@@ -82,7 +82,7 @@
                 </GuiElement>
 
                 <GuiElement id="noMonthlyTasksContainer">
-                    <Text profile="fs25_statisticsHeaderText" text="$l10n_ui_noShopItems" position="0px -40px" />
+                    <Text profile="taskListNoUpcomingText" text="$l10n_ui_noShopItems" position="0px -60px" width="350px" />
                 </GuiElement>
             </GuiElement>
 
