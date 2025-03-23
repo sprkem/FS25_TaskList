@@ -27,7 +27,7 @@
         <imageColor value="0 0 0 0" />
         <textFocusedColor value="$preset_fs25_colorMainHighlight" />
         <textHighlightedColor value="$preset_fs25_colorMainHighlight" />
-        <textSize value="24px" />
+        <textSize value="18px" />
         <textColor value="$preset_colorWhite_50" />
         <textAlignment value="left" />
     </Profile>

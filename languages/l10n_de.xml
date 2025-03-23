@@ -25,13 +25,6 @@
         <text name="ui_btn_add_group" text="Gruppe hinzufügen"/>
         <text name="ui_btn_add_task" text="Aufgabe hinzufügen"/>
         <text name="ui_btn_select_group" text="Gruppen ändern"/>
-        <text name="ui_intro_text_1" text="Um anzufangen, verwenden Sie Gérer Gruppen, um einen Gruppen zu erstellen. Ein Gruppen ist ein logischer Behälter für verwandte Aufgaben, zum Beispiel Feld 10 oder allgemeine Landwirtschaftliche Aufgaben."/>
-        <text name="ui_intro_text_2" text="Sobald Sie einen Gruppen erstellt haben, können Sie mit Gérer Aufgaben die Dinge definieren, die Sie tun müssen und wann."/>
-        <text name="ui_intro_text_3" text="Eine Aufgabe ist einfach nur Text, zum Beispiel Füttern der Kühe oder Ernte."/>
-        <text name="ui_intro_text_4" text="Aufgaben können entweder einmalige Dinge sein oder monatlich oder täglich wiederholt werden, oder durch ein Vielfaches von Monaten oder Tagen."/>
-        <text name="ui_intro_text_5" text="Wenn eine Aufgabe fällig ist, wird sie hier angezeigt. Verwenden Sie den Button 'Aufgabe abschließen', wenn sie fertig ist. Wenn es sich um eine wiederkehrende Aufgabe handelt, wird sie wiederholt, wenn sie fällig ist."/>
-        <text name="ui_intro_text_6" text="Ein Gruppen und alle seiner Aufgaben können leicht in einen neuen Gruppen kopiert werden, wenn es notwendig ist."/>
-        <text name="ui_intro_text_7" text="Sie können die derzeitigen Aufgaben ansehen, während Sie spielen, indem Sie Shift + T drücken."/>
         <text name="ui_set_group_name" text="Wählen Sie einen Namen für den Gruppen"/>
         <text name="ui_set_task_detail" text="Beschreiben Sie die Aufgabe"/>
         <text name="ui_set_task_priority" text="Setzen Sie die Priorität der Aufgabe"/>
@@ -64,5 +57,23 @@
 		<text name="ui_header_effort" text="Anstrengung"/>
 		<text name="ui_set_task_effort" text="Den Effortswert für diese Aufgabe festlegen, um Aufgaben klein und groß voneinander zu unterscheiden bei der Berechnung der Arbeitslast im Laufe der Zeit."/>
         <text name="ui_tasks_due_now" text="Aufgaben, die sofort erledigt werden müssen"/>
+        <text name="ui_intro_text_1" text="Um anzufangen, verwenden Sie Manage Groups, um eine Gruppe zu erstellen. Eine Standardgruppe ist ein logischer Behälter für verwandte Aufgaben, zum Beispiel 'Field 10' oder 'Allgemeine Bauernaufgaben'."/>
+		<text name="ui_intro_text_2" text="Nachdem Sie eine Gruppe erstellt haben, verwenden Sie Manage Tasks, um Dinge zu definieren, die Sie tun müssen und wann. Aufgaben werden hier als aktive Aufgaben angezeigt, wenn sie fällig sind."/>
+		<text name="ui_intro_text_3" text="Sie können auch eine Vorlagegruppe erstellen, zum Beispiel 'Weizenfeld'. Sie definieren Aufgaben wie bei einer normalen Gruppe und erstellen dann mehrere Vorlageinstanzgruppen, die die Vorlage verwenden."/>
+		<text name="ui_intro_text_4" text="Eine Vorlagegruppe selbst erzeugt keine aktiven Aufgaben, aber produziert Aufgaben für alle mit dieser Vorlage verbundenen Vorlageinstanzgruppen."/>
+		<text name="ui_intro_text_5" text="Eine Aufgabe ist einfach nur Text, wie zum Beispiel 'Füttern von Kühen' oder 'Ernte'. Sie können die Priorität (1 ist höchste) und die relative Anstrengung festlegen, die erforderlich ist."/>
+		<text name="ui_intro_text_6" text="Aufgaben können einmalige Dinge sein oder monatlich oder täglich wiederholt werden oder auf eine Vielfache von Monaten oder Tagen basieren."/>
+		<text name="ui_intro_text_7" text="Aufgaben werden in der Hauptansicht gezeigt und können vervollständigt werden. Wiederkehrende Aufgaben werden erneut angezeigt, wenn sie nächstes Mal fällig sind."/>
+		<text name="ui_intro_text_8" text="Wählen Sie 'Wechseln' aus, um zwischen Aufgabenansicht und Planungswerkzeug zu wechseln."/>
+		<text name="ui_intro_text_9" text="Eine Gruppe und alle in ihr enthaltenen Aufgaben können einfach kopiert werden, wenn erforderlich."/>
+		<text name="ui_intro_text_10" text="Man kann Aufgaben, die fällig sind, während der Spielzeit mit der Taste Shift + T anzeigen lassen."/>
+        <text name="ui_header_group_type" text="Gruppenart"/>
+		<text name="ui_header_group_source_template" text="Vorlage"/>
+		<text name="ui_group_type_standard" text="Standardgruppe"/>
+		<text name="ui_group_type_template" text="Vorlage"/>
+		<text name="ui_group_type_template_instance" text="Vorlageinstanz"/>
+		<text name="ui_group_request_type_description" text="Wählen Sie eine Gruppenart. Eine Standardgruppe enthält Aufgaben, die gezeigt werden, wenn sie fällig sind. Eine Vorlage definiert Aufgaben als Vorlage nur. Dann können Sie mehrere Vorlageinstanzgruppen erstellen, die die gleiche Vorlage verwenden und sie in einem Ort verwalten."/>
+		<text name="ui_group_request_source_group" text="Wählen Sie eine Vorlage für diese Gruppe aus."/>
+		<text name="ui_confirm_deletion_template" text="Sind Sie sicher, dass Sie eine Vorlage löschen möchten? Die Löschung einer Vorlage entfernt alle Vorlageinstanzgruppen, die mit ihr verbunden sind."/>
 	</texts>
 </l10n>
