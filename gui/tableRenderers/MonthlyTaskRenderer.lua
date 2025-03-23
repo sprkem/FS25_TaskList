@@ -32,6 +32,10 @@ function MonthlyTaskRenderer:populateCellForItemInSection(list, section, index, 
     local group = g_currentMission.taskList.taskGroups[meta.groupId]
     local task = group.tasks[meta.taskId]
 
+    if group.type == TaskGroup.GROUP_TYPE.TemplateInstance then
+        task = g_currentMission.taskList.taskGroups[group.templateGroupId].tasks[meta.taskId]
+    end
+
     cell:getAttribute("group"):setText(group.name)
     cell:getAttribute("detail"):setText(task.detail)
     cell:getAttribute("priority"):setText(task.priority)

@@ -294,7 +294,7 @@ function TaskList:checkAndAddActiveTaskIfDue(group, task)
         shouldAdd = true
     elseif task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS and task.nextN == currentPeriod then
         shouldAdd = true
-    end    
+    end
 
     if shouldAdd then
         self:addActiveTask(group.id, task.id)
@@ -372,7 +372,14 @@ function TaskList:getTasksForNextYear()
         result[i] = {}
     end
     for _, group in pairs(self.taskGroups) do
-        for _, task in pairs(group.tasks) do
+        local tasks = group.tasks
+        if group.type == TaskGroup.GROUP_TYPE.TemplateInstance then
+            tasks = self.taskGroups[group.templateGroupId].tasks
+        elseif group.type == TaskGroup.GROUP_TYPE.Template then
+            tasks = {}
+        end
+
+        for _, task in pairs(tasks) do
             if task.recurMode == Task.RECUR_MODE.MONTHLY then
                 local month = TaskListUtils.convertPeriodToMonthNumber(task.period)
                 table.insert(result[month],
