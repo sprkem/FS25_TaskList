@@ -41,10 +41,6 @@ function NewTaskEvent:run(connection)
 
     group.tasks[self.task.id] = self.task
 
-    -- local didAdd = g_currentMission.taskList:checkAndAddActiveTaskIfDue(group.id, self.task)
-    -- if didAdd then
-    --     g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
-    -- end
     local didAdd = false
     if group.type == TaskGroup.GROUP_TYPE.Template then
         for _, tg in pairs(g_currentMission.taskList.taskGroups) do

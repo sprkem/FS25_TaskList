@@ -321,7 +321,6 @@ function TaskList:updateTemplateAddedTasks()
     for groupId, tasks in pairs(self.templateTasksAdded) do
         for taskId, _ in pairs(tasks) do
             local task = self.taskGroups[groupId].tasks[taskId]
-            print("Updating template added task: " .. task.id)
             task.nextN = task.nextN + task.n
             if task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS and task.nextN > 12 then
                 task.nextN = task.nextN - 12

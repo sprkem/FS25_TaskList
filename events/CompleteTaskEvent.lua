@@ -31,7 +31,6 @@ function CompleteTaskEvent:run(connection)
         g_server:broadcastEvent(CompleteTaskEvent.new(self.groupId, self.taskId))
     end
 
-    -- Remove active task (old and new format)
     local key = self.groupId .. "_" .. self.taskId
     g_currentMission.taskList.activeTasks[key] = nil
 

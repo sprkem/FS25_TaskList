@@ -46,7 +46,6 @@ function RenameGroupEvent:run(connection)
 
     local activeTaskUpdates = false
     for _, task in pairs(tasks) do
-        -- Try old and new format for finding relevant active tasks to update
         local key = group.id .. "_" .. task.id
         local activeTask = g_currentMission.taskList.activeTasks[key]
 
