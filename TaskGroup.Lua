@@ -54,8 +54,7 @@ function TaskGroup:writeStream(streamId, connection)
     local taskCount = 0
     for _ in pairs(self.tasks) do taskCount = taskCount + 1 end
     streamWriteInt32(streamId, taskCount)
-
-    -- For each task in the group
+    
     for _, task in pairs(self.tasks) do
         task:writeStream(streamId, connection)
     end
