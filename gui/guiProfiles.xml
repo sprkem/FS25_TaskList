@@ -22,11 +22,12 @@
         <textDisabledColor value="$preset_colorDisabled" />
     </Profile>
     <Profile name="taskListDueNowText" extends="fs25_statisticsHeaderText" with="anchorTopLeft" />
+    <Profile name="taskListNoUpcomingText" extends="fs25_statisticsHeaderText" with="anchorTopCenter" />
     <Profile name="taskListIntroText" extends="baseReference" with="anchorTopLeft">
         <imageColor value="0 0 0 0" />
         <textFocusedColor value="$preset_fs25_colorMainHighlight" />
         <textHighlightedColor value="$preset_fs25_colorMainHighlight" />
-        <textSize value="24px" />
+        <textSize value="18px" />
         <textColor value="$preset_colorWhite_50" />
         <textAlignment value="left" />
     </Profile>

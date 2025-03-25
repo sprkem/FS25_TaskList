@@ -39,9 +39,16 @@ function RenameGroupEvent:run(connection)
 
     group.name = self.newName
 
+    local tasks = group.tasks
+    if group.type == TaskGroup.GROUP_TYPE.TemplateInstance then
+        tasks = g_currentMission.taskList.taskGroups[group.templateGroupId].tasks
+    end
+
     local activeTaskUpdates = false
-    for _, task in pairs(group.tasks) do
-        local activeTask = g_currentMission.taskList.activeTasks[task.id]
+    for _, task in pairs(tasks) do
+        local key = group.id .. "_" .. task.id
+        local activeTask = g_currentMission.taskList.activeTasks[key]
+
         if activeTask ~= nil then
             activeTask.groupName = self.newName
             activeTaskUpdates = true
