@@ -388,7 +388,7 @@ function TaskList:getTasksForNextYear()
                 local firstMonth = TaskListUtils.convertPeriodToMonthNumber(task.nextN)
                 local count = firstMonth - currentMonth
                 if count < 0 then
-                    firstMonth = firstMonth + 12
+                    count = count + 12
                 end
                 table.insert(result[firstMonth],
                     { groupId = group.id, taskId = task.id, effort = task.effort, priority = task.priority })
