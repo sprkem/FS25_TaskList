@@ -379,7 +379,7 @@ function TaskList:getTasksForNextYear()
         end
 
         for _, task in pairs(tasks) do
-            if task.recurMode == Task.RECUR_MODE.MONTHLY then
+            if task.recurMode == Task.RECUR_MODE.MONTHLY or task.recurMode == Task.RECUR_MODE.NONE then
                 local month = TaskListUtils.convertPeriodToMonthNumber(task.period)
                 table.insert(result[month],
                     { groupId = group.id, taskId = task.id, effort = task.effort, priority = task.priority })
