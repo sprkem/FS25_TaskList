@@ -108,9 +108,10 @@ end
 
 function ManageTasksFrame:populateCellForItemInSection(list, section, index, cell)
     local task = self.currentGroup.tasks[index]
+    local effort = task.effort * self.currentGroup.effortMultiplier
 
     cell:getAttribute("detail"):setText(task.detail)
-    cell:getAttribute("effort"):setText(task.effort)
+    cell:getAttribute("effort"):setText(effort)
     cell:getAttribute("priority"):setText(task.priority)
 
     local monthString = TaskListUtils.formatPeriodFullMonthName(task.period)

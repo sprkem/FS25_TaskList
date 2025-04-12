@@ -21,7 +21,6 @@
         <text name="ui_btn_copy" text="Copier"/>
         <text name="ui_btn_edit" text="Éditer"/>
         <text name="ui_btn_delete" text="Supprimer"/>
-        <text name="ui_btn_rename" text="Renommer"/>
         <text name="ui_btn_add_group" text="Ajouter un groupe"/>
         <text name="ui_btn_add_task" text="Ajouter une tâche"/>
         <text name="ui_btn_select_group" text="Changer de groupe"/>		

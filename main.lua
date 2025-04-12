@@ -24,13 +24,13 @@ source(TaskList.dir .. "gui/ManageTasksFrame.lua")
 source(TaskList.dir .. "gui/tableRenderers/MonthlyTaskRenderer.lua")
 source(TaskList.dir .. "events/InitialClientStateEvent.lua")
 source(TaskList.dir .. "events/NewTaskGroupEvent.lua")
+source(TaskList.dir .. "events/EditTaskGroupEvent.lua")
 source(TaskList.dir .. "events/DeleteGroupEvent.lua")
 source(TaskList.dir .. "events/NewTaskGroupEvent.lua")
 source(TaskList.dir .. "events/CompleteTaskEvent.lua")
 source(TaskList.dir .. "events/DeleteTaskEvent.lua")
 source(TaskList.dir .. "events/EditTaskEvent.lua")
 source(TaskList.dir .. "events/NewTaskEvent.lua")
-source(TaskList.dir .. "events/RenameGroupEvent.lua")
 
 function TaskList:loadMap()
     MessageType.ACTIVE_TASKS_UPDATED = nextMessageTypeId()
@@ -379,10 +379,11 @@ function TaskList:getTasksForNextYear()
         end
 
         for _, task in pairs(tasks) do
+            local effort = task.effort * group.effortMultiplier
             if task.recurMode == Task.RECUR_MODE.MONTHLY or task.recurMode == Task.RECUR_MODE.NONE then
                 local month = TaskListUtils.convertPeriodToMonthNumber(task.period)
                 table.insert(result[month],
-                    { groupId = group.id, taskId = task.id, effort = task.effort, priority = task.priority })
+                    { groupId = group.id, taskId = task.id, effort = effort, priority = task.priority })
             elseif task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
                 local currentMonth = TaskListUtils.convertPeriodToMonthNumber(g_currentMission.environment.currentPeriod)
                 local firstMonth = TaskListUtils.convertPeriodToMonthNumber(task.nextN)
@@ -391,7 +392,7 @@ function TaskList:getTasksForNextYear()
                     count = count + 12
                 end
                 table.insert(result[firstMonth],
-                    { groupId = group.id, taskId = task.id, effort = task.effort, priority = task.priority })
+                    { groupId = group.id, taskId = task.id, effort = effort, priority = task.priority })
 
                 local lastAdded = firstMonth
                 while true do
@@ -406,7 +407,7 @@ function TaskList:getTasksForNextYear()
                     end
 
                     table.insert(result[next],
-                        { groupId = group.id, taskId = task.id, effort = task.effort, priority = task.priority })
+                        { groupId = group.id, taskId = task.id, effort = effort, priority = task.priority })
                     lastAdded = next
                 end
             elseif task.recurMode == Task.RECUR_MODE.DAILY or task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
@@ -435,7 +436,7 @@ function TaskList:getTasksForNextYear()
                 end
 
                 table.insert(result[currentMonth],
-                    { groupId = group.id, taskId = task.id, effort = task.effort, priority = task.priority })
+                    { groupId = group.id, taskId = task.id, effort = effort, priority = task.priority })
                 local lastAdded = firstDay
                 while true do
                     if not seasonChanged and startSeason ~= g_currentMission.environment:getSeasonAtDay(lastAdded) then
@@ -456,7 +457,7 @@ function TaskList:getTasksForNextYear()
                     end
 
                     table.insert(result[currentMonth],
-                        { groupId = group.id, taskId = task.id, effort = task.effort, priority = task.priority })
+                        { groupId = group.id, taskId = task.id, effort = effort, priority = task.priority })
                     lastAdded = lastAdded + increment
                 end
             end
@@ -533,15 +534,8 @@ function TaskList:addGroupForCurrentFarm(group)
     g_client:getServerConnection():sendEvent(NewTaskGroupEvent.new(group))
 end
 
-function TaskList:renameGroup(groupId, newName)
-    local group = self.taskGroups[groupId]
-    if group == nil then
-        InfoDialog.show(g_i18n:getText("ui_group_not_found_error"))
-        return
-    end
-
-    group.name = newName
-    g_client:getServerConnection():sendEvent(RenameGroupEvent.new(groupId, newName))
+function TaskList:editGroupForCurrentFarm(group)
+    g_client:getServerConnection():sendEvent(EditTaskGroupEvent.new(group))
 end
 
 function TaskList:copyGroupForCurrentFarm(newName, groupToCopyId)

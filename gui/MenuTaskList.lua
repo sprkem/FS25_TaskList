@@ -217,7 +217,7 @@ function MenuTaskList:updateWorkload()
     for i = 1, 12 do
         local totalEffort = 0
         for _, task in pairs(tasks[i]) do
-            totalEffort = totalEffort + task.effort
+            totalEffort = totalEffort + task.effort -- effort is already multiplied by getTasksForNextYear
         end
         effortMap[i] = totalEffort
         min = math.min(min, totalEffort)
@@ -282,9 +282,11 @@ end
 
 function MenuTaskList:populateCellForItemInSection(list, section, index, cell)
     local task = self.currentTasks[index]
+    local group = g_currentMission.taskList.taskGroups[task.groupId]
+    local effort = task.effort * group.effortMultiplier
     cell:getAttribute("group"):setText(task.groupName)
     cell:getAttribute("detail"):setText(task.detail)
-    cell:getAttribute("effort"):setText(task.effort)
+    cell:getAttribute("effort"):setText(effort)
     cell:getAttribute("priority"):setText(task.priority)
 
     local currentPeriod = g_currentMission.environment.currentPeriod

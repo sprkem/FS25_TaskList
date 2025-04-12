@@ -21,7 +21,6 @@
 		<text name="ui_btn_copy" text="Copy"/>
 		<text name="ui_btn_edit" text="Edit"/>
 		<text name="ui_btn_delete" text="Delete"/>
-		<text name="ui_btn_rename" text="Rename"/>
 		<text name="ui_btn_add_group" text="Add Group"/>
 		<text name="ui_btn_add_task" text="Add Task"/>
 		<text name="ui_btn_select_group" text="Change group"/>
@@ -75,5 +74,7 @@
 		<text name="ui_group_request_type_description" text="Choose a group type. A Standard group contains tasks that will be shown when due. A Template defines tasks as a template only. Then you can define multiple Template Instance groups that use the same Template and manage them in one place."/>
 		<text name="ui_group_request_source_group" text="Choose a Template to use for this group."/>
 		<text name="ui_confirm_deletion_template" text="Are you sure you want to delete? Deleting a Template will delete all Template Instance groups associated with it."/>
+
+		<text name="ui_set_task_effort_multiplier" text="Multiply the effort values for this group. Use 1 to use the values of the template, or set it higher if for example the group represents a large field."/>
 	</texts>
 </l10n>

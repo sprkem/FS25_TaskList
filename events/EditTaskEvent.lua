@@ -34,7 +34,7 @@ function EditTaskEvent:run(connection)
 
     local group = g_currentMission.taskList.taskGroups[self.groupId]
     if group == nil then
-        print("DeleteGroupEvent: Group not present, skipping.")
+        print("EditTaskEvent: Group not present, skipping.")
         return
     end
 
