@@ -116,7 +116,7 @@ function ManageGroupsFrame:onAddEditGroupRequestName(group)
                     return
                 end
                 group.name = name
-                self:onAddRequestType(group)
+                self:onAddEditRequestType(group)
             end
         end, self,
         group.name,
@@ -126,12 +126,12 @@ end
 
 function ManageGroupsFrame:onAddEditRequestType(group)
     local allowedValues = {}
-    table.insert(allowedValues, g_i18n:getText("ui_group_type_standard"))
-    table.insert(allowedValues, g_i18n:getText("ui_group_type_template"))
+    table.insert(allowedValues, g_i18n:getText("ui_type_standard"))
+    table.insert(allowedValues, g_i18n:getText("ui_type_template"))
 
     for _, group in pairs(g_currentMission.taskList.taskGroups) do
         if group.type == TaskGroup.GROUP_TYPE.Template then
-            table.insert(allowedValues, g_i18n:getText("ui_group_type_template_instance"))
+            table.insert(allowedValues, g_i18n:getText("ui_type_template_instance"))
             break
         end
     end

@@ -54,6 +54,7 @@ function TaskList:loadMap()
     self.taskGroups = {}
     self.activeTasks = {}
     self.templateTasksAdded = {}
+    self.husbandries = nil
     self.currentPeriod = g_currentMission.environment.currentPeriod
     self.currentDay = g_currentMission.environment.currentDay
 
@@ -204,7 +205,43 @@ function TaskList.addIngameMenuPage(frame, pageName, uvs, predicateFunc, insertA
     g_inGameMenu:rebuildTabList()
 end
 
+function TaskList:updateHusbandries()
+    self.husbandries = {}
+    local husbandries = g_currentMission.husbandrySystem:getPlaceablesByFarm()
+    for _, husbandry in pairs(husbandries) do
+        local spec = husbandry.spec_husbandryFood
+        local animalType = spec.animalTypeIndex
+        self.husbandries[husbandry.id] = {
+            name = husbandry:getName(),
+            id = husbandry.id,
+            capacity = spec.capacity,
+            foodTypes = {}
+        }
+        local food = g_currentMission.animalFoodSystem:getAnimalFood(animalType)
+        for _, foodGroup in pairs(food.groups) do
+            local foodInfo = {
+                title = foodGroup.title,
+                amount = 0
+            }
+            for _, fillLevel in pairs(foodGroup.fillTypes) do
+                foodInfo.amount = foodInfo.amount + spec.fillLevels[fillLevel]
+            end
+            self.husbandries[husbandry.id].foodTypes[foodGroup.title] = foodInfo
+        end
+    end
+end
+
+function TaskList:getHusbandries()
+    if self.husbandries == nil then
+        self:updateHusbandries()
+    end
+    return self.husbandries
+end
+
 function TaskList:hourChanged()
+    g_currentMission.taskList:updateHusbandries()
+    g_currentMission.taskList:addOrClearHusbandryTasks()
+
     local period = g_currentMission.environment.currentPeriod
     if period ~= g_currentMission.taskList.currentPeriod then
         g_currentMission.taskList:onPeriodChanged()
@@ -217,9 +254,21 @@ function TaskList:hourChanged()
     end
 end
 
+function TaskList:saveGameLoaded()
+    local self = g_currentMission.taskList
+    g_messageCenter:subscribe(MessageType.HUSBANDRY_SYSTEM_ADDED_PLACEABLE, function(menu)
+        self:updateHusbandries()
+    end, self)
+
+    g_messageCenter:subscribe(MessageType.HUSBANDRY_SYSTEM_REMOVED_PLACEABLE, function(menu)
+        self:updateHusbandries()
+    end, self)
+end
+
 function TaskList:playerFarmChanged()
     g_messageCenter:publish(MessageType.TASK_GROUPS_UPDATED)
     g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
+    self:updateHusbandries()
 end
 
 function TaskList:onPeriodChanged()
@@ -238,6 +287,31 @@ function TaskList:onDayChanged()
     end
     g_currentMission.taskList.currentDay = g_currentMission.environment.currentDay
     self:updateTemplateAddedTasks()
+end
+
+function TaskList:addOrClearHusbandryTasks()
+    for _, group in pairs(self.taskGroups) do
+        if group.type == TaskGroup.GROUP_TYPE.Standard then
+            for _, task in pairs(group.tasks) do
+                if task.type == Task.TASK_TYPE.Husbandry then
+                    local husbandry = self:getHusbandries()[task.husbandryId]
+                    if husbandry ~= nil then
+                        local foodInfo = husbandry.foodTypes[task.husbandryFood]
+                        if foodInfo.amount <= task.husbandryLevel then
+                            self:addActiveTask(group.id, task.id)
+                            g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
+                        else
+                            local key = group.id .. "_" .. task.id
+                            if self.activeTasks[key] ~= nil then
+                                self.activeTasks[key] = nil
+                                g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
 end
 
 function TaskList:addGroupTasksForCurrentPeriod(group)
@@ -338,20 +412,21 @@ function TaskList:addActiveTask(groupId, taskId)
         task = self.taskGroups[group.templateGroupId].tasks[taskId]
     end
 
-    local taskCopy = TaskListUtils.deepcopy(task)
-    taskCopy.groupName = group.name
-    taskCopy.groupId = group.id
+    local activeTask = {
+        id = task.id,
+        groupId = group.id
+    }
 
     if task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
-        taskCopy.createdMarker = g_currentMission.environment.currentDay
+        activeTask.createdMarker = g_currentMission.environment.currentDay
     else
-        taskCopy.createdMarker = g_currentMission.environment.currentPeriod
+        activeTask.createdMarker = g_currentMission.environment.currentPeriod
     end
 
-    local key = taskCopy.groupId .. "_" .. taskCopy.id
-    self.activeTasks[key] = taskCopy
+    local key = activeTask.groupId .. "_" .. activeTask.id
+    self.activeTasks[key] = activeTask
     -- Expect caller to raise ACTIVE_TASKS_UPDATED as this is called repeatedly
-    return taskCopy
+    return activeTask
 end
 
 function TaskList:getActiveTasksForCurrentFarm()
@@ -664,5 +739,6 @@ PlayerInputComponent.registerGlobalPlayerActionEvents = Utils.overwrittenFunctio
 
 g_messageCenter:subscribe(MessageType.HOUR_CHANGED, TaskList.hourChanged)
 g_messageCenter:subscribe(MessageType.PLAYER_FARM_CHANGED, TaskList.playerFarmChanged)
+g_messageCenter:subscribe(MessageType.SAVEGAME_LOADED, TaskList.saveGameLoaded)
 
 addModEventListener(TaskList)

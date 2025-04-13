@@ -40,7 +40,6 @@ end
 
 function ManageTasksFrame:updateContent()
     local farmGroups = g_currentMission.taskList:getGroupListForCurrentFarm()
-
     -- Limit shown groups to templates or standard groups
     self.availableGroups = {}
     for _, group in pairs(farmGroups) do
@@ -108,10 +107,9 @@ end
 
 function ManageTasksFrame:populateCellForItemInSection(list, section, index, cell)
     local task = self.currentGroup.tasks[index]
-    local effort = task.effort * self.currentGroup.effortMultiplier
 
-    cell:getAttribute("detail"):setText(task.detail)
-    cell:getAttribute("effort"):setText(effort)
+    cell:getAttribute("detail"):setText(task:getTaskDescription())
+    cell:getAttribute("effort"):setText(task:getEffortDescription(self.currentGroup.effortMultiplier))
     cell:getAttribute("priority"):setText(task.priority)
 
     local monthString = TaskListUtils.formatPeriodFullMonthName(task.period)
@@ -140,7 +138,7 @@ end
 function ManageTasksFrame:onClickAdd(sender)
     local newTask = Task.new()
     self.isEdit = false
-    self:onAddEditTaskRequestDetail(newTask)
+    self:onAddEditTaskRequestType(newTask, false)
 end
 
 function ManageTasksFrame:onClickEdit(sender)
@@ -150,10 +148,148 @@ function ManageTasksFrame:onClickEdit(sender)
     end
     local task = self.currentGroup.tasks[self.selectedTaskIndex]
     self.isEdit = true
-    self:onAddEditTaskRequestDetail(task)
+    self:onAddEditTaskRequestType(task, false)
 end
 
-function ManageTasksFrame:onAddEditTaskRequestDetail(newTask)
+-- TODO - on edit group, if it becomes a Template, remove any husbandry tasks (or dont allow type change)
+function ManageTasksFrame:onAddEditTaskRequestType(task, isGoingBack)
+    local husbandryCount = 0
+    for _ in pairs(g_currentMission.taskList:getHusbandries()) do husbandryCount = husbandryCount + 1 end
+    if self.currentGroup.type == TaskGroup.GROUP_TYPE.Template or husbandryCount == 0 then
+        -- If we're here after going back, the sequence should end
+        if isGoingBack == false then
+            self:onAddEditTaskRequestDetail(task)
+        end
+    else
+        local allowedValues = {}
+        table.insert(allowedValues, g_i18n:getText("ui_type_standard"))
+        table.insert(allowedValues, g_i18n:getText("ui_type_husbandry"))
+        TaskListUtils.showOptionDialog({
+            text = g_i18n:getText("ui_task_request_type_description"),
+            title = "",
+            defaultText = "",
+            options = allowedValues,
+            defaultOption = task.type,
+            target = self,
+            args = {},
+            callback = function(_, index)
+                if index > 0 then
+                    task.type = index
+
+                    if task.type == Task.TASK_TYPE.Standard then
+                        task.husbandryId = -1
+                        task.husbandryFood = ""
+                        self:onAddEditTaskRequestPriority(task)
+                    elseif task.type == Task.TASK_TYPE.Husbandry then
+                        self:onAddEditRequestHusbandry(task)
+                    end
+                end
+            end
+        })
+    end
+end
+
+function ManageTasksFrame:onAddEditRequestHusbandry(task)
+    local allowedValues = {}
+    local lookup = {}
+    local default = 1
+
+    for _, husbandry in pairs(g_currentMission.taskList:getHusbandries()) do
+        table.insert(allowedValues, husbandry.name)
+        lookup[husbandry.name] = husbandry
+        if task.husbandryId == husbandry.id then
+            default = #allowedValues
+        end
+    end
+
+    TaskListUtils.showOptionDialog({
+        text = g_i18n:getText("ui_task_request_husbandry"),
+        title = "",
+        defaultText = "",
+        options = allowedValues,
+        defaultOption = default,
+        target = self,
+        args = {},
+        callback = function(_, index)
+            if index > 0 then
+                local value = allowedValues[index]
+                local husbandry = lookup[value]
+                task.husbandryId = husbandry.id
+                self:onAddEditRequestFoodType(task)
+            else
+                -- Go back
+                self:onAddEditTaskRequestType(task)
+            end
+        end
+    })
+end
+
+-- TODO - don't count effort for husbandry task types
+function ManageTasksFrame:onAddEditRequestFoodType(task)
+    local husbandry = g_currentMission.taskList:getHusbandries()[task.husbandryId]
+    local allowedValues = {}
+    for _, foodType in pairs(husbandry.foodTypes) do
+        table.insert(allowedValues, foodType.title)
+    end
+
+    TaskListUtils.showOptionDialog({
+        text = g_i18n:getText("ui_task_request_food_type"),
+        title = "",
+        defaultText = "",
+        options = allowedValues,
+        defaultOption = task.effort,
+        target = self,
+        args = {},
+        callback = function(_, index)
+            if index > 0 then
+                local value = allowedValues[index]
+                task.husbandryFood = value
+                self:onAddEditRequestFoodLevel(task)
+            else
+                -- Go back
+                self:onAddEditRequestHusbandry(task)
+            end
+        end
+    })
+end
+
+function ManageTasksFrame:onAddEditRequestFoodLevel(task)
+    local husbandry = g_currentMission.taskList:getHusbandries()[task.husbandryId]
+    local foodType = husbandry.foodTypes[task.husbandryFood]
+    local allowedValues = {
+        g_i18n:getText("ui_task_food_level_empty"),
+        string.format("10%% (%d)", husbandry.capacity * 0.10),
+        string.format("20%% (%d)", husbandry.capacity * 0.20),
+        string.format("30%% (%d)", husbandry.capacity * 0.30),
+        string.format("40%% (%d)", husbandry.capacity * 0.40),
+        string.format("50%% (%d)", husbandry.capacity * 0.50),
+        string.format("60%% (%d)", husbandry.capacity * 0.60),
+        string.format("70%% (%d)", husbandry.capacity * 0.70),
+        string.format("80%% (%d)", husbandry.capacity * 0.80),
+        string.format("90%% (%d)", husbandry.capacity * 0.90)
+    }
+
+    TaskListUtils.showOptionDialog({
+        text = g_i18n:getText("ui_task_request_food_level"),
+        title = "",
+        defaultText = "",
+        options = allowedValues,
+        defaultOption = task.husbandryLevel + 1,
+        target = self,
+        args = {},
+        callback = function(_, index)
+            if index > 0 then
+                task.husbandryLevel = index - 1
+                self:onAddEditTaskJourneyComplete(task)
+            else
+                -- Go back
+                self:onAddEditRequestFoodType(task)
+            end
+        end
+    })
+end
+
+function ManageTasksFrame:onAddEditTaskRequestDetail(task)
     TextInputDialog.show(
         function(self, value, clickOk)
             if clickOk then
@@ -163,67 +299,70 @@ function ManageTasksFrame:onAddEditTaskRequestDetail(newTask)
                     return
                 end
 
-                newTask.detail = detail
-                self:onAddEditTaskEffort(newTask)
+                task.detail = detail
+                self:onAddEditTaskEffort(task)
+            else
+                -- Go back
+                self:onAddEditTaskRequestType(task, true)
             end
         end, self,
-        newTask.detail,
+        task.detail,
         g_i18n:getText("ui_set_task_detail"),
         nil, Task.MAX_DETAIL_LENGTH, g_i18n:getText("ui_btn_ok"))
 end
 
-function ManageTasksFrame:onAddEditTaskEffort(newTask)
+function ManageTasksFrame:onAddEditTaskEffort(task)
     local allowedValues = { "1", "2", "3", "4", "5" }
     TaskListUtils.showOptionDialog({
         text = g_i18n:getText("ui_set_task_effort"),
         title = "",
         defaultText = "",
         options = allowedValues,
-        defaultOption = newTask.effort,
+        defaultOption = task.effort,
         target = self,
         args = {},
         callback = function(_, index)
             if index > 0 then
                 local value = allowedValues[index]
-                newTask.effort = tonumber(value)
-                self:onAddEditTaskRequestPriority(newTask)
+                task.effort = tonumber(value)
+                self:onAddEditTaskRequestPriority(task)
             else
                 -- Go back
-                self:onAddEditTaskRequestDetail(newTask)
+                self:onAddEditTaskRequestDetail(task)
             end
         end
     })
 end
 
 -- New Task Step
-function ManageTasksFrame:onAddEditTaskRequestPriority(newTask)
+function ManageTasksFrame:onAddEditTaskRequestPriority(task)
     local allowedValues = { "1", "2", "3", "4", "5" }
     TaskListUtils.showOptionDialog({
         text = g_i18n:getText("ui_set_task_priority"),
         title = "",
         defaultText = "",
         options = allowedValues,
-        defaultOption = newTask.priority,
+        defaultOption = task.priority,
         target = self,
         args = {},
         callback = function(_, index)
             if index > 0 then
                 local value = allowedValues[index]
-                newTask.priority = tonumber(value)
-                self:onAddEditTaskRequestShouldRecur(newTask)
+                task.priority = tonumber(value)
+                self:onAddEditTaskRequestShouldRecur(task)
             else
                 -- Go back
-                self:onAddEditTaskEffort(newTask)
+                self:onAddEditTaskEffort(task)
             end
         end
     })
 end
 
 -- New Task Step
-function ManageTasksFrame:onAddEditTaskRequestShouldRecur(newTask)
+function ManageTasksFrame:onAddEditTaskRequestShouldRecur(task)
     local allowedValues = { g_i18n:getText("ui_yes"), g_i18n:getText("ui_no") }
     local default = 1
-    if newTask.shouldRecur == false then
+    if task.shouldRecur == false then
         default = 2
     end
     TaskListUtils.showOptionDialog({
@@ -236,22 +375,22 @@ function ManageTasksFrame:onAddEditTaskRequestShouldRecur(newTask)
         args = {},
         callback = function(_, index)
             if index > 0 then
-                newTask.shouldRecur = index == 1
-                if newTask.shouldRecur then
-                    self:onAddEditTaskRequestRecurMode(newTask)
+                task.shouldRecur = index == 1
+                if task.shouldRecur then
+                    self:onAddEditTaskRequestRecurMode(task)
                 else
-                    self:onAddEditTaskRequestPeriod(newTask)
+                    self:onAddEditTaskRequestPeriod(task)
                 end
             else
                 -- Go back
-                self:onAddEditTaskRequestPriority(newTask)
+                self:onAddEditTaskRequestPriority(task)
             end
         end
     })
 end
 
 -- New Task Step
-function ManageTasksFrame:onAddEditTaskRequestRecurMode(newTask)
+function ManageTasksFrame:onAddEditTaskRequestRecurMode(task)
     local allowedValues = {
         g_i18n:getText("ui_set_task_recur_mode_monthly"),
         g_i18n:getText("ui_task_due_daily"),
@@ -260,8 +399,8 @@ function ManageTasksFrame:onAddEditTaskRequestRecurMode(newTask)
     }
 
     local default = 1
-    if newTask.recurMode ~= Task.RECUR_MODE.NONE then
-        default = newTask.recurMode
+    if task.recurMode ~= Task.RECUR_MODE.NONE then
+        default = task.recurMode
     end
     TaskListUtils.showOptionDialog({
         text = g_i18n:getText("ui_set_task_recur_mode"),
@@ -273,39 +412,39 @@ function ManageTasksFrame:onAddEditTaskRequestRecurMode(newTask)
         args = {},
         callback = function(_, index)
             if index > 0 then
-                newTask.recurMode = index
+                task.recurMode = index
 
-                if newTask.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS or newTask.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
-                    self:onAddEditTaskRequestN(newTask)
+                if task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS or task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
+                    self:onAddEditTaskRequestN(task)
                     return
                 end
 
-                newTask.n = 0
-                newTask.nextN = 0
-                if newTask.recurMode == Task.RECUR_MODE.MONTHLY then
-                    self:onAddEditTaskRequestPeriod(newTask)
-                elseif newTask.recurMode == Task.RECUR_MODE.DAILY then
-                    self:onAddEditTaskJourneyComplete(newTask)
+                task.n = 0
+                task.nextN = 0
+                if task.recurMode == Task.RECUR_MODE.MONTHLY then
+                    self:onAddEditTaskRequestPeriod(task)
+                elseif task.recurMode == Task.RECUR_MODE.DAILY then
+                    self:onAddEditTaskJourneyComplete(task)
                 end
             else
                 -- Go back
-                self:onAddEditTaskRequestShouldRecur(newTask)
+                self:onAddEditTaskRequestShouldRecur(task)
             end
         end
     })
 end
 
-function ManageTasksFrame:onAddEditTaskRequestN(newTask)
+function ManageTasksFrame:onAddEditTaskRequestN(task)
     local allowedValues = { "1", "2", "3", "4", "5" }
     local default = 1
-    if newTask.n ~= 0 then
-        default = newTask.n
+    if task.n ~= 0 then
+        default = task.n
     end
 
     local text = ""
-    if newTask.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
+    if task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
         text = g_i18n:getText("ui_set_task_n_months")
-    elseif newTask.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
+    elseif task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
         text = g_i18n:getText("ui_set_task_n_days")
     end
 
@@ -320,22 +459,22 @@ function ManageTasksFrame:onAddEditTaskRequestN(newTask)
         callback = function(_, index)
             if index > 0 then
                 local increment = tonumber(allowedValues[index])
-                newTask.n = increment
-                if newTask.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
-                    newTask.nextN = g_currentMission.environment.currentPeriod
-                elseif newTask.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
-                    newTask.nextN = g_currentMission.environment.currentDay
+                task.n = increment
+                if task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
+                    task.nextN = g_currentMission.environment.currentPeriod
+                elseif task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
+                    task.nextN = g_currentMission.environment.currentDay
                 end
-                self:onAddEditTaskJourneyComplete(newTask)
+                self:onAddEditTaskJourneyComplete(task)
             else
-                self:onAddEditTaskRequestRecurMode(newTask)
+                self:onAddEditTaskRequestRecurMode(task)
             end
         end
     })
 end
 
 -- New Task Step
-function ManageTasksFrame:onAddEditTaskRequestPeriod(newTask)
+function ManageTasksFrame:onAddEditTaskRequestPeriod(task)
     local allowedValues = {
         g_i18n:getText("ui_month1"),
         g_i18n:getText("ui_month2"),
@@ -351,8 +490,8 @@ function ManageTasksFrame:onAddEditTaskRequestPeriod(newTask)
         g_i18n:getText("ui_month12")
     }
     local default = TaskListUtils.convertPeriodToMonthNumber(g_currentMission.environment.currentPeriod)
-    if newTask.period ~= 1 then
-        default = TaskListUtils.convertPeriodToMonthNumber(newTask.period)
+    if task.period ~= 1 then
+        default = TaskListUtils.convertPeriodToMonthNumber(task.period)
     end
     TaskListUtils.showOptionDialog({
         text = g_i18n:getText("ui_set_task_period"),
@@ -364,13 +503,13 @@ function ManageTasksFrame:onAddEditTaskRequestPeriod(newTask)
         args = {},
         callback = function(_, index)
             if index > 0 then
-                newTask.period = TaskListUtils.convertMonthNumberToPeriod(index)
-                self:onAddEditTaskJourneyComplete(newTask)
+                task.period = TaskListUtils.convertMonthNumberToPeriod(index)
+                self:onAddEditTaskJourneyComplete(task)
             else
-                if newTask.shouldRecur then
-                    self:onAddEditTaskRequestRecurMode(newTask)
+                if task.shouldRecur then
+                    self:onAddEditTaskRequestRecurMode(task)
                 else
-                    self:onAddEditTaskRequestShouldRecur(newTask)
+                    self:onAddEditTaskRequestShouldRecur(task)
                 end
             end
         end
@@ -378,8 +517,8 @@ function ManageTasksFrame:onAddEditTaskRequestPeriod(newTask)
 end
 
 -- New Task Final Step
-function ManageTasksFrame:onAddEditTaskJourneyComplete(newTask)
-    g_currentMission.taskList:addTask(self.currentGroup.id, newTask, self.isEdit)
+function ManageTasksFrame:onAddEditTaskJourneyComplete(task)
+    g_currentMission.taskList:addTask(self.currentGroup.id, task, self.isEdit)
     self.isEdit = false
 end
 

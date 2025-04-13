@@ -68,13 +68,20 @@
 		<text name="ui_intro_text_10" text="You can view tasks currently due while playing by pressing Shift + T."/>
 		<text name="ui_header_group_type" text="Group Type"/>
 		<text name="ui_header_group_source_template" text="Template"/>
-		<text name="ui_group_type_standard" text="Standard"/>
-		<text name="ui_group_type_template" text="Template"/>
-		<text name="ui_group_type_template_instance" text="Template Instance"/>
+		<text name="ui_type_standard" text="Standard"/>
+		<text name="ui_type_template" text="Template"/>
+		<text name="ui_type_template_instance" text="Template Instance"/>
 		<text name="ui_group_request_type_description" text="Choose a group type. A Standard group contains tasks that will be shown when due. A Template defines tasks as a template only. Then you can define multiple Template Instance groups that use the same Template and manage them in one place."/>
 		<text name="ui_group_request_source_group" text="Choose a Template to use for this group."/>
 		<text name="ui_confirm_deletion_template" text="Are you sure you want to delete? Deleting a Template will delete all Template Instance groups associated with it."/>
 
 		<text name="ui_set_task_effort_multiplier" text="Multiply the effort values for this group. Use 1 to use the values of the template, or set it higher if for example the group represents a large field."/>
+		<text name="ui_task_request_type_description" text="Choose a task type. Standard is free text. Husbandry can track food inputs and raises tasks if food types get low."/>
+		<text name="ui_type_husbandry" text="Husbandry"/>
+		<text name="ui_task_request_husbandry" text="Select the husbandry for this task."/>
+		<text name="ui_task_request_food_type" text="Select the food type to track."/>
+		<text name="ui_task_food_level_empty" text="Empty"/>
+		<text name="ui_task_request_food_level" text="Select the food level to track. When the level drops below the target, a task will be added to fill add more food."/>
+		<text name="ui_task_food_fill" text="fill"/>
 	</texts>
 </l10n>

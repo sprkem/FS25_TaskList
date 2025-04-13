@@ -8,9 +8,9 @@ TaskGroup.GROUP_TYPE = {
     TemplateInstance = 3
 }
 TaskGroup.GROUP_TYPE_STRINGS = {
-    [TaskGroup.GROUP_TYPE.Standard] = "ui_group_type_standard",
-    [TaskGroup.GROUP_TYPE.Template] = "ui_group_type_template",
-    [TaskGroup.GROUP_TYPE.TemplateInstance] = "ui_group_type_template_instance"
+    [TaskGroup.GROUP_TYPE.Standard] = "ui_type_standard",
+    [TaskGroup.GROUP_TYPE.Template] = "ui_type_template",
+    [TaskGroup.GROUP_TYPE.TemplateInstance] = "ui_type_template_instance"
 }
 
 function TaskGroup.new(customMt)
@@ -26,6 +26,14 @@ function TaskGroup.new(customMt)
     self.templateGroupId = ""
     self.tasks = {}
     return self
+end
+
+function TaskGroup:getTaskById(id)
+    if self.type == TaskGroup.GROUP_TYPE.TemplateInstance then
+        local templateGroup = g_currentMission.taskList.taskGroups[self.templateGroupId]
+        return templateGroup:getTaskById(id)
+    end
+    return self.tasks[id]
 end
 
 function TaskGroup:copyValuesFromGroup(sourceGroup, includeId)
@@ -58,7 +66,7 @@ function TaskGroup:writeStream(streamId, connection)
     local taskCount = 0
     for _ in pairs(self.tasks) do taskCount = taskCount + 1 end
     streamWriteInt32(streamId, taskCount)
-    
+
     for _, task in pairs(self.tasks) do
         task:writeStream(streamId, connection)
     end

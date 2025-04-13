@@ -68,9 +68,9 @@
 		<text name="ui_intro_text_10" text="You can view tasks currently due while playing by pressing Shift + T."/>
 		<text name="ui_header_group_type" text="Type de groupe"/>
 		<text name="ui_header_group_source_template" text="Modèle"/>
-		<text name="ui_group_type_standard" text="Standard"/>
-		<text name="ui_group_type_template" text="Modèle"/>
-		<text name="ui_group_type_template_instance" text="Instance de modèle"/>
+		<text name="ui_type_standard" text="Standard"/>
+		<text name="ui_type_template" text="Modèle"/>
+		<text name="ui_type_template_instance" text="Instance de modèle"/>
 		<text name="ui_group_request_type_description" text="Choisissez le type de groupe. Un groupe standard contient des tâches qui seront affichées lorsque dûes. Un modèle définit des tâches comme un modèle uniquement. Vous pouvez ensuite définir plusieurs instances de groupe de modèle qui utilisent le même modèle et les gérer dans un endroit unique."/>
 		<text name="ui_group_request_source_group" text="Choisissez un modèle pour ce groupe."/>
 		<text name="ui_confirm_deletion_template" text="Sûr que vous voulez supprimer ? La suppression d'un modèle supprime toutes les instances de groupe de modèle associées."/>

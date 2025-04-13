@@ -68,9 +68,9 @@
 		<text name="ui_intro_text_10" text="Man kann Aufgaben, die fällig sind, während der Spielzeit mit der Taste Shift + T anzeigen lassen."/>
         <text name="ui_header_group_type" text="Gruppenart"/>
 		<text name="ui_header_group_source_template" text="Vorlage"/>
-		<text name="ui_group_type_standard" text="Standardgruppe"/>
-		<text name="ui_group_type_template" text="Vorlage"/>
-		<text name="ui_group_type_template_instance" text="Vorlageinstanz"/>
+		<text name="ui_type_standard" text="Standardgruppe"/>
+		<text name="ui_type_template" text="Vorlage"/>
+		<text name="ui_type_template_instance" text="Vorlageinstanz"/>
 		<text name="ui_group_request_type_description" text="Wählen Sie eine Gruppenart. Eine Standardgruppe enthält Aufgaben, die gezeigt werden, wenn sie fällig sind. Eine Vorlage definiert Aufgaben als Vorlage nur. Dann können Sie mehrere Vorlageinstanzgruppen erstellen, die die gleiche Vorlage verwenden und sie in einem Ort verwalten."/>
 		<text name="ui_group_request_source_group" text="Wählen Sie eine Vorlage für diese Gruppe aus."/>
 		<text name="ui_confirm_deletion_template" text="Sind Sie sicher, dass Sie eine Vorlage löschen möchten? Die Löschung einer Vorlage entfernt alle Vorlageinstanzgruppen, die mit ihr verbunden sind."/>

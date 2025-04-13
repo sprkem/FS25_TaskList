@@ -9,6 +9,11 @@ Task.RECUR_MODE = {
     EVERY_N_DAYS = 4
 }
 
+Task.TASK_TYPE = {
+    Standard = 1,
+    Husbandry = 2,
+}
+
 Task.MAX_DETAIL_LENGTH = 45
 
 function Task.new(customMt)
@@ -25,8 +30,29 @@ function Task.new(customMt)
     self.recurMode = Task.RECUR_MODE.NONE
     self.nextN = 0
     self.n = 0
+    self.type = Task.TASK_TYPE.Standard
+    self.husbandryId = -1
+    self.husbandryFood = ""
+    self.husbandryLevel = 0
 
     return self
+end
+
+function Task:getTaskDescription()
+    local description = self.detail
+    if self.type == Task.TASK_TYPE.Husbandry then
+        local husbandry = g_currentMission.taskList:getHusbandries()[self.husbandryId]
+        description = string.format("%s %s %s", husbandry.name, g_i18n:getText("ui_task_food_fill"), self.husbandryFood)
+    end
+    return description
+end
+
+function Task:getEffortDescription(multiplier)
+    local effortDescription = tostring(self.effort * multiplier)
+    if self.type == Task.TASK_TYPE.Husbandry then
+        effortDescription = '-'
+    end
+    return effortDescription
 end
 
 function Task:copyValuesFromTask(sourceTask, includeId)
@@ -38,6 +64,10 @@ function Task:copyValuesFromTask(sourceTask, includeId)
     self.recurMode = sourceTask.recurMode
     self.nextN = sourceTask.nextN
     self.n = sourceTask.n
+    self.type = sourceTask.type
+    self.husbandryId = sourceTask.husbandryId
+    self.husbandryFood = sourceTask.husbandryFood
+    self.husbandryLevel = sourceTask.husbandryLevel
 
     if includeId then
         self.id = sourceTask.id
@@ -54,6 +84,10 @@ function Task:writeStream(streamId, connection)
     streamWriteInt32(streamId, self.nextN)
     streamWriteInt32(streamId, self.n)
     streamWriteInt32(streamId, self.effort)
+    streamWriteInt32(streamId, self.type)
+    streamWriteInt32(streamId, self.husbandryId)
+    streamWriteString(streamId, self.husbandryFood)
+    streamWriteInt32(streamId, self.husbandryLevel)
 end
 
 function Task:readStream(streamId, connection)
@@ -66,6 +100,10 @@ function Task:readStream(streamId, connection)
     self.nextN = streamReadInt32(streamId)
     self.n = streamReadInt32(streamId)
     self.effort = streamReadInt32(streamId)
+    self.type = streamReadInt32(streamId)
+    self.husbandryId = streamReadInt32(streamId)
+    self.husbandryFood = streamReadString(streamId)
+    self.husbandryLevel = streamReadInt32(streamId)
 end
 
 function Task:saveToXmlFile(xmlFile, key)
@@ -78,6 +116,10 @@ function Task:saveToXmlFile(xmlFile, key)
     setXMLInt(xmlFile, key .. "#nextN", self.nextN)
     setXMLInt(xmlFile, key .. "#n", self.n)
     setXMLInt(xmlFile, key .. "#effort", self.effort)
+    setXMLInt(xmlFile, key .. "#type", self.type)
+    setXMLInt(xmlFile, key .. "#husbandryId", self.husbandryId)
+    setXMLString(xmlFile, key .. "#husbandryFood", self.husbandryFood)
+    setXMLInt(xmlFile, key .. "#husbandryLevel", self.husbandryLevel)
 end
 
 function Task:loadFromXMLFile(xmlFile, key)
@@ -90,4 +132,8 @@ function Task:loadFromXMLFile(xmlFile, key)
     self.nextN = getXMLInt(xmlFile, key .. "#nextN")
     self.n = getXMLInt(xmlFile, key .. "#n")
     self.effort = getXMLInt(xmlFile, key .. "#effort") or 1
+    self.type = getXMLInt(xmlFile, key .. "#type") or Task.TASK_TYPE.Standard
+    self.husbandryId = getXMLInt(xmlFile, key .. "#husbandryId") or -1
+    self.husbandryFood = getXMLString(xmlFile, key .. "#husbandryFood") or ""
+    self.husbandryLevel = getXMLInt(xmlFile, key .. "#husbandryLevel") or 0
 end

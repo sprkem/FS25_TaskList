@@ -1,7 +1,15 @@
 MenuTaskList = {}
 MenuTaskList.currentTasks = {}
 MenuTaskList._mt = Class(MenuTaskList, TabbedMenuFrameElement)
-MenuTaskList.sortingFunction = function(k1, k2) return k1.priority < k2.priority end
+MenuTaskList.sortingFunction = function(k1, k2)
+    local g1 = g_currentMission.taskList.taskGroups[k1.groupId]    
+    local g2 = g_currentMission.taskList.taskGroups[k2.groupId]
+
+    local t1 = g1:getTaskById(k1.id)
+    local t2 = g2:getTaskById(k2.id)
+
+    return t1.priority < t2.priority
+end
 
 MenuTaskList.VIEW_MODE = {
     CURRENTLY_DUE = 0,
@@ -281,12 +289,13 @@ function MenuTaskList:getTitleForSectionHeader(list, section)
 end
 
 function MenuTaskList:populateCellForItemInSection(list, section, index, cell)
-    local task = self.currentTasks[index]
-    local group = g_currentMission.taskList.taskGroups[task.groupId]
-    local effort = task.effort * group.effortMultiplier
-    cell:getAttribute("group"):setText(task.groupName)
-    cell:getAttribute("detail"):setText(task.detail)
-    cell:getAttribute("effort"):setText(effort)
+    local taskInfo = self.currentTasks[index]
+    local group = g_currentMission.taskList.taskGroups[taskInfo.groupId]
+    local task = group:getTaskById(taskInfo.id)
+
+    cell:getAttribute("group"):setText(group.name)
+    cell:getAttribute("detail"):setText(task:getTaskDescription())
+    cell:getAttribute("effort"):setText(task:getEffortDescription(group.effortMultiplier))
     cell:getAttribute("priority"):setText(task.priority)
 
     local currentPeriod = g_currentMission.environment.currentPeriod
@@ -299,6 +308,8 @@ function MenuTaskList:populateCellForItemInSection(list, section, index, cell)
     elseif task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
         overdue = currentPeriod ~= task.createdMarker
     end
+
+    if task.type == Task.TASK_TYPE.Husbandry then overdue = false end
 
     if overdue then
         cell:getAttribute("overdue"):setText(g_i18n:getText("ui_yes"))
