@@ -330,12 +330,14 @@ function MenuTaskList:completeTask()
         InfoDialog.show(g_i18n:getText("ui_no_task_selected"))
         return
     end
-    local task = self.currentTasks[self.selectedCurrentTaskRow]
+    local taskInfo = self.currentTasks[self.selectedCurrentTaskRow]
+    local group = g_currentMission.taskList.taskGroups[taskInfo.groupId]
+    local task = group:getTaskById(taskInfo.id)
 
     YesNoDialog.show(
         function(self, clickOk)
             if clickOk then
-                g_currentMission.taskList:completeTask(task.groupId, task.id)
+                g_currentMission.taskList:completeTask(taskInfo.groupId, task.id)
             end
         end, self,
         string.format(g_i18n:getText("ui_confirm_complete_task"), task.detail))

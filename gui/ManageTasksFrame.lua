@@ -166,7 +166,7 @@ function ManageTasksFrame:onAddEditTaskRequestType(task, isGoingBack)
                     if task.type == Task.TASK_TYPE.Standard then
                         task.husbandryId = -1
                         task.husbandryFood = ""
-                        self:onAddEditTaskRequestPriority(task)
+                        self:onAddEditTaskRequestDetail(task)
                     elseif task.type == Task.TASK_TYPE.Husbandry then
                         self:onAddEditRequestHusbandry(task)
                     end
