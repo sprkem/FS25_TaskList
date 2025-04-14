@@ -720,7 +720,9 @@ function TaskList.ShowActiveTaskNotifications()
     else
         table.sort(tempActive, TaskListUtils.taskSortingFunction)
         for _, activeTask in pairs(tempActive) do
-            local description = string.format("%s - %s", activeTask.groupName, activeTask.detail)
+            local group = g_currentMission.taskList.taskGroups[activeTask.groupId]
+            local task = group:getTaskById(activeTask.id)
+            local description = string.format("%s - %s", group.name, task:getTaskDescription())
             g_currentMission:addIngameNotification(FSBaseMission.INGAME_NOTIFICATION_INFO, description)
         end
     end
