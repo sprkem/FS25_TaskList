@@ -299,6 +299,7 @@ function MenuTaskList:populateCellForItemInSection(list, section, index, cell)
     cell:getAttribute("detail"):setText(task:getTaskDescription())
     cell:getAttribute("effort"):setText(task:getEffortDescription(group.effortMultiplier))
     cell:getAttribute("priority"):setText(task.priority)
+    cell:getAttribute("due"):setText(task:getDueDescription())
 
     local currentPeriod = g_currentMission.environment.currentPeriod
     local currentDay = g_currentMission.environment.currentDay
@@ -317,19 +318,6 @@ function MenuTaskList:populateCellForItemInSection(list, section, index, cell)
         cell:getAttribute("overdue"):setText(g_i18n:getText("ui_yes"))
     else
         cell:getAttribute("overdue"):setText(g_i18n:getText("ui_no"))
-    end
-
-    local monthString = TaskListUtils.formatPeriodFullMonthName(task.period)
-    if not task.shouldRecur then
-        cell:getAttribute("due"):setText(monthString)
-    elseif task.recurMode == Task.RECUR_MODE.DAILY then
-        cell:getAttribute("due"):setText(g_i18n:getText("ui_task_due_daily"))
-    elseif task.recurMode == Task.RECUR_MODE.MONTHLY then
-        cell:getAttribute("due"):setText(string.format(g_i18n:getText("ui_task_due_monthly"), monthString))
-    elseif task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
-        cell:getAttribute("due"):setText(string.format(g_i18n:getText("ui_task_due_n_days"), task.n))
-    elseif task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
-        cell:getAttribute("due"):setText(string.format(g_i18n:getText("ui_task_due_n_months"), task.n))
     end
 end
 

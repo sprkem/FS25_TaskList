@@ -96,7 +96,9 @@ function ManageGroupsFrame:onClickEdit(sender)
         InfoDialog.show(g_i18n:getText("ui_no_group_selected_error"))
         return
     end
-    local group = self.currentGroups[self.selectedGroupIndex]
+    local groupInfo = self.currentGroups[self.selectedGroupIndex]
+    local group = g_currentMission.taskList.taskGroups[groupInfo.id]
+    
     self.isEdit = true
     self:onAddEditGroupRequestName(group)
 end
@@ -116,7 +118,13 @@ function ManageGroupsFrame:onAddEditGroupRequestName(group)
                     return
                 end
                 group.name = name
-                self:onAddEditRequestType(group)
+
+                if self.isEdit then
+                    self:onAddEditJourneyComplete(group)
+                else
+                    self:onAddEditRequestType(group)
+                end
+
             end
         end, self,
         group.name,
@@ -259,7 +267,7 @@ function ManageGroupsFrame:onClickDelete(sender)
                 g_currentMission.taskList:deleteGroup(self.currentGroups[self.selectedGroupIndex].id)
             end
         end, self,
-        g_i18n:getText("ui_confirm_deletion"))
+        dialogText)
 end
 
 function ManageGroupsFrame:onCopyGroupNameSet(name, clickOk)

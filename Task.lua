@@ -55,6 +55,25 @@ function Task:getEffortDescription(multiplier)
     return effortDescription
 end
 
+function Task:getDueDescription(multiplier)
+    if self.type == Task.TASK_TYPE.Husbandry then
+        return string.format("< %s", g_i18n:formatVolume(self.husbandryLevel, 0))
+    end
+
+    local monthString = TaskListUtils.formatPeriodFullMonthName(self.period)
+    if not self.shouldRecur then
+        return monthString
+    elseif self.recurMode == Task.RECUR_MODE.DAILY then
+        return g_i18n:getText("ui_task_due_daily")
+    elseif self.recurMode == Task.RECUR_MODE.MONTHLY then
+        return string.format(g_i18n:getText("ui_task_due_monthly"), monthString)
+    elseif self.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
+        return string.format(g_i18n:getText("ui_task_due_n_days"), self.n)
+    elseif self.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
+        return string.format(g_i18n:getText("ui_task_due_n_months"), self.n)
+    end
+end
+
 function Task:copyValuesFromTask(sourceTask, includeId)
     self.detail = sourceTask.detail
     self.priority = sourceTask.priority

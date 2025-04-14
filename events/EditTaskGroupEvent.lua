@@ -35,7 +35,7 @@ function EditTaskGroupEvent:run(connection)
         return
     end
 
-    group:copyValuesFromTaskGroup(self.taskGroup, false)
+    group:copyValuesFromGroup(self.taskGroup, false)
 
     g_messageCenter:publish(MessageType.TASK_GROUPS_UPDATED)
     g_currentMission.taskList:addGroupTasksForCurrentPeriod(self.taskGroup)

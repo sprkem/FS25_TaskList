@@ -111,19 +111,7 @@ function ManageTasksFrame:populateCellForItemInSection(list, section, index, cel
     cell:getAttribute("detail"):setText(task:getTaskDescription())
     cell:getAttribute("effort"):setText(task:getEffortDescription(self.currentGroup.effortMultiplier))
     cell:getAttribute("priority"):setText(task.priority)
-
-    local monthString = TaskListUtils.formatPeriodFullMonthName(task.period)
-    if not task.shouldRecur then
-        cell:getAttribute("due"):setText(monthString)
-    elseif task.recurMode == Task.RECUR_MODE.DAILY then
-        cell:getAttribute("due"):setText(g_i18n:getText("ui_task_due_daily"))
-    elseif task.recurMode == Task.RECUR_MODE.MONTHLY then
-        cell:getAttribute("due"):setText(string.format(g_i18n:getText("ui_task_due_monthly"), monthString))
-    elseif task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
-        cell:getAttribute("due"):setText(string.format(g_i18n:getText("ui_task_due_n_days"), task.n))
-    elseif task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
-        cell:getAttribute("due"):setText(string.format(g_i18n:getText("ui_task_due_n_months"), task.n))
-    end
+    cell:getAttribute("due"):setText(task:getDueDescription())
 end
 
 function ManageTasksFrame:onListSelectionChanged(list, section, index)
@@ -151,7 +139,6 @@ function ManageTasksFrame:onClickEdit(sender)
     self:onAddEditTaskRequestType(task, false)
 end
 
--- TODO - on edit group, if it becomes a Template, remove any husbandry tasks (or dont allow type change)
 function ManageTasksFrame:onAddEditTaskRequestType(task, isGoingBack)
     local husbandryCount = 0
     for _ in pairs(g_currentMission.taskList:getHusbandries()) do husbandryCount = husbandryCount + 1 end
@@ -224,7 +211,6 @@ function ManageTasksFrame:onAddEditRequestHusbandry(task)
     })
 end
 
--- TODO - don't count effort for husbandry task types
 function ManageTasksFrame:onAddEditRequestFoodType(task)
     local husbandry = g_currentMission.taskList:getHusbandries()[task.husbandryId]
     local allowedValues = {}
@@ -258,15 +244,15 @@ function ManageTasksFrame:onAddEditRequestFoodLevel(task)
     local foodType = husbandry.foodTypes[task.husbandryFood]
     local allowedValues = {
         g_i18n:getText("ui_task_food_level_empty"),
-        string.format("10%% (%d)", husbandry.capacity * 0.10),
-        string.format("20%% (%d)", husbandry.capacity * 0.20),
-        string.format("30%% (%d)", husbandry.capacity * 0.30),
-        string.format("40%% (%d)", husbandry.capacity * 0.40),
-        string.format("50%% (%d)", husbandry.capacity * 0.50),
-        string.format("60%% (%d)", husbandry.capacity * 0.60),
-        string.format("70%% (%d)", husbandry.capacity * 0.70),
-        string.format("80%% (%d)", husbandry.capacity * 0.80),
-        string.format("90%% (%d)", husbandry.capacity * 0.90)
+        string.format("10%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.10, 0)),
+        string.format("20%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.20, 0)),
+        string.format("30%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.30, 0)),
+        string.format("40%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.40, 0)),
+        string.format("50%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.50, 0)),
+        string.format("60%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.60, 0)),
+        string.format("70%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.70, 0)),
+        string.format("80%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.80, 0)),
+        string.format("90%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.90, 0))
     }
 
     TaskListUtils.showOptionDialog({
@@ -279,7 +265,8 @@ function ManageTasksFrame:onAddEditRequestFoodLevel(task)
         args = {},
         callback = function(_, index)
             if index > 0 then
-                task.husbandryLevel = index - 1
+                local capacity = (index - 1) * 0.10
+                task.husbandryLevel = capacity * husbandry.capacity
                 self:onAddEditTaskJourneyComplete(task)
             else
                 -- Go back

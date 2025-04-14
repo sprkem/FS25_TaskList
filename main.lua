@@ -263,6 +263,10 @@ function TaskList:saveGameLoaded()
     g_messageCenter:subscribe(MessageType.HUSBANDRY_SYSTEM_REMOVED_PLACEABLE, function(menu)
         self:updateHusbandries()
     end, self)
+    
+    g_messageCenter:subscribe(MessageType.UNLOADING_STATIONS_CHANGED, function(menu)
+        self:updateHusbandries()
+    end, self)
 end
 
 function TaskList:playerFarmChanged()
@@ -294,18 +298,14 @@ function TaskList:addOrClearHusbandryTasks()
         if group.type == TaskGroup.GROUP_TYPE.Standard then
             for _, task in pairs(group.tasks) do
                 if task.type == Task.TASK_TYPE.Husbandry then
-                    local husbandry = self:getHusbandries()[task.husbandryId]
-                    if husbandry ~= nil then
-                        local foodInfo = husbandry.foodTypes[task.husbandryFood]
-                        if foodInfo.amount <= task.husbandryLevel then
-                            self:addActiveTask(group.id, task.id)
+                    local didAdd = self:checkAndAddActiveTaskIfDue(group, task)
+                    if didAdd then
+                        g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
+                    else
+                        local key = group.id .. "_" .. task.id
+                        if self.activeTasks[key] ~= nil then
+                            self.activeTasks[key] = nil
                             g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
-                        else
-                            local key = group.id .. "_" .. task.id
-                            if self.activeTasks[key] ~= nil then
-                                self.activeTasks[key] = nil
-                                g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
-                            end
                         end
                     end
                 end
@@ -358,7 +358,16 @@ function TaskList:checkAndAddActiveTaskIfDue(group, task)
     local currentDay = g_currentMission.environment.currentDay
     local currentPeriod = g_currentMission.environment.currentPeriod
     local shouldAdd = false
-    if task.recurMode == Task.RECUR_MODE.DAILY then
+
+    if task.type == Task.TASK_TYPE.Husbandry then
+        local husbandry = self:getHusbandries()[task.husbandryId]
+        if husbandry ~= nil then
+            local foodInfo = husbandry.foodTypes[task.husbandryFood]
+            if foodInfo.amount <= task.husbandryLevel then
+                shouldAdd = true
+            end
+        end
+    elseif task.recurMode == Task.RECUR_MODE.DAILY then
         shouldAdd = true
     elseif task.recurMode == Task.RECUR_MODE.NONE and task.period == currentPeriod then
         shouldAdd = true
@@ -596,14 +605,6 @@ function TaskList:deleteGroup(groupId)
     if group == nil then
         InfoDialog.show(g_i18n:getText("ui_group_not_found_error"))
         return
-    end
-
-    if group.type == TaskGroup.GROUP_TYPE.Template then
-        for _, tg in pairs(self.taskGroups) do
-            if tg.type == TaskGroup.GROUP_TYPE.TemplateInstance and tg.templateGroupId == group.id then
-                g_client:getServerConnection():sendEvent(DeleteGroupEvent.new(tg.id))
-            end
-        end
     end
 
     g_client:getServerConnection():sendEvent(DeleteGroupEvent.new(groupId))
