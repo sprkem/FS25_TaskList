@@ -2,7 +2,7 @@ MenuTaskList = {}
 MenuTaskList.currentTasks = {}
 MenuTaskList._mt = Class(MenuTaskList, TabbedMenuFrameElement)
 MenuTaskList.sortingFunction = function(k1, k2)
-    local g1 = g_currentMission.taskList.taskGroups[k1.groupId]    
+    local g1 = g_currentMission.taskList.taskGroups[k1.groupId]
     local g2 = g_currentMission.taskList.taskGroups[k2.groupId]
 
     local t1 = g1:getTaskById(k1.id)
@@ -225,7 +225,9 @@ function MenuTaskList:updateWorkload()
     for i = 1, 12 do
         local totalEffort = 0
         for _, task in pairs(tasks[i]) do
+            -- if task.type ~= Task.TASK_TYPE.Husbandry then
             totalEffort = totalEffort + task.effort -- effort is already multiplied by getTasksForNextYear
+            -- end
         end
         effortMap[i] = totalEffort
         min = math.min(min, totalEffort)

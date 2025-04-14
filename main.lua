@@ -454,6 +454,10 @@ function TaskList:getTasksForNextYear()
         end
 
         for _, task in pairs(tasks) do
+            if task.type == Task.TASK_TYPE.Husbandry then
+                continue
+            end
+
             local effort = task.effort * group.effortMultiplier
             if task.recurMode == Task.RECUR_MODE.MONTHLY or task.recurMode == Task.RECUR_MODE.NONE then
                 local month = TaskListUtils.convertPeriodToMonthNumber(task.period)
