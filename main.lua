@@ -24,13 +24,13 @@ source(TaskList.dir .. "gui/ManageTasksFrame.lua")
 source(TaskList.dir .. "gui/tableRenderers/MonthlyTaskRenderer.lua")
 source(TaskList.dir .. "events/InitialClientStateEvent.lua")
 source(TaskList.dir .. "events/NewTaskGroupEvent.lua")
+source(TaskList.dir .. "events/EditTaskGroupEvent.lua")
 source(TaskList.dir .. "events/DeleteGroupEvent.lua")
 source(TaskList.dir .. "events/NewTaskGroupEvent.lua")
 source(TaskList.dir .. "events/CompleteTaskEvent.lua")
 source(TaskList.dir .. "events/DeleteTaskEvent.lua")
 source(TaskList.dir .. "events/EditTaskEvent.lua")
 source(TaskList.dir .. "events/NewTaskEvent.lua")
-source(TaskList.dir .. "events/RenameGroupEvent.lua")
 
 function TaskList:loadMap()
     MessageType.ACTIVE_TASKS_UPDATED = nextMessageTypeId()
@@ -54,6 +54,7 @@ function TaskList:loadMap()
     self.taskGroups = {}
     self.activeTasks = {}
     self.templateTasksAdded = {}
+    self.husbandries = nil
     self.currentPeriod = g_currentMission.environment.currentPeriod
     self.currentDay = g_currentMission.environment.currentDay
 
@@ -204,7 +205,43 @@ function TaskList.addIngameMenuPage(frame, pageName, uvs, predicateFunc, insertA
     g_inGameMenu:rebuildTabList()
 end
 
+function TaskList:updateHusbandries()
+    self.husbandries = {}
+    local husbandries = g_currentMission.husbandrySystem:getPlaceablesByFarm()
+    for _, husbandry in pairs(husbandries) do
+        local spec = husbandry.spec_husbandryFood
+        local animalType = spec.animalTypeIndex
+        self.husbandries[husbandry.id] = {
+            name = husbandry:getName(),
+            id = husbandry.id,
+            capacity = spec.capacity,
+            foodTypes = {}
+        }
+        local food = g_currentMission.animalFoodSystem:getAnimalFood(animalType)
+        for _, foodGroup in pairs(food.groups) do
+            local foodInfo = {
+                title = foodGroup.title,
+                amount = 0
+            }
+            for _, fillLevel in pairs(foodGroup.fillTypes) do
+                foodInfo.amount = foodInfo.amount + spec.fillLevels[fillLevel]
+            end
+            self.husbandries[husbandry.id].foodTypes[foodGroup.title] = foodInfo
+        end
+    end
+end
+
+function TaskList:getHusbandries()
+    if self.husbandries == nil then
+        self:updateHusbandries()
+    end
+    return self.husbandries
+end
+
 function TaskList:hourChanged()
+    g_currentMission.taskList:updateHusbandries()
+    g_currentMission.taskList:addOrClearHusbandryTasks()
+
     local period = g_currentMission.environment.currentPeriod
     if period ~= g_currentMission.taskList.currentPeriod then
         g_currentMission.taskList:onPeriodChanged()
@@ -217,9 +254,25 @@ function TaskList:hourChanged()
     end
 end
 
+function TaskList:saveGameLoaded()
+    local self = g_currentMission.taskList
+    g_messageCenter:subscribe(MessageType.HUSBANDRY_SYSTEM_ADDED_PLACEABLE, function(menu)
+        self:updateHusbandries()
+    end, self)
+
+    g_messageCenter:subscribe(MessageType.HUSBANDRY_SYSTEM_REMOVED_PLACEABLE, function(menu)
+        self:updateHusbandries()
+    end, self)
+    
+    g_messageCenter:subscribe(MessageType.UNLOADING_STATIONS_CHANGED, function(menu)
+        self:updateHusbandries()
+    end, self)
+end
+
 function TaskList:playerFarmChanged()
     g_messageCenter:publish(MessageType.TASK_GROUPS_UPDATED)
     g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
+    self:updateHusbandries()
 end
 
 function TaskList:onPeriodChanged()
@@ -238,6 +291,27 @@ function TaskList:onDayChanged()
     end
     g_currentMission.taskList.currentDay = g_currentMission.environment.currentDay
     self:updateTemplateAddedTasks()
+end
+
+function TaskList:addOrClearHusbandryTasks()
+    for _, group in pairs(self.taskGroups) do
+        if group.type == TaskGroup.GROUP_TYPE.Standard then
+            for _, task in pairs(group.tasks) do
+                if task.type == Task.TASK_TYPE.Husbandry then
+                    local didAdd = self:checkAndAddActiveTaskIfDue(group, task)
+                    if didAdd then
+                        g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
+                    else
+                        local key = group.id .. "_" .. task.id
+                        if self.activeTasks[key] ~= nil then
+                            self.activeTasks[key] = nil
+                            g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
+                        end
+                    end
+                end
+            end
+        end
+    end
 end
 
 function TaskList:addGroupTasksForCurrentPeriod(group)
@@ -284,7 +358,16 @@ function TaskList:checkAndAddActiveTaskIfDue(group, task)
     local currentDay = g_currentMission.environment.currentDay
     local currentPeriod = g_currentMission.environment.currentPeriod
     local shouldAdd = false
-    if task.recurMode == Task.RECUR_MODE.DAILY then
+
+    if task.type == Task.TASK_TYPE.Husbandry then
+        local husbandry = self:getHusbandries()[task.husbandryId]
+        if husbandry ~= nil then
+            local foodInfo = husbandry.foodTypes[task.husbandryFood]
+            if foodInfo.amount <= task.husbandryLevel then
+                shouldAdd = true
+            end
+        end
+    elseif task.recurMode == Task.RECUR_MODE.DAILY then
         shouldAdd = true
     elseif task.recurMode == Task.RECUR_MODE.NONE and task.period == currentPeriod then
         shouldAdd = true
@@ -338,20 +421,21 @@ function TaskList:addActiveTask(groupId, taskId)
         task = self.taskGroups[group.templateGroupId].tasks[taskId]
     end
 
-    local taskCopy = TaskListUtils.deepcopy(task)
-    taskCopy.groupName = group.name
-    taskCopy.groupId = group.id
+    local activeTask = {
+        id = task.id,
+        groupId = group.id
+    }
 
     if task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
-        taskCopy.createdMarker = g_currentMission.environment.currentDay
+        activeTask.createdMarker = g_currentMission.environment.currentDay
     else
-        taskCopy.createdMarker = g_currentMission.environment.currentPeriod
+        activeTask.createdMarker = g_currentMission.environment.currentPeriod
     end
 
-    local key = taskCopy.groupId .. "_" .. taskCopy.id
-    self.activeTasks[key] = taskCopy
+    local key = activeTask.groupId .. "_" .. activeTask.id
+    self.activeTasks[key] = activeTask
     -- Expect caller to raise ACTIVE_TASKS_UPDATED as this is called repeatedly
-    return taskCopy
+    return activeTask
 end
 
 function TaskList:getActiveTasksForCurrentFarm()
@@ -379,10 +463,15 @@ function TaskList:getTasksForNextYear()
         end
 
         for _, task in pairs(tasks) do
+            if task.type == Task.TASK_TYPE.Husbandry then
+                continue
+            end
+
+            local effort = task.effort * group.effortMultiplier
             if task.recurMode == Task.RECUR_MODE.MONTHLY or task.recurMode == Task.RECUR_MODE.NONE then
                 local month = TaskListUtils.convertPeriodToMonthNumber(task.period)
                 table.insert(result[month],
-                    { groupId = group.id, taskId = task.id, effort = task.effort, priority = task.priority })
+                    { groupId = group.id, taskId = task.id, effort = effort, priority = task.priority })
             elseif task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
                 local currentMonth = TaskListUtils.convertPeriodToMonthNumber(g_currentMission.environment.currentPeriod)
                 local firstMonth = TaskListUtils.convertPeriodToMonthNumber(task.nextN)
@@ -391,7 +480,7 @@ function TaskList:getTasksForNextYear()
                     count = count + 12
                 end
                 table.insert(result[firstMonth],
-                    { groupId = group.id, taskId = task.id, effort = task.effort, priority = task.priority })
+                    { groupId = group.id, taskId = task.id, effort = effort, priority = task.priority })
 
                 local lastAdded = firstMonth
                 while true do
@@ -406,7 +495,7 @@ function TaskList:getTasksForNextYear()
                     end
 
                     table.insert(result[next],
-                        { groupId = group.id, taskId = task.id, effort = task.effort, priority = task.priority })
+                        { groupId = group.id, taskId = task.id, effort = effort, priority = task.priority })
                     lastAdded = next
                 end
             elseif task.recurMode == Task.RECUR_MODE.DAILY or task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
@@ -435,7 +524,7 @@ function TaskList:getTasksForNextYear()
                 end
 
                 table.insert(result[currentMonth],
-                    { groupId = group.id, taskId = task.id, effort = task.effort, priority = task.priority })
+                    { groupId = group.id, taskId = task.id, effort = effort, priority = task.priority })
                 local lastAdded = firstDay
                 while true do
                     if not seasonChanged and startSeason ~= g_currentMission.environment:getSeasonAtDay(lastAdded) then
@@ -456,7 +545,7 @@ function TaskList:getTasksForNextYear()
                     end
 
                     table.insert(result[currentMonth],
-                        { groupId = group.id, taskId = task.id, effort = task.effort, priority = task.priority })
+                        { groupId = group.id, taskId = task.id, effort = effort, priority = task.priority })
                     lastAdded = lastAdded + increment
                 end
             end
@@ -518,14 +607,6 @@ function TaskList:deleteGroup(groupId)
         return
     end
 
-    if group.type == TaskGroup.GROUP_TYPE.Template then
-        for _, tg in pairs(self.taskGroups) do
-            if tg.type == TaskGroup.GROUP_TYPE.TemplateInstance and tg.templateGroupId == group.id then
-                g_client:getServerConnection():sendEvent(DeleteGroupEvent.new(tg.id))
-            end
-        end
-    end
-
     g_client:getServerConnection():sendEvent(DeleteGroupEvent.new(groupId))
 end
 
@@ -533,15 +614,8 @@ function TaskList:addGroupForCurrentFarm(group)
     g_client:getServerConnection():sendEvent(NewTaskGroupEvent.new(group))
 end
 
-function TaskList:renameGroup(groupId, newName)
-    local group = self.taskGroups[groupId]
-    if group == nil then
-        InfoDialog.show(g_i18n:getText("ui_group_not_found_error"))
-        return
-    end
-
-    group.name = newName
-    g_client:getServerConnection():sendEvent(RenameGroupEvent.new(groupId, newName))
+function TaskList:editGroupForCurrentFarm(group)
+    g_client:getServerConnection():sendEvent(EditTaskGroupEvent.new(group))
 end
 
 function TaskList:copyGroupForCurrentFarm(newName, groupToCopyId)
@@ -646,7 +720,9 @@ function TaskList.ShowActiveTaskNotifications()
     else
         table.sort(tempActive, TaskListUtils.taskSortingFunction)
         for _, activeTask in pairs(tempActive) do
-            local description = string.format("%s - %s", activeTask.groupName, activeTask.detail)
+            local group = g_currentMission.taskList.taskGroups[activeTask.groupId]
+            local task = group:getTaskById(activeTask.id)
+            local description = string.format("%s - %s", group.name, task:getTaskDescription())
             g_currentMission:addIngameNotification(FSBaseMission.INGAME_NOTIFICATION_INFO, description)
         end
     end
@@ -670,5 +746,6 @@ PlayerInputComponent.registerGlobalPlayerActionEvents = Utils.overwrittenFunctio
 
 g_messageCenter:subscribe(MessageType.HOUR_CHANGED, TaskList.hourChanged)
 g_messageCenter:subscribe(MessageType.PLAYER_FARM_CHANGED, TaskList.playerFarmChanged)
+g_messageCenter:subscribe(MessageType.SAVEGAME_LOADED, TaskList.saveGameLoaded)
 
 addModEventListener(TaskList)

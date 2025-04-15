@@ -21,7 +21,6 @@
 		<text name="ui_btn_copy" text="Copy"/>
 		<text name="ui_btn_edit" text="Edit"/>
 		<text name="ui_btn_delete" text="Delete"/>
-		<text name="ui_btn_rename" text="Rename"/>
 		<text name="ui_btn_add_group" text="Add Group"/>
 		<text name="ui_btn_add_task" text="Add Task"/>
 		<text name="ui_btn_select_group" text="Change group"/>
@@ -60,20 +59,28 @@
 		<text name="ui_intro_text_1" text="To get started, use Manage Groups to create a Group. A Standard group is a logical container for related tasks, for example 'Field 10', or 'General Farm Tasks'."/>		
 		<text name="ui_intro_text_2" text="Once you have made a group, use Manage Tasks to define things you need to do and when. Tasks will show in here as active tasks when due."/>
 		<text name="ui_intro_text_3" text="You can also create a Template group, for example 'Wheat Field'. You define tasks as you do with a normal group, and then create multiple Template Instance groups that use the template."/>
-		<text name="ui_intro_text_4" text="A Template group itself does not generate active tasks, but will produce tasks for all associated Template Instance groups."/>
-		<text name="ui_intro_text_5" text="A task is just plain text, such as 'Feed cows', or 'Harvest'. You can define the priority (1 is highest) and the relative effort required."/>
-		<text name="ui_intro_text_6" text="Tasks can be one off things or recur by month or day, or by a multiple of months of days."/>
-		<text name="ui_intro_text_7" text="When a task is due it will show in the main view in priority order. Use Complete Task when it is done. If it is a recurring task, it will show again when next due."/>
+		<text name="ui_intro_text_4" text="A Template itself does not generate active tasks, but will produce tasks for all associated Template Instance groups."/>
+		<text name="ui_intro_text_5" text="A task is just plain text, such as 'Harvest Corn'. You can define the priority (1 is highest) and the relative effort required."/>
+		<text name="ui_intro_text_6" text="Tasks can be one off things or recur by month or day, or by a multiple of months of days. If you have animals, you can automatically raise tasks if food levels get low."/>
+		<text name="ui_intro_text_7" text="When a task is due it will show in the main view in priority order. Use 'Complete Task' when it is done. If it is a recurring task, it will show again when next due."/>
 		<text name="ui_intro_text_8" text="Choose 'Switch Mode' to alternate between a view of tasks currently due, and a planning tool, showing the total effort for each month and upcoming tasks by month."/>
 		<text name="ui_intro_text_9" text="A group and all of its tasks can be easily copied to a new group if needed."/>
 		<text name="ui_intro_text_10" text="You can view tasks currently due while playing by pressing Shift + T."/>
 		<text name="ui_header_group_type" text="Group Type"/>
 		<text name="ui_header_group_source_template" text="Template"/>
-		<text name="ui_group_type_standard" text="Standard"/>
-		<text name="ui_group_type_template" text="Template"/>
-		<text name="ui_group_type_template_instance" text="Template Instance"/>
+		<text name="ui_type_standard" text="Standard"/>
+		<text name="ui_type_template" text="Template"/>
+		<text name="ui_type_template_instance" text="Template Instance"/>
 		<text name="ui_group_request_type_description" text="Choose a group type. A Standard group contains tasks that will be shown when due. A Template defines tasks as a template only. Then you can define multiple Template Instance groups that use the same Template and manage them in one place."/>
 		<text name="ui_group_request_source_group" text="Choose a Template to use for this group."/>
 		<text name="ui_confirm_deletion_template" text="Are you sure you want to delete? Deleting a Template will delete all Template Instance groups associated with it."/>
+		<text name="ui_set_task_effort_multiplier" text="Multiply the effort values for this group. Use 1 to use the values of the template, or set it higher if for example the group represents a large field."/>
+		<text name="ui_task_request_type_description" text="Choose a task type. Standard is free text. Husbandry can track food inputs and raises tasks if food types get low."/>
+		<text name="ui_type_husbandry" text="Husbandry"/>
+		<text name="ui_task_request_husbandry" text="Select the husbandry for this task."/>
+		<text name="ui_task_request_food_type" text="Select the food type to track."/>
+		<text name="ui_task_food_level_empty" text="Empty"/>
+		<text name="ui_task_request_food_level" text="Select the food level to track. When the level drops below the target, a task will be added to fill add more food."/>
+		<text name="ui_task_food_fill" text="Fill"/>
 	</texts>
 </l10n>

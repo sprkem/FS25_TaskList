@@ -36,10 +36,12 @@ function MonthlyTaskRenderer:populateCellForItemInSection(list, section, index, 
         task = g_currentMission.taskList.taskGroups[group.templateGroupId].tasks[meta.taskId]
     end
 
+    local effort = task.effort * group.effortMultiplier
+
     cell:getAttribute("group"):setText(group.name)
     cell:getAttribute("detail"):setText(task.detail)
     cell:getAttribute("priority"):setText(task.priority)
-    cell:getAttribute("effort"):setText(task.effort)
+    cell:getAttribute("effort"):setText(effort)
 end
 
 function MonthlyTaskRenderer:onListSelectionChanged(list, section, index)

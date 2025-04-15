@@ -8,9 +8,9 @@ TaskGroup.GROUP_TYPE = {
     TemplateInstance = 3
 }
 TaskGroup.GROUP_TYPE_STRINGS = {
-    [TaskGroup.GROUP_TYPE.Standard] = "ui_group_type_standard",
-    [TaskGroup.GROUP_TYPE.Template] = "ui_group_type_template",
-    [TaskGroup.GROUP_TYPE.TemplateInstance] = "ui_group_type_template_instance"
+    [TaskGroup.GROUP_TYPE.Standard] = "ui_type_standard",
+    [TaskGroup.GROUP_TYPE.Template] = "ui_type_template",
+    [TaskGroup.GROUP_TYPE.TemplateInstance] = "ui_type_template_instance"
 }
 
 function TaskGroup.new(customMt)
@@ -21,10 +21,19 @@ function TaskGroup.new(customMt)
     self.id = g_currentMission.taskList:generateId()
     self.farmId = g_currentMission.taskList:getCurrentFarmId()
     self.name = ""
+    self.effortMultiplier = 1
     self.type = TaskGroup.GROUP_TYPE.Standard
     self.templateGroupId = ""
     self.tasks = {}
     return self
+end
+
+function TaskGroup:getTaskById(id)
+    if self.type == TaskGroup.GROUP_TYPE.TemplateInstance then
+        local templateGroup = g_currentMission.taskList.taskGroups[self.templateGroupId]
+        return templateGroup:getTaskById(id)
+    end
+    return self.tasks[id]
 end
 
 function TaskGroup:copyValuesFromGroup(sourceGroup, includeId)
@@ -32,6 +41,7 @@ function TaskGroup:copyValuesFromGroup(sourceGroup, includeId)
     self.name = sourceGroup.name
     self.type = sourceGroup.type
     self.templateGroupId = sourceGroup.templateGroupId
+    self.effortMultiplier = sourceGroup.effortMultiplier
 
     for _, task in pairs(sourceGroup.tasks) do
         local newTask = Task.new()
@@ -50,11 +60,13 @@ function TaskGroup:writeStream(streamId, connection)
     streamWriteInt32(streamId, self.type)
     streamWriteString(streamId, self.templateGroupId)
     streamWriteString(streamId, self.name)
+    streamWriteInt32(streamId, self.effortMultiplier)
+
 
     local taskCount = 0
     for _ in pairs(self.tasks) do taskCount = taskCount + 1 end
     streamWriteInt32(streamId, taskCount)
-    
+
     for _, task in pairs(self.tasks) do
         task:writeStream(streamId, connection)
     end
@@ -66,6 +78,7 @@ function TaskGroup:readStream(streamId, connection)
     self.type = streamReadInt32(streamId)
     self.templateGroupId = streamReadString(streamId)
     self.name = streamReadString(streamId)
+    self.effortMultiplier = streamReadInt32(streamId)
 
     local taskCount = streamReadInt32(streamId)
     for j = 1, taskCount do
@@ -81,6 +94,7 @@ function TaskGroup:saveToXmlFile(xmlFile, key)
     setXMLInt(xmlFile, key .. "#farmId", self.farmId)
     setXMLInt(xmlFile, key .. "#type", self.type)
     setXMLString(xmlFile, key .. "#templateGroupId", self.templateGroupId)
+    setXMLInt(xmlFile, key .. "#effortMultiplier", self.effortMultiplier)
 
     local i = 0
     for _, task in pairs(self.tasks) do
@@ -96,6 +110,7 @@ function TaskGroup:loadFromXMLFile(xmlFile, key)
     self.farmId = getXMLInt(xmlFile, key .. "#farmId")
     self.type = getXMLInt(xmlFile, key .. "#type") or TaskGroup.GROUP_TYPE.Standard
     self.templateGroupId = getXMLString(xmlFile, key .. "#templateGroupId") or ""
+    self.effortMultiplier = getXMLInt(xmlFile, key .. "#effortMultiplier") or 1
 
     local i = 0
     while true do

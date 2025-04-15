@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
-<modDesc descVersion="96">
+<modDesc descVersion="97">
     <author>Ozz</author>
     <version>1.0.0.0</version>
     <iconFilename>icon_taskList.dds</iconFilename>
     <title>
         <en>Task List</en>
-        <de>Task List</de>
-        <fr>Task List</fr>
     </title>
     <description>
             <en><![CDATA[Task List
@@ -19,7 +17,9 @@ On the main menu, just above Settings, you will find a new menu with a clipboard
 - Create one-off tasks or tasks that recur daily, monthly, every N months, or every N days.
 - Give tasks a priority so you know what to do first.
 - Buy a new field and want to copy tasks from an existing field? No problem, you can do this in seconds.
+- Got lots of fields and want to manage them as one? Create a template and use that repeatedly.
 - View currently due tasks in the menu and mark them complete when you've done them.
+- Plan ahead by looking at cumulative effort throughout the year. Also look ahead at the coming 12 months to see what tasks are coming up.
 - View currently due tasks without checking the menu by pressing Shift + T
 
 ]]></en>		
@@ -29,12 +29,14 @@ Wenn Sie Notizen über die Aufgaben machen, die Sie erledigen müssen, oder soga
 
 Auf dem Hauptmenü, direkt oberhalb von Einstellungen, finden Sie ein neues Menü mit einem Klarstreifen-Symbol. Verwenden Sie dieses Menü, um mit den folgenden Funktionen zu beginnen:
 
-- Gruppen erstellen, um verwandte Aufgaben zu enthalten, wie zum Beispiel Feld 10 oder allgemeine Landwirtschaftliche Aufgaben.
-- Eine Aufgabe erstellen oder eine wiederkehrende Aufgabe, die täglich, monatlich, jeden N. Monat oder jeden N. Tag wiederholt.
-- Aufgaben eine Priorität geben, damit Sie wissen, was zuerst erledigt werden muss.
-- Ein neues Feld kaufen und Aufgaben von einem bestehenden Feld kopieren? Kein Problem, Sie können dies in Sekunden tun.
-- Die aktuellen fälligen Aufgaben im Menü ansehen und sie als erledigt markieren, wenn Sie sie erledigt haben.
-- Ansicht der derzeitigen Aufgaben ohne die Menüprüfung durch Drücken von Shift + T
+- Erstellen Sie Gruppen, um verwandte Aufgaben zu speichern, wie zum Beispiel Feld 10 oder allgemeine Bauarbeiten.
+- Erstellen Sie eine einmalige Aufgabe oder eine Aufgabe, die täglich, monatlich, jeden N Monaten oder jeden N Tage wiederholt wird.
+- Geben Sie Aufgaben eine Priorität, damit Sie wissen, was Sie zuerst tun sollen.
+- Kaufen Sie ein neues Feld und möchten Sie Aufgaben von einem bestehenden Feld kopieren? Kein Problem, Sie können dies in Sekunden tun.
+- Haben Sie viele Felder und möchten Sie sie als einen verwalten? Erstellen Sie ein Modell und verwenden Sie es wiederholt.
+- Siehen Sie die aktuell fälligen Aufgaben im Menü an und markieren Sie sie als abgeschlossen, wenn Sie sie abgeschlossen haben.
+- Planen Sie im Voraus, indem Sie den kumulativen Effort über das ganze Jahr betrachten. Siehen Sie auch im Voraus die nächsten 12 Monate an, um zu sehen, welche Aufgaben sich ankommen.
+- Siehen Sie die aktuell fälligen Aufgaben ohne, dass Sie das Menü überprüfen, indem Sie Shift + T drücken.
 
 ]]></de>	
     <fr><![CDATA[Task List
@@ -43,12 +45,14 @@ Si vous vous retrouvez à prendre des notes des tâches que vous devez accomplir
 
 Sur le menu principal, juste au-dessus des Paramètres, vous trouverez un nouveau menu avec un icône de papier-collant. Utilisez ce menu pour commencer avec les fonctionnalités suivantes :
 
-Créez des groupes pour contenir des tâches liées, telles que le champ 10 ou les tâches générales de ferme.
-Créez des tâches uniques ou des tâches qui se répètent quotidiennement, mensuellement, tous les N mois ou tous les N jours.
-Donnez des priorités aux tâches afin de savoir ce que faire en premier.
-Vous voulez acheter un nouveau champ et voulez copier des tâches d'un champ existant ? Pas de problème, vous pouvez le faire en quelques secondes.
-Consultez les tâches qui sont en retard dans le menu et marquez-les comme terminées lorsque vous les avez effectuées.
-Consultez les tâches qui sont en retard sans vérifier le menu en appuyant sur Shift + T
+- Créez des groupes pour contenir des tâches liées, telles que le champ 10 ou les tâches agricoles générales.
+- Créez des tâches uniques ou des tâches qui se répètent quotidiennement, mensuellement, chaque N mois ou chaque N jours.
+- Donnez aux tâches une priorité pour savoir quoi faire en premier.
+- Achetez un nouveau champ et voulez copier des tâches d'un champ existant ? Pas de problème, vous pouvez le faire en quelques secondes.
+- Avez-vous beaucoup de champs et voulez les gérer comme un seul ? Créez un modèle et utilisez-le à plusieurs reprises.
+- Affichez les tâches actuellement en retard dans le menu et marquez-les complétées lorsque vous les avez terminées.
+- Plannez à l'avance en regardant l'effort cumulé tout au long de l'année. Regardez également à l'avance les 12 prochains mois pour voir ce qui se présente.
+- Affichez les tâches actuellement en retard sans vérifier le menu en appuyant sur Shift + T.
 
 ]]></fr>	
     </description>

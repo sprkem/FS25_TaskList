@@ -38,7 +38,7 @@
         <BoxLayout profile="fs25_dialogButtonBox">
             <Button profile="buttonCancel" text="$l10n_ui_btn_delete" onClick="onClickDelete" />
             <Button profile="buttonActivate" text="$l10n_ui_btn_copy" onClick="onClickCopy" />
-            <Button profile="buttonExtra1" text="$l10n_ui_btn_rename" onClick="onClickRename" />
+            <Button profile="buttonExtra1" text="$l10n_ui_btn_edit" onClick="onClickEdit" />
             <Button profile="buttonOK" text="$l10n_ui_btn_add_group" onClick="onClickAdd" />
             <Button profile="buttonBack" text="$l10n_ui_btn_close" onClick="onClickBack" />
         </BoxLayout>

@@ -1,7 +1,15 @@
 MenuTaskList = {}
 MenuTaskList.currentTasks = {}
 MenuTaskList._mt = Class(MenuTaskList, TabbedMenuFrameElement)
-MenuTaskList.sortingFunction = function(k1, k2) return k1.priority < k2.priority end
+MenuTaskList.sortingFunction = function(k1, k2)
+    local g1 = g_currentMission.taskList.taskGroups[k1.groupId]
+    local g2 = g_currentMission.taskList.taskGroups[k2.groupId]
+
+    local t1 = g1:getTaskById(k1.id)
+    local t2 = g2:getTaskById(k2.id)
+
+    return t1.priority < t2.priority
+end
 
 MenuTaskList.VIEW_MODE = {
     CURRENTLY_DUE = 0,
@@ -217,7 +225,9 @@ function MenuTaskList:updateWorkload()
     for i = 1, 12 do
         local totalEffort = 0
         for _, task in pairs(tasks[i]) do
-            totalEffort = totalEffort + task.effort
+            -- if task.type ~= Task.TASK_TYPE.Husbandry then
+            totalEffort = totalEffort + task.effort -- effort is already multiplied by getTasksForNextYear
+            -- end
         end
         effortMap[i] = totalEffort
         min = math.min(min, totalEffort)
@@ -281,11 +291,15 @@ function MenuTaskList:getTitleForSectionHeader(list, section)
 end
 
 function MenuTaskList:populateCellForItemInSection(list, section, index, cell)
-    local task = self.currentTasks[index]
-    cell:getAttribute("group"):setText(task.groupName)
-    cell:getAttribute("detail"):setText(task.detail)
-    cell:getAttribute("effort"):setText(task.effort)
+    local taskInfo = self.currentTasks[index]
+    local group = g_currentMission.taskList.taskGroups[taskInfo.groupId]
+    local task = group:getTaskById(taskInfo.id)
+
+    cell:getAttribute("group"):setText(group.name)
+    cell:getAttribute("detail"):setText(task:getTaskDescription())
+    cell:getAttribute("effort"):setText(task:getEffortDescription(group.effortMultiplier))
     cell:getAttribute("priority"):setText(task.priority)
+    cell:getAttribute("due"):setText(task:getDueDescription())
 
     local currentPeriod = g_currentMission.environment.currentPeriod
     local currentDay = g_currentMission.environment.currentDay
@@ -298,23 +312,12 @@ function MenuTaskList:populateCellForItemInSection(list, section, index, cell)
         overdue = currentPeriod ~= task.createdMarker
     end
 
+    if task.type == Task.TASK_TYPE.Husbandry then overdue = false end
+
     if overdue then
         cell:getAttribute("overdue"):setText(g_i18n:getText("ui_yes"))
     else
         cell:getAttribute("overdue"):setText(g_i18n:getText("ui_no"))
-    end
-
-    local monthString = TaskListUtils.formatPeriodFullMonthName(task.period)
-    if not task.shouldRecur then
-        cell:getAttribute("due"):setText(monthString)
-    elseif task.recurMode == Task.RECUR_MODE.DAILY then
-        cell:getAttribute("due"):setText(g_i18n:getText("ui_task_due_daily"))
-    elseif task.recurMode == Task.RECUR_MODE.MONTHLY then
-        cell:getAttribute("due"):setText(string.format(g_i18n:getText("ui_task_due_monthly"), monthString))
-    elseif task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
-        cell:getAttribute("due"):setText(string.format(g_i18n:getText("ui_task_due_n_days"), task.n))
-    elseif task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
-        cell:getAttribute("due"):setText(string.format(g_i18n:getText("ui_task_due_n_months"), task.n))
     end
 end
 
@@ -327,12 +330,14 @@ function MenuTaskList:completeTask()
         InfoDialog.show(g_i18n:getText("ui_no_task_selected"))
         return
     end
-    local task = self.currentTasks[self.selectedCurrentTaskRow]
+    local taskInfo = self.currentTasks[self.selectedCurrentTaskRow]
+    local group = g_currentMission.taskList.taskGroups[taskInfo.groupId]
+    local task = group:getTaskById(taskInfo.id)
 
     YesNoDialog.show(
         function(self, clickOk)
             if clickOk then
-                g_currentMission.taskList:completeTask(task.groupId, task.id)
+                g_currentMission.taskList:completeTask(taskInfo.groupId, task.id)
             end
         end, self,
         string.format(g_i18n:getText("ui_confirm_complete_task"), task.detail))

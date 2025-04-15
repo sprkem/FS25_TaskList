@@ -8,9 +8,9 @@
         <text name="ui_header_icon" text=""/>
         <text name="ui_header_group" text="Groupe"/>
         <text name="ui_header_detail" text="Tâche"/>
-        <text name="ui_header_overdue" text="En retard"/>
+        <text name="ui_header_overdue" text="Tâche en retard"/>
         <text name="ui_header_priority" text="Priorité"/>
-        <text name="ui_header_due" text="Dû"/>
+        <text name="ui_header_due" text="Date d'échéance"/>
         <text name="ui_manage_groups" text="Gérer les groupes"/>
         <text name="ui_manage_tasks" text="Gérer les tâches"/>
         <text name="ui_header_current_group" text="Tâches pour le groupe : %s"/>
@@ -21,59 +21,66 @@
         <text name="ui_btn_copy" text="Copier"/>
         <text name="ui_btn_edit" text="Éditer"/>
         <text name="ui_btn_delete" text="Supprimer"/>
-        <text name="ui_btn_rename" text="Renommer"/>
         <text name="ui_btn_add_group" text="Ajouter un groupe"/>
         <text name="ui_btn_add_task" text="Ajouter une tâche"/>
-        <text name="ui_btn_select_group" text="Changer de groupe"/>		
-        <text name="ui_set_group_name" text="Choisissez un nom de groupe"/>
-        <text name="ui_set_task_detail" text="Désignez la tâche"/>
-        <text name="ui_set_task_priority" text="Fixez la priorité de la tâche"/>
-        <text name="ui_set_task_should_recur" text="Est-ce que la tâche est récurrente?"/>
-        <text name="ui_set_task_period" text="Quand est la tâche dûe?"/>
-        <text name="ui_set_task_recur_mode" text="Quand doit la tâche se répéter?"/>
-        <text name="ui_set_task_recur_mode_monthly" text="Sur un mois spécifique"/>
-        <text name="ui_set_task_recur_mode_n_months" text="Tous les N mois"/>
-        <text name="ui_set_task_recur_mode_n_days" text="Tous les N jours"/>
-        <text name="ui_task_due_daily" text="Journellement"/>
-        <text name="ui_task_due_monthly" text="Tous les %s"/>
-        <text name="ui_task_due_n_months" text="Tous les %s mois"/>
-        <text name="ui_task_due_n_days" text="Tous les %s jours"/>
-        <text name="ui_set_task_n_months" text="Combien de mois devrait la tâche être complétée?"/>
-        <text name="ui_set_task_n_days" text="Combien de jours devrait la tâche être complétée?"/>
+        <text name="ui_btn_select_group" text="Changer de groupe"/>
+        <text name="ui_set_group_name" text="Choisir un nom de groupe"/>
+        <text name="ui_set_task_detail" text="Décrire la tâche"/>
+        <text name="ui_set_task_priority" text="Définir la priorité de la tâche. Cela est utilisé pour ordonner les tâches en fonction de leur importance"/>
+        <text name="ui_set_task_should_recur" text="La tâche doit-elle se répéter?"/>
+        <text name="ui_set_task_period" text="Quelle est la date d'échéance de la tâche?"/>
+        <text name="ui_set_task_recur_mode" text="Quand la tâche doit-elle se répéter?"/>
+        <text name="ui_set_task_recur_mode_monthly" text="Chaque mois"/>
+        <text name="ui_set_task_recur_mode_n_months" text="Tous les %s mois"/>
+        <text name="ui_set_task_recur_mode_n_days" text="Tous les %s jours"/>
+        <text name="ui_task_due_daily" text="Jourly"/>
+        <text name="ui_task_due_monthly" text="Chaque %s"/>
+        <text name="ui_task_due_n_months" text="Chaque %s mois"/>
+        <text name="ui_task_due_n_days" text="Chaque %s jours"/>
+        <text name="ui_set_task_n_months" text="Quelle fréquence en mois doit la tâche être complétée?"/>
+        <text name="ui_set_task_n_days" text="Quelle fréquence en jours doit la tâche être complétée?"/>
         <text name="ui_group_exists_error" text="Un groupe avec ce nom existe déjà"/>
         <text name="ui_no_name_specified_error" text="Aucun nom pour le groupe n'a été spécifié"/>
-        <text name="ui_no_detail_specified_error" text="Aucun détail de tâche n'a été spécifié"/>
+        <text name="ui_no_detail_specified_error" text="Aucune détail pour la tâche n'a été spécifié"/>
         <text name="ui_no_group_selected_error" text="Aucun groupe sélectionné pour copier"/>
         <text name="ui_no_task_selected" text="Aucune tâche sélectionnée"/>
         <text name="ui_no_group_selected" text="Aucun groupe sélectionné"/>
-        <text name="ui_confirm_deletion" text="Soyez sûr de vouloir supprimer?"/>
+        <text name="ui_confirm_deletion" text="Êtes-vous sûr de vouloir supprimer?"/>
         <text name="ui_group_not_found_error" text="Le groupe n'a pas été trouvé. Vérifiez que le groupe n'a pas été supprimé"/>
         <text name="ui_task_not_found_error" text="La tâche n'a pas été trouvée. Vérifiez que la tâche n'a pas été supprimée"/>
-        <text name="ui_no_groups_exist" text="Vous n'avez pas encore de groupes"/>
-        <text name="ui_no_tasks_exist_for_group" text="Vous n'avez pas encore de tâches pour ce groupe"/>
-        <text name="ui_no_active_tasks" text="Vous n'avez pas encore de tâches dûes"/>
-        <text name="ui_confirm_complete_task" text="Vérifiez la fin de la tâche : %s"/>
-        <text name="ui_tasks_over_time" text="Charge de travail au fil du temp"/>
-		<text name="ui_header_effort" text="Effort"/>
-		<text name="ui_set_task_effort" text="Fixer le niveau d'effort pour cette tâche, afin de différencier les tâches petites et grandes lors de la calcul de la charge de travail au fil du temps."/>
-        <text name="ui_tasks_due_now" text="Tâches à effectuer immédiatement"/>
-        <text name="ui_intro_text_1" text="Créez un groupe en utilisant Gestion des groupes. Un groupe standard est un conteneur logique pour des tâches liées, par exemple 'Champ 10' ou 'Tâches agricoles générales'."/>		
-		<text name="ui_intro_text_2" text="Une fois que vous avez créé un groupe, utilisez Gestion des tâches pour définir les choses que vous devez faire et quand. Les tâches apparaîtront ici comme des tâches actives lorsque elles sont dûes."/>
-		<text name="ui_intro_text_3" text="Vous pouvez créer un groupe de modèle, par exemple 'Champ de blé'. Définissez les tâches comme un groupe standard, puis créez des instances de groupe de modèle."/>
-		<text name="ui_intro_text_4" text="Un groupe de modèle produit des tâches pour toutes les instances de groupe de modèle associées."/>
-		<text name="ui_intro_text_5" text="Une tâche est un texte simple, comme 'Faire nourrir les vaches' ou 'Récolte'. Définissez la priorité (1 est la plus élevée) et la relative difficulté."/>
-		<text name="ui_intro_text_6" text="Les tâches peuvent être des événements uniques ou récurrents par mois ou jour, ou par un multiple de mois ou jours."/>
-		<text name="ui_intro_text_7" text="Lorsqu'une tâche est dûe, elle apparaît dans la vue principale dans l'ordre de priorité. Utilisez 'Tâche complétée' lorsqu'elle est terminée. Si c'est une tâche récurrente, elle apparaît à nouveau à la date suivante."/>
-		<text name="ui_intro_text_8" text="Activez le mode 'Sélectionner' pour passer entre une vue des tâches dûes et un outil de planification, affichant le total d'efforts par mois et les tâches futures par mois."/>
-		<text name="ui_intro_text_9" text="Un groupe et toutes ses tâches peuvent être facilement copiés dans un nouveau groupe si nécessaire."/>
-		<text name="ui_intro_text_10" text="You can view tasks currently due while playing by pressing Shift + T."/>
-		<text name="ui_header_group_type" text="Type de groupe"/>
-		<text name="ui_header_group_source_template" text="Modèle"/>
-		<text name="ui_group_type_standard" text="Standard"/>
-		<text name="ui_group_type_template" text="Modèle"/>
-		<text name="ui_group_type_template_instance" text="Instance de modèle"/>
-		<text name="ui_group_request_type_description" text="Choisissez le type de groupe. Un groupe standard contient des tâches qui seront affichées lorsque dûes. Un modèle définit des tâches comme un modèle uniquement. Vous pouvez ensuite définir plusieurs instances de groupe de modèle qui utilisent le même modèle et les gérer dans un endroit unique."/>
-		<text name="ui_group_request_source_group" text="Choisissez un modèle pour ce groupe."/>
-		<text name="ui_confirm_deletion_template" text="Sûr que vous voulez supprimer ? La suppression d'un modèle supprime toutes les instances de groupe de modèle associées."/>
-	</texts>
+        <text name="ui_no_groups_exist" text="Aucun groupe n'existe"/>
+        <text name="ui_no_tasks_exist_for_group" text="Aucune tâche n'existe pour ce groupe"/>
+        <text name="ui_no_active_tasks" text="Aucune tâche en cours"/>
+        <text name="ui_confirm_complete_task" text="Confirmer la fin de la tâche : %s"/>
+        <text name="ui_tasks_over_time" text="Chargement des tâches au fil du temps"/>
+        <text name="ui_header_effort" text="Effort"/>
+        <text name="ui_set_task_effort" text="Définir le niveau d'effort pour cette tâche. Cela est utilisé pour différencier les petites et les grandes tâches lors du calcul du chargement au fil du temps"/>
+        <text name="ui_tasks_due_now" text="Tâches en cours"/>
+        <text name="ui_intro_text_1" text="Pour commencer, utilisez Gérer les groupes pour créer un groupe. Un groupe standard est un conteneur logique pour les tâches liées, par exemple 'Champ 10', ou 'Tâches générales'"/>
+        <text name="ui_intro_text_2" text="Une fois que vous avez créé un groupe, utilisez Gérer les tâches pour définir les choses que vous devez faire et quand. Les tâches afficheront ici comme des tâches en cours lorsque dûes"/>
+        <text name="ui_intro_text_3" text="Vous pouvez également créer un groupe de modèle, par exemple 'Champ de blé'. Vous définissez les tâches comme vous le faites avec un groupe standard, et vous créez plusieurs groupes de modèle Instance qui utilisent le modèle"/>
+        <text name="ui_intro_text_4" text="Un modèle lui-même ne génère pas de tâches actives, mais produira des tâches pour tous les groupes de modèle associés"/>
+        <text name="ui_intro_text_5" text="Une tâche est simplement du texte, comme 'Récolter le maïs'. Vous pouvez définir la priorité (1 est la plus élevée) et le niveau d'effort requis"/>
+        <text name="ui_intro_text_6" text="Les tâches peuvent être des choses uniques ou se répéter en fonction du mois ou du jour, ou en fonction d'une multiple de mois ou de jours. Si vous avez des animaux, vous pouvez automatiquement créer des tâches si les niveaux de nourriture tombent à zéro"/>
+        <text name="ui_intro_text_7" text="Lorsqu'une tâche est due, elle affichera dans la vue principale en fonction de la priorité. Utilisez 'Terminer la tâche' lorsque c'est fait. Si c'est une tâche récurrente, elle affichera à nouveau lorsque prochainement due"/>
+        <text name="ui_intro_text_8" text="Choisissez 'Mode de sélection' pour alterner entre une vue des tâches en cours et un outil de planification, montrant le total d'effort pour chaque mois et tâches à venir par mois"/>
+        <text name="ui_intro_text_9" text="Un groupe et toutes ses tâches peuvent être facilement copiées vers un nouveau groupe si nécessaire"/>
+        <text name="ui_intro_text_10" text="Vous pouvez afficher les tâches en cours en jouant en appuyant sur Shift + T"/>
+        <text name="ui_header_group_type" text="Type de groupe"/>
+        <text name="ui_header_group_source_template" text="Modèle"/>
+        <text name="ui_type_standard" text="Standard"/>
+        <text name="ui_type_template" text="Modèle"/>
+        <text name="ui_type_template_instance" text="Instance de modèle"/>
+        <text name="ui_group_request_type_description" text="Choisissez un type de groupe. Un groupe standard contient des tâches qui seront affichées lorsque dûes. Un modèle définit des tâches comme un modèle seulement. Ensuite, vous pouvez définir plusieurs groupes de modèle Instance qui utilisent le même modèle et les gérer dans un seul endroit"/>
+        <text name="ui_group_request_source_group" text="Choisissez un modèle pour utiliser pour ce groupe"/>
+        <text name="ui_confirm_deletion_template" text="Êtes-vous sûr de vouloir supprimer? Supprimer un modèle supprimera tous les groupes de modèle Instance associés"/>
+        <text name="ui_set_task_effort_multiplier" text="Multiplier les valeurs d'effort pour ce groupe. Utilisez 1 pour utiliser les valeurs du modèle, ou définissez une valeur plus élevée si par exemple le groupe représente un grand champ"/>
+        <text name="ui_task_request_type_description" text="Choisissez un type de tâche. Standard est texte libre. Husbandry peut suivre les entrées de nourriture et créer des tâches si les niveaux de nourriture tombent à zéro"/>
+        <text name="ui_type_husbandry" text="Husbandry"/>
+        <text name="ui_task_request_husbandry" text="Sélectionnez l'husbandrie pour cette tâche"/>
+        <text name="ui_task_request_food_type" text="Sélectionnez le type de nourriture à suivre"/>
+        <text name="ui_task_food_level_empty" text=" vide"/>
+        <text name="ui_task_request_food_level" text="Sélectionnez le niveau de nourriture à suivre. Lorsque le niveau tombe en dessous du cible, une tâche sera ajoutée pour remplir plus de nourriture"/>
+        <text name="ui_task_food_fill" text="Remplir"/>        
+    </texts>
 </l10n>
