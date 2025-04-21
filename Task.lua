@@ -31,7 +31,7 @@ function Task.new(customMt)
     self.nextN = 0
     self.n = 0
     self.type = Task.TASK_TYPE.Standard
-    self.husbandryId = -1
+    self.husbandryId = ""
     self.husbandryFood = ""
     self.husbandryLevel = 0
 
@@ -158,7 +158,7 @@ function Task:loadFromXMLFile(xmlFile, key)
     self.n = getXMLInt(xmlFile, key .. "#n")
     self.effort = getXMLInt(xmlFile, key .. "#effort") or 1
     self.type = getXMLInt(xmlFile, key .. "#type") or Task.TASK_TYPE.Standard
-    self.husbandryId = getXMLString(xmlFile, key .. "#husbandryId") or -1
+    self.husbandryId = getXMLString(xmlFile, key .. "#husbandryId") or ""
     self.husbandryFood = getXMLString(xmlFile, key .. "#husbandryFood") or ""
     self.husbandryLevel = getXMLInt(xmlFile, key .. "#husbandryLevel") or 0
     self:repairAfterLoad()
