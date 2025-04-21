@@ -42,8 +42,13 @@ function Task:getTaskDescription()
     local description = self.detail
     if self.type == Task.TASK_TYPE.Husbandry then
         local husbandry = g_currentMission.taskList:getHusbandries()[self.husbandryId]
-        local foodInfo = husbandry.keys[self.husbandryFood]
-        description = string.format("%s %s %s", husbandry.name, g_i18n:getText("ui_task_food_fill"), foodInfo.title)
+        if husbandry == nil then
+            print("Task:getTaskDescription: husbandry is nil: " .. tostring(self.husbandryId))
+            description = 'N/A'
+        else
+            local foodInfo = husbandry.keys[self.husbandryFood]
+            description = string.format("%s %s %s", husbandry.name, g_i18n:getText("ui_task_food_fill"), foodInfo.title)
+        end
     end
     return description
 end
@@ -137,7 +142,7 @@ function Task:saveToXmlFile(xmlFile, key)
     setXMLInt(xmlFile, key .. "#n", self.n)
     setXMLInt(xmlFile, key .. "#effort", self.effort)
     setXMLInt(xmlFile, key .. "#type", self.type)
-    setXMLInt(xmlFile, key .. "#husbandryId", self.husbandryId)
+    setXMLString(xmlFile, key .. "#husbandryId", self.husbandryId)
     setXMLString(xmlFile, key .. "#husbandryFood", self.husbandryFood)
     setXMLInt(xmlFile, key .. "#husbandryLevel", self.husbandryLevel)
 end
@@ -153,7 +158,7 @@ function Task:loadFromXMLFile(xmlFile, key)
     self.n = getXMLInt(xmlFile, key .. "#n")
     self.effort = getXMLInt(xmlFile, key .. "#effort") or 1
     self.type = getXMLInt(xmlFile, key .. "#type") or Task.TASK_TYPE.Standard
-    self.husbandryId = getXMLInt(xmlFile, key .. "#husbandryId") or -1
+    self.husbandryId = getXMLString(xmlFile, key .. "#husbandryId") or -1
     self.husbandryFood = getXMLString(xmlFile, key .. "#husbandryFood") or ""
     self.husbandryLevel = getXMLInt(xmlFile, key .. "#husbandryLevel") or 0
     self:repairAfterLoad()

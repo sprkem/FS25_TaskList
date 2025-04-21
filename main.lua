@@ -216,13 +216,21 @@ end
 
 function TaskList:updateHusbandries()
     self.husbandries = {}
+
+    if g_currentMission.isExitingGame then
+        return
+    end
+
     local husbandries = g_currentMission.husbandrySystem:getPlaceablesByFarm()
     for _, husbandry in pairs(husbandries) do
+        if husbandry.isDeleted or husbandry.isDeleting then
+            continue
+        end
         local spec = husbandry.spec_husbandryFood
         local animalType = spec.animalTypeIndex
-        self.husbandries[husbandry.id] = {
+        self.husbandries[husbandry.uniqueId] = {
             name = husbandry:getName(),
-            id = husbandry.id,
+            id = husbandry.uniqueId,
             capacity = spec.capacity,
             keys = {},
         }
@@ -236,7 +244,7 @@ function TaskList:updateHusbandries()
             for _, fillLevel in pairs(foodGroup.fillTypes) do
                 foodInfo.amount = foodInfo.amount + spec.fillLevels[fillLevel]
             end
-            self.husbandries[husbandry.id].keys[foodInfo.key] = foodInfo
+            self.husbandries[husbandry.uniqueId].keys[foodInfo.key] = foodInfo
         end
     end
 end
