@@ -164,7 +164,6 @@ function Task:repairAfterLoad()
     for _, animalFood in pairs(g_currentMission.animalFoodSystem.animalFood) do
         for _, group in animalFood.groups do
             if self.husbandryFood == group.title then
-                print('Repaired ' .. group.title)
                 self.husbandryFood = g_currentMission.taskList:getHusbandryFoodKey(group)
                 break
             end

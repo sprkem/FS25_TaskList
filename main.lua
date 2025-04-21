@@ -224,7 +224,6 @@ function TaskList:updateHusbandries()
             name = husbandry:getName(),
             id = husbandry.id,
             capacity = spec.capacity,
-            foodTypes = {},
             keys = {},
         }
         local food = g_currentMission.animalFoodSystem:getAnimalFood(animalType)
@@ -237,7 +236,6 @@ function TaskList:updateHusbandries()
             for _, fillLevel in pairs(foodGroup.fillTypes) do
                 foodInfo.amount = foodInfo.amount + spec.fillLevels[fillLevel]
             end
-            self.husbandries[husbandry.id].foodTypes[foodGroup.title] = foodInfo
             self.husbandries[husbandry.id].keys[foodInfo.key] = foodInfo
         end
     end
@@ -374,7 +372,7 @@ function TaskList:checkAndAddActiveTaskIfDue(group, task)
     if task.type == Task.TASK_TYPE.Husbandry then
         local husbandry = self:getHusbandries()[task.husbandryId]
         if husbandry ~= nil then
-            local foodInfo = husbandry.foodTypes[task.husbandryFood]
+            local foodInfo = husbandry.keys[task.husbandryFood]
             if foodInfo.amount <= task.husbandryLevel then
                 shouldAdd = true
             end

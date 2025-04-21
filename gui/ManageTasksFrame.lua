@@ -216,9 +216,9 @@ function ManageTasksFrame:onAddEditRequestFoodType(task)
     local husbandry = g_currentMission.taskList:getHusbandries()[task.husbandryId]
     local allowedValues = {}
     local lookup = {}
-    for _, foodType in pairs(husbandry.foodTypes) do
-        table.insert(allowedValues, foodType.title)
-        lookup[foodType.title] = foodType.key
+    for _, foodInfo in pairs(husbandry.keys) do
+        table.insert(allowedValues, foodInfo.title)
+        lookup[foodInfo.title] = foodInfo.key
     end
 
     TaskListUtils.showOptionDialog({
@@ -244,7 +244,6 @@ end
 
 function ManageTasksFrame:onAddEditRequestFoodLevel(task)
     local husbandry = g_currentMission.taskList:getHusbandries()[task.husbandryId]
-    -- local foodType = husbandry.foodTypes[task.husbandryFood]
     local allowedValues = {
         g_i18n:getText("ui_task_food_level_empty"),
         string.format("10%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.10, 0)),
