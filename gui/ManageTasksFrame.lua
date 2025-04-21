@@ -25,6 +25,7 @@ end
 function ManageTasksFrame:onOpen()
     ManageTasksFrame:superClass().onOpen(self)
     self.currentGroupId = -1
+    self.selectedTaskIndex = -1
 
     g_messageCenter:subscribe(MessageType.TASK_GROUPS_UPDATED, function(menu)
         self:updateContent()
@@ -130,11 +131,11 @@ function ManageTasksFrame:onClickAdd(sender)
 end
 
 function ManageTasksFrame:onClickEdit(sender)
-    if self.selectedTaskIndex == -1 then
+    local task = self.currentGroup.tasks[self.selectedTaskIndex]
+    if task == nil then
         InfoDialog.show(g_i18n:getText("ui_no_task_selected"))
         return
     end
-    local task = self.currentGroup.tasks[self.selectedTaskIndex]
     self.isEdit = true
     self:onAddEditTaskRequestType(task, false)
 end
@@ -214,8 +215,10 @@ end
 function ManageTasksFrame:onAddEditRequestFoodType(task)
     local husbandry = g_currentMission.taskList:getHusbandries()[task.husbandryId]
     local allowedValues = {}
+    local lookup = {}
     for _, foodType in pairs(husbandry.foodTypes) do
         table.insert(allowedValues, foodType.title)
+        lookup[foodType.title] = foodType.key
     end
 
     TaskListUtils.showOptionDialog({
@@ -229,7 +232,7 @@ function ManageTasksFrame:onAddEditRequestFoodType(task)
         callback = function(_, index)
             if index > 0 then
                 local value = allowedValues[index]
-                task.husbandryFood = value
+                task.husbandryFood = lookup[value]
                 self:onAddEditRequestFoodLevel(task)
             else
                 -- Go back
@@ -241,7 +244,7 @@ end
 
 function ManageTasksFrame:onAddEditRequestFoodLevel(task)
     local husbandry = g_currentMission.taskList:getHusbandries()[task.husbandryId]
-    local foodType = husbandry.foodTypes[task.husbandryFood]
+    -- local foodType = husbandry.foodTypes[task.husbandryFood]
     local allowedValues = {
         g_i18n:getText("ui_task_food_level_empty"),
         string.format("10%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.10, 0)),

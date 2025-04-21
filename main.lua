@@ -205,6 +205,15 @@ function TaskList.addIngameMenuPage(frame, pageName, uvs, predicateFunc, insertA
     g_inGameMenu:rebuildTabList()
 end
 
+function TaskList:getHusbandryFoodKey(foodGroup)
+    local fillTypes = {}
+    for _, fillLevel in pairs(foodGroup.fillTypes) do
+        table.insert(fillTypes, fillLevel)
+    end
+    table.sort(fillTypes, function(a, b) return a < b end)
+    return table.concat(fillTypes, "_")
+end
+
 function TaskList:updateHusbandries()
     self.husbandries = {}
     local husbandries = g_currentMission.husbandrySystem:getPlaceablesByFarm()
@@ -215,18 +224,21 @@ function TaskList:updateHusbandries()
             name = husbandry:getName(),
             id = husbandry.id,
             capacity = spec.capacity,
-            foodTypes = {}
+            foodTypes = {},
+            keys = {},
         }
         local food = g_currentMission.animalFoodSystem:getAnimalFood(animalType)
         for _, foodGroup in pairs(food.groups) do
             local foodInfo = {
                 title = foodGroup.title,
-                amount = 0
+                amount = 0,
+                key = self:getHusbandryFoodKey(foodGroup)
             }
             for _, fillLevel in pairs(foodGroup.fillTypes) do
                 foodInfo.amount = foodInfo.amount + spec.fillLevels[fillLevel]
             end
             self.husbandries[husbandry.id].foodTypes[foodGroup.title] = foodInfo
+            self.husbandries[husbandry.id].keys[foodInfo.key] = foodInfo
         end
     end
 end

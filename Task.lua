@@ -42,7 +42,8 @@ function Task:getTaskDescription()
     local description = self.detail
     if self.type == Task.TASK_TYPE.Husbandry then
         local husbandry = g_currentMission.taskList:getHusbandries()[self.husbandryId]
-        description = string.format("%s %s %s", husbandry.name, g_i18n:getText("ui_task_food_fill"), self.husbandryFood)
+        local foodInfo = husbandry.keys[self.husbandryFood]
+        description = string.format("%s %s %s", husbandry.name, g_i18n:getText("ui_task_food_fill"), foodInfo.title)
     end
     return description
 end
@@ -155,4 +156,18 @@ function Task:loadFromXMLFile(xmlFile, key)
     self.husbandryId = getXMLInt(xmlFile, key .. "#husbandryId") or -1
     self.husbandryFood = getXMLString(xmlFile, key .. "#husbandryFood") or ""
     self.husbandryLevel = getXMLInt(xmlFile, key .. "#husbandryLevel") or 0
+    self:repairAfterLoad()
+end
+
+function Task:repairAfterLoad()
+    -- Account for previous localised method of storing food type
+    for _, animalFood in pairs(g_currentMission.animalFoodSystem.animalFood) do
+        for _, group in animalFood.groups do
+            if self.husbandryFood == group.title then
+                print('Repaired ' .. group.title)
+                self.husbandryFood = g_currentMission.taskList:getHusbandryFoodKey(group)
+                break
+            end
+        end
+    end
 end
