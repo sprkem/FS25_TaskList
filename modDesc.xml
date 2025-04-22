@@ -5,6 +5,8 @@
     <iconFilename>icon_taskList.dds</iconFilename>
     <title>
         <en>Task List</en>
+        <de>Aufgabenliste</de>
+        <fr>Liste Des Tâches</fr>
     </title>
     <description>
             <en><![CDATA[Task List
@@ -23,7 +25,7 @@ On the main menu, just above Settings, you will find a new menu with a clipboard
 - View currently due tasks without checking the menu by pressing Shift + T
 
 ]]></en>		
-    <de><![CDATA[Task List
+    <de><![CDATA[Aufgabenliste
 
 Wenn Sie Notizen über die Aufgaben machen, die Sie erledigen müssen, oder sogar externe Software verwenden, dann ist Task List hier, um Ihnen zu helfen.
 
@@ -39,7 +41,7 @@ Auf dem Hauptmenü, direkt oberhalb von Einstellungen, finden Sie ein neues Men�
 - Siehen Sie die aktuell fälligen Aufgaben ohne, dass Sie das Menü überprüfen, indem Sie Shift + T drücken.
 
 ]]></de>	
-    <fr><![CDATA[Task List
+    <fr><![CDATA[Liste Des Tâches
 
 Si vous vous retrouvez à prendre des notes des tâches que vous devez accomplir, ou même à utiliser un logiciel externe, alors Task List est là pour vous aider.
 
