@@ -1,5 +1,0 @@
-del "C:\Users\steve\Documents\My Games\FarmingSimulator2025\mods\FS25_TaskList.zip"
-rmdir /s /q "C:\Users\steve\Documents\My Games\FarmingSimulator2025\mods\FS25_TaskList\"
-move /y "FS25_TaskList.zip" "C:\Users\steve\Documents\My Games\FarmingSimulator2025\mods\"
-7z x "C:\Users\steve\Documents\My Games\FarmingSimulator2025\mods\FS25_TaskList.zip" -o"C:\Users\steve\Documents\My Games\FarmingSimulator2025\mods\FS25_TaskList\"
-del "C:\Users\steve\Documents\My Games\FarmingSimulator2025\mods\FS25_TaskList.zip"
