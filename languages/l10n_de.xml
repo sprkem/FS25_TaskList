@@ -76,11 +76,13 @@
         <text name="ui_confirm_deletion_template" text="Sind Sie sicher, dass Sie die Modell löschen möchten? Die Löschung eines Modells löscht alle Modellinstanzen-Gruppen, die damit verbunden sind"/>
         <text name="ui_set_task_effort_multiplier" text="Multiplizieren Sie die Anstrengungswerte für diese Gruppe. Verwenden Sie 1, um die Werte des Modells zu verwenden, oder setzen Sie eine höhere Zahl, wenn zum Beispiel ein großes Feld gemeint ist"/>
         <text name="ui_task_request_type_description" text="Wählen Sie einen Aufgabenart. Standard ist frei text. Husbandry kann die Nahrungseingänge verfolgen und wiederholte Aufgaben erstellen, wenn die Nahrungsniveaus unter dem Ziel fallen"/>
-        <text name="ui_type_husbandry" text="Husbandry"/>
         <text name="ui_task_request_husbandry" text="Wählen Sie die Husbandry für diese Aufgabe"/>
         <text name="ui_task_request_food_type" text="Wählen Sie den Nahrungstyp zu verfolgen"/>
         <text name="ui_task_food_level_empty" text="Leer"/>
         <text name="ui_task_request_food_level" text="Wählen Sie das Niveau der Nahrung zu verfolgen. Wenn das Niveau unter dem Ziel fällt, wird eine Aufgabe erstellt, um mehr Nahrung zu liefern"/>
         <text name="ui_task_food_fill" text="Füllen"/>
+        <text name="ui_husbandry_food_total" text="Gesamt"/>
+		<text name="ui_task_food_fill_total" text="Füllen Sie Lebensmittel"/>
+		<text name="ui_type_husbandry_food" text="Tierfutter"/>
     </texts>
 </l10n>

@@ -76,11 +76,13 @@
         <text name="ui_confirm_deletion_template" text="Êtes-vous sûr de vouloir supprimer? Supprimer un modèle supprimera tous les groupes de modèle Instance associés"/>
         <text name="ui_set_task_effort_multiplier" text="Multiplier les valeurs d'effort pour ce groupe. Utilisez 1 pour utiliser les valeurs du modèle, ou définissez une valeur plus élevée si par exemple le groupe représente un grand champ"/>
         <text name="ui_task_request_type_description" text="Choisissez un type de tâche. Standard est texte libre. Husbandry peut suivre les entrées de nourriture et créer des tâches si les niveaux de nourriture tombent à zéro"/>
-        <text name="ui_type_husbandry" text="Husbandry"/>
         <text name="ui_task_request_husbandry" text="Sélectionnez l'husbandrie pour cette tâche"/>
         <text name="ui_task_request_food_type" text="Sélectionnez le type de nourriture à suivre"/>
         <text name="ui_task_food_level_empty" text=" vide"/>
         <text name="ui_task_request_food_level" text="Sélectionnez le niveau de nourriture à suivre. Lorsque le niveau tombe en dessous du cible, une tâche sera ajoutée pour remplir plus de nourriture"/>
-        <text name="ui_task_food_fill" text="Remplir"/>        
+        <text name="ui_task_food_fill" text="Remplir"/>
+        <text name="ui_husbandry_food_total" text="Totale"/>
+		<text name="ui_task_food_fill_total" text="Remplir la nourriture"/>
+		<text name="ui_type_husbandry_food" text="Alimentation d'élevage"/>      
     </texts>
 </l10n>

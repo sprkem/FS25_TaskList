@@ -151,7 +151,7 @@ function ManageTasksFrame:onAddEditTaskRequestType(task, isGoingBack)
     else
         local allowedValues = {}
         table.insert(allowedValues, g_i18n:getText("ui_type_standard"))
-        table.insert(allowedValues, g_i18n:getText("ui_type_husbandry"))
+        table.insert(allowedValues, g_i18n:getText("ui_type_husbandry_food"))
         TaskListUtils.showOptionDialog({
             text = g_i18n:getText("ui_task_request_type_description"),
             title = "",
@@ -168,7 +168,7 @@ function ManageTasksFrame:onAddEditTaskRequestType(task, isGoingBack)
                         task.husbandryId = -1
                         task.husbandryFood = ""
                         self:onAddEditTaskRequestDetail(task)
-                    elseif task.type == Task.TASK_TYPE.Husbandry then
+                    elseif task.type == Task.TASK_TYPE.HusbandryFood then
                         self:onAddEditRequestHusbandry(task)
                     end
                 end
@@ -214,11 +214,17 @@ end
 
 function ManageTasksFrame:onAddEditRequestFoodType(task)
     local husbandry = g_currentMission.taskList:getHusbandries()[task.husbandryId]
-    local allowedValues = {}
+    local allowedValues = {g_i18n:getText("ui_husbandry_food_total")}
     local lookup = {}
+    local default = 1
+    local defaultMatch = 2
     for _, foodInfo in pairs(husbandry.keys) do
         table.insert(allowedValues, foodInfo.title)
         lookup[foodInfo.title] = foodInfo.key
+        if task.husbandryFood == foodInfo.key then
+            default = defaultMatch
+        end
+        defaultMatch = defaultMatch + 1
     end
 
     TaskListUtils.showOptionDialog({
@@ -226,13 +232,16 @@ function ManageTasksFrame:onAddEditRequestFoodType(task)
         title = "",
         defaultText = "",
         options = allowedValues,
-        defaultOption = task.effort,
+        defaultOption = default,
         target = self,
         args = {},
         callback = function(_, index)
             if index > 0 then
-                local value = allowedValues[index]
-                task.husbandryFood = lookup[value]
+                if index == 1 then
+                    task.husbandryFood = Task.TOTAL_FOOD_KEY
+                else
+                    task.husbandryFood = lookup[allowedValues[index]]
+                end
                 self:onAddEditRequestFoodLevel(task)
             else
                 -- Go back
@@ -256,13 +265,17 @@ function ManageTasksFrame:onAddEditRequestFoodLevel(task)
         string.format("80%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.80, 0)),
         string.format("90%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.90, 0))
     }
+    local default = 1
+    if task.husbandryLevel ~= 0 then
+        default = math.floor((task.husbandryLevel / husbandry.capacity) * 10) + 1
+    end
 
     TaskListUtils.showOptionDialog({
         text = g_i18n:getText("ui_task_request_food_level"),
         title = "",
         defaultText = "",
         options = allowedValues,
-        defaultOption = task.husbandryLevel + 1,
+        defaultOption = default,
         target = self,
         args = {},
         callback = function(_, index)

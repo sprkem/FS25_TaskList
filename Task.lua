@@ -11,10 +11,11 @@ Task.RECUR_MODE = {
 
 Task.TASK_TYPE = {
     Standard = 1,
-    Husbandry = 2,
+    HusbandryFood = 2,
 }
 
 Task.MAX_DETAIL_LENGTH = 45
+Task.TOTAL_FOOD_KEY = "total"
 
 function Task.new(customMt)
     local self = {}
@@ -40,14 +41,19 @@ end
 
 function Task:getTaskDescription()
     local description = self.detail
-    if self.type == Task.TASK_TYPE.Husbandry then
+    if self.type == Task.TASK_TYPE.HusbandryFood then
         local husbandry = g_currentMission.taskList:getHusbandries()[self.husbandryId]
         if husbandry == nil then
             print("Task:getTaskDescription: husbandry is nil: " .. tostring(self.husbandryId))
             description = 'N/A'
         else
-            local foodInfo = husbandry.keys[self.husbandryFood]
-            description = string.format("%s %s %s", husbandry.name, g_i18n:getText("ui_task_food_fill"), foodInfo.title)
+            if self.husbandryFood == Task.TOTAL_FOOD_KEY then
+                description = string.format("%s %s", husbandry.name, g_i18n:getText("ui_task_food_fill_total"))
+            else
+                local foodInfo = husbandry.keys[self.husbandryFood]
+                description = string.format("%s %s %s", husbandry.name, g_i18n:getText("ui_task_food_fill"),
+                foodInfo.title)
+            end
         end
     end
     return description
@@ -55,14 +61,14 @@ end
 
 function Task:getEffortDescription(multiplier)
     local effortDescription = tostring(self.effort * multiplier)
-    if self.type == Task.TASK_TYPE.Husbandry then
+    if self.type == Task.TASK_TYPE.HusbandryFood then
         effortDescription = '-'
     end
     return effortDescription
 end
 
 function Task:getDueDescription(multiplier)
-    if self.type == Task.TASK_TYPE.Husbandry then
+    if self.type == Task.TASK_TYPE.HusbandryFood then
         return string.format("< %s", g_i18n:formatVolume(self.husbandryLevel, 0))
     end
 
@@ -161,17 +167,4 @@ function Task:loadFromXMLFile(xmlFile, key)
     self.husbandryId = getXMLString(xmlFile, key .. "#husbandryId") or ""
     self.husbandryFood = getXMLString(xmlFile, key .. "#husbandryFood") or ""
     self.husbandryLevel = getXMLInt(xmlFile, key .. "#husbandryLevel") or 0
-    self:repairAfterLoad()
-end
-
-function Task:repairAfterLoad()
-    -- Account for previous localised method of storing food type
-    for _, animalFood in pairs(g_currentMission.animalFoodSystem.animalFood) do
-        for _, group in animalFood.groups do
-            if self.husbandryFood == group.title then
-                self.husbandryFood = g_currentMission.taskList:getHusbandryFoodKey(group)
-                break
-            end
-        end
-    end
 end
