@@ -78,11 +78,19 @@
         <text name="ui_task_request_type_description" text="Choisissez un type de tâche. Standard est texte libre. Husbandry peut suivre les entrées de nourriture et créer des tâches si les niveaux de nourriture tombent à zéro"/>
         <text name="ui_task_request_husbandry" text="Sélectionnez l'husbandrie pour cette tâche"/>
         <text name="ui_task_request_food_type" text="Sélectionnez le type de nourriture à suivre"/>
-        <text name="ui_task_food_level_empty" text=" vide"/>
+        <text name="ui_task_level_empty" text=" vide"/>
         <text name="ui_task_request_food_level" text="Sélectionnez le niveau de nourriture à suivre. Lorsque le niveau tombe en dessous du cible, une tâche sera ajoutée pour remplir plus de nourriture"/>
-        <text name="ui_task_food_fill" text="Remplir"/>
+        <text name="ui_task_food_fill" text="remplir"/>
         <text name="ui_husbandry_food_total" text="Totale"/>
-		<text name="ui_task_food_fill_total" text="Remplir la nourriture"/>
-		<text name="ui_type_husbandry_food" text="Alimentation d'élevage"/>      
+		<text name="ui_task_food_fill_total" text="remplir la nourriture"/>
+		<text name="ui_type_husbandry_food" text="Alimentation d'élevage"/>
+        <text name="ui_task_evaluator_greater_than" text="haute"/>
+		<text name="ui_task_evaluator_less_than" text="faible"/>
+        <text name="ui_type_husbandry_conditions" text="Conditions d'élevage"/>
+		<text name="ui_task_request_condition_type" text="Choisissez la condition à suivre."/>
+		<text name="ui_task_request_condition_evaluator" text="Choisissez la date d'échéance de la tâche. Vous pouvez la reporter lorsqu'elle passe sous la valeur cible ou lorsqu'elle la dépasse."/>
+		<text name="ui_task_condition_evaluator_less_than" text="En dessous de l'objectif"/>
+		<text name="ui_task_condition_evaluator_greater_than" text="Au-dessus de la cible"/>
+		<text name="ui_task_request_condition_level" text="Choisissez le niveau cible à suivre pour la condition."/>
     </texts>
 </l10n>

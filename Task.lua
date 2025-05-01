@@ -12,10 +12,26 @@ Task.RECUR_MODE = {
 Task.TASK_TYPE = {
     Standard = 1,
     HusbandryFood = 2,
+    HusbandryConditions = 3,
 }
 
 Task.MAX_DETAIL_LENGTH = 45
 Task.TOTAL_FOOD_KEY = "total"
+
+Task.EVALUATOR = {
+    LessThan = 1,
+    GreaterThan = 2,
+}
+
+Task.EVALUATOR_DESCRIPTION_STRINGS = {
+    [Task.EVALUATOR.LessThan] = "ui_task_evaluator_less_than",
+    [Task.EVALUATOR.GreaterThan] = "ui_task_evaluator_greater_than",
+}
+
+Task.EVALUATOR_SYMBOLS = {
+    [Task.EVALUATOR.LessThan] = "<",
+    [Task.EVALUATOR.GreaterThan] = ">",
+}
 
 function Task.new(customMt)
     local self = {}
@@ -34,7 +50,9 @@ function Task.new(customMt)
     self.type = Task.TASK_TYPE.Standard
     self.husbandryId = ""
     self.husbandryFood = ""
+    self.husbandryCondition = ""
     self.husbandryLevel = 0
+    self.evaluator = Task.EVALUATOR.LessThan
 
     return self
 end
@@ -52,8 +70,19 @@ function Task:getTaskDescription()
             else
                 local foodInfo = husbandry.keys[self.husbandryFood]
                 description = string.format("%s %s %s", husbandry.name, g_i18n:getText("ui_task_food_fill"),
-                foodInfo.title)
+                    foodInfo.title)
             end
+        end
+    elseif self.type == Task.TASK_TYPE.HusbandryConditions then
+        local husbandry = g_currentMission.taskList:getHusbandries()[self.husbandryId]
+        if husbandry == nil then
+            print("Task:getTaskDescription: husbandry is nil: " .. tostring(self.husbandryId))
+            description = 'N/A'
+        else
+            local middleString = Task.EVALUATOR_DESCRIPTION_STRINGS[self.evaluator]
+            local conditionInfo = husbandry.conditionInfos[self.husbandryCondition]
+            description = string.format("%s %s %s", husbandry.name, g_i18n:getText(middleString),
+                conditionInfo.title)
         end
     end
     return description
@@ -70,6 +99,8 @@ end
 function Task:getDueDescription(multiplier)
     if self.type == Task.TASK_TYPE.HusbandryFood then
         return string.format("< %s", g_i18n:formatVolume(self.husbandryLevel, 0))
+    elseif self.type == Task.TASK_TYPE.HusbandryConditions then
+        return string.format("%s %s", Task.EVALUATOR_SYMBOLS[self.evaluator], g_i18n:formatVolume(self.husbandryLevel, 0))
     end
 
     local monthString = TaskListUtils.formatPeriodFullMonthName(self.period)
@@ -98,7 +129,9 @@ function Task:copyValuesFromTask(sourceTask, includeId)
     self.type = sourceTask.type
     self.husbandryId = sourceTask.husbandryId
     self.husbandryFood = sourceTask.husbandryFood
+    self.husbandryCondition = sourceTask.husbandryCondition
     self.husbandryLevel = sourceTask.husbandryLevel
+    self.evaluator = sourceTask.evaluator
 
     if includeId then
         self.id = sourceTask.id
@@ -118,7 +151,9 @@ function Task:writeStream(streamId, connection)
     streamWriteInt32(streamId, self.type)
     streamWriteInt32(streamId, self.husbandryId)
     streamWriteString(streamId, self.husbandryFood)
+    streamWriteString(streamId, self.husbandryCondition)
     streamWriteInt32(streamId, self.husbandryLevel)
+    streamWriteInt32(streamId, self.evaluator)
 end
 
 function Task:readStream(streamId, connection)
@@ -134,7 +169,9 @@ function Task:readStream(streamId, connection)
     self.type = streamReadInt32(streamId)
     self.husbandryId = streamReadInt32(streamId)
     self.husbandryFood = streamReadString(streamId)
+    self.husbandryCondition = streamReadString(streamId)
     self.husbandryLevel = streamReadInt32(streamId)
+    self.evaluator = streamReadInt32(streamId)
 end
 
 function Task:saveToXmlFile(xmlFile, key)
@@ -150,7 +187,9 @@ function Task:saveToXmlFile(xmlFile, key)
     setXMLInt(xmlFile, key .. "#type", self.type)
     setXMLString(xmlFile, key .. "#husbandryId", self.husbandryId)
     setXMLString(xmlFile, key .. "#husbandryFood", self.husbandryFood)
+    setXMLString(xmlFile, key .. "#husbandryCondition", self.husbandryCondition)
     setXMLInt(xmlFile, key .. "#husbandryLevel", self.husbandryLevel)
+    setXMLInt(xmlFile, key .. "#evaluator", self.evaluator)
 end
 
 function Task:loadFromXMLFile(xmlFile, key)
@@ -166,5 +205,7 @@ function Task:loadFromXMLFile(xmlFile, key)
     self.type = getXMLInt(xmlFile, key .. "#type") or Task.TASK_TYPE.Standard
     self.husbandryId = getXMLString(xmlFile, key .. "#husbandryId") or ""
     self.husbandryFood = getXMLString(xmlFile, key .. "#husbandryFood") or ""
+    self.husbandryCondition = getXMLString(xmlFile, key .. "#husbandryCondition") or ""
     self.husbandryLevel = getXMLInt(xmlFile, key .. "#husbandryLevel") or 0
+    self.evaluator = getXMLInt(xmlFile, key .. "#evaluator") or Task.EVALUATOR.LessThan
 end

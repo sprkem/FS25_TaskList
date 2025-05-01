@@ -54,6 +54,7 @@ function TaskList:loadMap()
     self.taskGroups = {}
     self.activeTasks = {}
     self.templateTasksAdded = {}
+    self.fillTypeCache = nil
     self.husbandries = nil
     self.currentPeriod = g_currentMission.environment.currentPeriod
     self.currentDay = g_currentMission.environment.currentDay
@@ -205,6 +206,13 @@ function TaskList.addIngameMenuPage(frame, pageName, uvs, predicateFunc, insertA
     g_inGameMenu:rebuildTabList()
 end
 
+function TaskList:populateFillTypeCache()
+    self.fillTypeCache = {}
+    for k, v in pairs(g_fillTypeManager.indexToTitle) do
+        self.fillTypeCache[v] = k
+    end
+end
+
 function TaskList:getHusbandryFoodKey(foodGroup)
     local fillTypes = {}
     for _, fillLevel in pairs(foodGroup.fillTypes) do
@@ -221,20 +229,27 @@ function TaskList:updateHusbandries()
         return
     end
 
+    if self.fillTypeCache == nil then
+        self:populateFillTypeCache()
+    end
+
     local husbandries = g_currentMission.husbandrySystem:getPlaceablesByFarm()
     for _, husbandry in pairs(husbandries) do
         if husbandry.isDeleted or husbandry.isDeleting then
             continue
         end
-        local spec = husbandry.spec_husbandryFood
-        local animalType = spec.animalTypeIndex
+        local foodSpec = husbandry.spec_husbandryFood
+        local animalType = foodSpec.animalTypeIndex
         self.husbandries[husbandry.uniqueId] = {
             name = husbandry:getName(),
             id = husbandry.uniqueId,
-            capacity = spec.capacity,
+            foodCapacity = foodSpec.capacity,
             totalFood = 0,
             keys = {},
+            conditionInfos = {}
         }
+
+        -- Get the fill levels for the husbandry
         local food = g_currentMission.animalFoodSystem:getAnimalFood(animalType)
         local totalFood = 0
         for _, foodGroup in pairs(food.groups) do
@@ -244,12 +259,32 @@ function TaskList:updateHusbandries()
                 key = self:getHusbandryFoodKey(foodGroup)
             }
             for _, fillLevel in pairs(foodGroup.fillTypes) do
-                foodInfo.amount = foodInfo.amount + spec.fillLevels[fillLevel]
+                foodInfo.amount = foodInfo.amount + foodSpec.fillLevels[fillLevel]
             end
             totalFood = totalFood + foodInfo.amount
             self.husbandries[husbandry.uniqueId].keys[foodInfo.key] = foodInfo
         end
         self.husbandries[husbandry.uniqueId].totalFood = totalFood
+
+        -- Get condition levels for the husbandry
+        local conditionInfos = husbandry:getConditionInfos()
+        for i, conditionInfo in pairs(conditionInfos) do
+            if i == 1 then
+                continue
+            end
+            local conditionFillType = self.fillTypeCache[conditionInfo.title]
+            if conditionFillType ~= nil then
+                local conditionInfo = {
+                    title = conditionInfo.title,
+                    amount = conditionInfo.value,
+                    key = conditionFillType,
+                    capacity = husbandry:getHusbandryCapacity(conditionFillType)
+                }
+                if conditionInfo.capacity > 0 then
+                    self.husbandries[husbandry.uniqueId].conditionInfos[conditionInfo.key] = conditionInfo
+                end
+            end
+        end
     end
 end
 
@@ -319,7 +354,7 @@ function TaskList:addOrClearHusbandryTasks()
     for _, group in pairs(self.taskGroups) do
         if group.type == TaskGroup.GROUP_TYPE.Standard then
             for _, task in pairs(group.tasks) do
-                if task.type == Task.TASK_TYPE.HusbandryFood then
+                if task.type == Task.TASK_TYPE.HusbandryFood or task.type == Task.TASK_TYPE.HusbandryConditions then
                     local didAdd = self:checkAndAddActiveTaskIfDue(group, task)
                     if didAdd then
                         g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
@@ -384,7 +419,6 @@ function TaskList:checkAndAddActiveTaskIfDue(group, task)
     if task.type == Task.TASK_TYPE.HusbandryFood then
         local husbandry = self:getHusbandries()[task.husbandryId]
         if husbandry ~= nil then
-
             if task.husbandryFood == Task.TOTAL_FOOD_KEY then
                 if husbandry.totalFood <= task.husbandryLevel then
                     shouldAdd = true
@@ -392,6 +426,18 @@ function TaskList:checkAndAddActiveTaskIfDue(group, task)
             else
                 local foodInfo = husbandry.keys[task.husbandryFood]
                 if foodInfo.amount <= task.husbandryLevel then
+                    shouldAdd = true
+                end
+            end
+        end
+    elseif task.type == Task.TASK_TYPE.HusbandryConditions then
+        local husbandry = self:getHusbandries()[task.husbandryId]
+        if husbandry ~= nil then
+            local conditionInfo = husbandry.conditionInfos[task.husbandryCondition]
+            if conditionInfo ~= nil then
+                if task.evaluator == Task.EVALUATOR.LessThan and conditionInfo.amount < task.husbandryLevel then
+                    shouldAdd = true
+                elseif task.evaluator == Task.EVALUATOR.GreaterThan and conditionInfo.amount > task.husbandryLevel then
                     shouldAdd = true
                 end
             end

@@ -152,6 +152,7 @@ function ManageTasksFrame:onAddEditTaskRequestType(task, isGoingBack)
         local allowedValues = {}
         table.insert(allowedValues, g_i18n:getText("ui_type_standard"))
         table.insert(allowedValues, g_i18n:getText("ui_type_husbandry_food"))
+        table.insert(allowedValues, g_i18n:getText("ui_type_husbandry_conditions"))
         TaskListUtils.showOptionDialog({
             text = g_i18n:getText("ui_task_request_type_description"),
             title = "",
@@ -165,10 +166,10 @@ function ManageTasksFrame:onAddEditTaskRequestType(task, isGoingBack)
                     task.type = index
 
                     if task.type == Task.TASK_TYPE.Standard then
-                        task.husbandryId = -1
+                        task.husbandryId = ""
                         task.husbandryFood = ""
                         self:onAddEditTaskRequestDetail(task)
-                    elseif task.type == Task.TASK_TYPE.HusbandryFood then
+                    elseif task.type == Task.TASK_TYPE.HusbandryFood or Task.TASK_TYPE.HusbandryConditions then
                         self:onAddEditRequestHusbandry(task)
                     end
                 end
@@ -183,6 +184,12 @@ function ManageTasksFrame:onAddEditRequestHusbandry(task)
     local default = 1
 
     for _, husbandry in pairs(g_currentMission.taskList:getHusbandries()) do
+        local conditionCount = 0
+        for _ in pairs(husbandry.conditionInfos) do conditionCount = conditionCount + 1 end
+        if task.type == Task.TASK_TYPE.HusbandryConditions and conditionCount == 0 then
+            continue
+        end
+
         table.insert(allowedValues, husbandry.name)
         lookup[husbandry.name] = husbandry
         if task.husbandryId == husbandry.id then
@@ -203,7 +210,11 @@ function ManageTasksFrame:onAddEditRequestHusbandry(task)
                 local value = allowedValues[index]
                 local husbandry = lookup[value]
                 task.husbandryId = husbandry.id
-                self:onAddEditRequestFoodType(task)
+                if task.type == Task.TASK_TYPE.HusbandryFood then
+                    self:onAddEditRequestFoodType(task)
+                elseif task.type == Task.TASK_TYPE.HusbandryConditions then
+                    self:OnAddEditRequestConditionType(task)
+                end
             else
                 -- Go back
                 self:onAddEditTaskRequestType(task)
@@ -214,7 +225,7 @@ end
 
 function ManageTasksFrame:onAddEditRequestFoodType(task)
     local husbandry = g_currentMission.taskList:getHusbandries()[task.husbandryId]
-    local allowedValues = {g_i18n:getText("ui_husbandry_food_total")}
+    local allowedValues = { g_i18n:getText("ui_husbandry_food_total") }
     local lookup = {}
     local default = 1
     local defaultMatch = 2
@@ -254,20 +265,20 @@ end
 function ManageTasksFrame:onAddEditRequestFoodLevel(task)
     local husbandry = g_currentMission.taskList:getHusbandries()[task.husbandryId]
     local allowedValues = {
-        g_i18n:getText("ui_task_food_level_empty"),
-        string.format("10%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.10, 0)),
-        string.format("20%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.20, 0)),
-        string.format("30%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.30, 0)),
-        string.format("40%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.40, 0)),
-        string.format("50%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.50, 0)),
-        string.format("60%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.60, 0)),
-        string.format("70%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.70, 0)),
-        string.format("80%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.80, 0)),
-        string.format("90%% (%s)", g_i18n:formatVolume(husbandry.capacity * 0.90, 0))
+        g_i18n:getText("ui_task_level_empty"),
+        string.format("10%% (%s)", g_i18n:formatVolume(husbandry.foodCapacity * 0.10, 0)),
+        string.format("20%% (%s)", g_i18n:formatVolume(husbandry.foodCapacity * 0.20, 0)),
+        string.format("30%% (%s)", g_i18n:formatVolume(husbandry.foodCapacity * 0.30, 0)),
+        string.format("40%% (%s)", g_i18n:formatVolume(husbandry.foodCapacity * 0.40, 0)),
+        string.format("50%% (%s)", g_i18n:formatVolume(husbandry.foodCapacity * 0.50, 0)),
+        string.format("60%% (%s)", g_i18n:formatVolume(husbandry.foodCapacity * 0.60, 0)),
+        string.format("70%% (%s)", g_i18n:formatVolume(husbandry.foodCapacity * 0.70, 0)),
+        string.format("80%% (%s)", g_i18n:formatVolume(husbandry.foodCapacity * 0.80, 0)),
+        string.format("90%% (%s)", g_i18n:formatVolume(husbandry.foodCapacity * 0.90, 0))
     }
     local default = 1
     if task.husbandryLevel ~= 0 then
-        default = math.floor((task.husbandryLevel / husbandry.capacity) * 10) + 1
+        default = math.floor((task.husbandryLevel / husbandry.foodCapacity) * 10) + 1
     end
 
     TaskListUtils.showOptionDialog({
@@ -281,7 +292,7 @@ function ManageTasksFrame:onAddEditRequestFoodLevel(task)
         callback = function(_, index)
             if index > 0 then
                 local capacity = (index - 1) * 0.10
-                task.husbandryLevel = capacity * husbandry.capacity
+                task.husbandryLevel = capacity * husbandry.foodCapacity
                 self:onAddEditTaskJourneyComplete(task)
             else
                 -- Go back
@@ -290,6 +301,107 @@ function ManageTasksFrame:onAddEditRequestFoodLevel(task)
         end
     })
 end
+
+function ManageTasksFrame:OnAddEditRequestConditionType(task)
+    local husbandry = g_currentMission.taskList:getHusbandries()[task.husbandryId]
+    local allowedValues = {}
+    local lookup = {}
+    local default = 1
+    for _, conditionInfo in pairs(husbandry.conditionInfos) do
+        table.insert(allowedValues, conditionInfo.title)
+        lookup[conditionInfo.title] = conditionInfo.key
+        if task.husbandryCondition == conditionInfo.key then
+            default = #allowedValues
+        end
+    end
+
+    TaskListUtils.showOptionDialog({
+        text = g_i18n:getText("ui_task_request_condition_type"),
+        title = "",
+        defaultText = "",
+        options = allowedValues,
+        defaultOption = default,
+        target = self,
+        args = {},
+        callback = function(_, index)
+            if index > 0 then
+                task.husbandryCondition = lookup[allowedValues[index]]
+                self:onAddEditRequestConditionEvaluator(task)
+            else
+                -- Go back
+                self:onAddEditRequestHusbandry(task)
+            end
+        end
+    })
+end
+
+function ManageTasksFrame:onAddEditRequestConditionEvaluator(task)
+    local allowedValues = {
+        g_i18n:getText("ui_task_condition_evaluator_less_than"),
+        g_i18n:getText("ui_task_condition_evaluator_greater_than")
+    }
+
+    TaskListUtils.showOptionDialog({
+        text = g_i18n:getText("ui_task_request_condition_evaluator"),
+        title = "",
+        defaultText = "",
+        options = allowedValues,
+        defaultOption = task.evaluator,
+        target = self,
+        args = {},
+        callback = function(_, index)
+            if index > 0 then
+                task.evaluator = index
+                self:onAddEditRequestConditionLevel(task)
+            else
+                -- Go back
+                self:OnAddEditRequestConditionType(task)
+            end
+        end
+    })
+end
+
+function ManageTasksFrame:onAddEditRequestConditionLevel(task)
+    local husbandry = g_currentMission.taskList:getHusbandries()[task.husbandryId]
+    local conditionInfo = husbandry.conditionInfos[task.husbandryCondition]
+    local allowedValues = {
+        g_i18n:getText("ui_task_level_empty"),
+        string.format("10%% (%s)", g_i18n:formatVolume(conditionInfo.capacity * 0.10, 0)),
+        string.format("20%% (%s)", g_i18n:formatVolume(conditionInfo.capacity * 0.20, 0)),
+        string.format("30%% (%s)", g_i18n:formatVolume(conditionInfo.capacity * 0.30, 0)),
+        string.format("40%% (%s)", g_i18n:formatVolume(conditionInfo.capacity * 0.40, 0)),
+        string.format("50%% (%s)", g_i18n:formatVolume(conditionInfo.capacity * 0.50, 0)),
+        string.format("60%% (%s)", g_i18n:formatVolume(conditionInfo.capacity * 0.60, 0)),
+        string.format("70%% (%s)", g_i18n:formatVolume(conditionInfo.capacity * 0.70, 0)),
+        string.format("80%% (%s)", g_i18n:formatVolume(conditionInfo.capacity * 0.80, 0)),
+        string.format("90%% (%s)", g_i18n:formatVolume(conditionInfo.capacity * 0.90, 0))
+    }
+    local default = 1
+    if task.husbandryLevel ~= 0 then
+        default = math.floor((task.husbandryLevel / conditionInfo.capacity) * 10) + 1
+    end
+
+    TaskListUtils.showOptionDialog({
+        text = g_i18n:getText("ui_task_request_condition_level"),
+        title = "",
+        defaultText = "",
+        options = allowedValues,
+        defaultOption = default,
+        target = self,
+        args = {},
+        callback = function(_, index)
+            if index > 0 then
+                local capacity = (index - 1) * 0.10
+                task.husbandryLevel = capacity * conditionInfo.capacity
+                self:onAddEditTaskJourneyComplete(task)
+            else
+                -- Go back
+                self:onAddEditRequestConditionEvaluator(task)
+            end
+        end
+    })
+end
+
 
 function ManageTasksFrame:onAddEditTaskRequestDetail(task)
     TextInputDialog.show(
