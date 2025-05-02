@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="97">
     <author>Ozz</author>
-    <version>1.0.0.0</version>
+    <version>1.1.0.0</version>
     <iconFilename>icon_taskList.dds</iconFilename>
     <title>
         <en>Task List</en>
@@ -24,6 +24,16 @@ On the main menu, just above Settings, you will find a new menu with a clipboard
 - Plan ahead by looking at cumulative effort throughout the year. Also look ahead at the coming 12 months to see what tasks are coming up.
 - View currently due tasks without checking the menu by pressing Shift + T
 
+- Github:
+https://github.com/sprkem/FS25_TaskList
+
+Changelog:
+
+1.1.0.0:
+- Added tracking tasks for animal conditions e.g slurry, straw etc
+- You can now track the total food level for a husbandry
+- Fixed a non-damaging error when saving
+
 ]]></en>		
     <de><![CDATA[Aufgabenliste
 
@@ -40,6 +50,16 @@ Auf dem Hauptmenü, direkt oberhalb von Einstellungen, finden Sie ein neues Men�
 - Planen Sie im Voraus, indem Sie den kumulativen Effort über das ganze Jahr betrachten. Siehen Sie auch im Voraus die nächsten 12 Monate an, um zu sehen, welche Aufgaben sich ankommen.
 - Siehen Sie die aktuell fälligen Aufgaben ohne, dass Sie das Menü überprüfen, indem Sie Shift + T drücken.
 
+- Github:
+https://github.com/sprkem/FS25_TaskList
+
+Änderungsliste:
+
+1.1.0.0:
+- Tracking-Aufgaben für Tierbedingungen hinzugefügt, z. B. Gülle, Stroh usw.
+- Sie können jetzt den Gesamtfutterstand für eine Zucht verfolgen
+- Ein nicht schädlicher Fehler beim Speichern wurde behoben
+
 ]]></de>	
     <fr><![CDATA[Liste Des Tâches
 
@@ -55,6 +75,16 @@ Sur le menu principal, juste au-dessus des Paramètres, vous trouverez un nouvea
 - Affichez les tâches actuellement en retard dans le menu et marquez-les complétées lorsque vous les avez terminées.
 - Plannez à l'avance en regardant l'effort cumulé tout au long de l'année. Regardez également à l'avance les 12 prochains mois pour voir ce qui se présente.
 - Affichez les tâches actuellement en retard sans vérifier le menu en appuyant sur Shift + T.
+
+- Github:
+https://github.com/sprkem/FS25_TaskList
+
+Journal des modifications:
+
+1.1.0.0:
+- Ajout de tâches de suivi pour les conditions animales, par exemple le lisier, la paille, etc.
+- Vous pouvez désormais suivre le niveau total de nourriture pour un élevage
+- Correction d'une erreur non dommageable lors de la sauvegarde
 
 ]]></fr>	
     </description>
