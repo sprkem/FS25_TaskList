@@ -34,6 +34,8 @@ Changelog:
 - You can now track the total food level for a husbandry
 - Fixed a non-damaging error when saving
 
+- Fixed bug with sending client state in multiplayer
+
 ]]></en>		
     <de><![CDATA[Aufgabenliste
 

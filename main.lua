@@ -56,6 +56,7 @@ function TaskList:loadMap()
     self.templateTasksAdded = {}
     self.fillTypeCache = nil
     self.husbandries = nil
+    self.productions = nil
     self.currentPeriod = g_currentMission.environment.currentPeriod
     self.currentDay = g_currentMission.environment.currentDay
 
@@ -295,9 +296,83 @@ function TaskList:getHusbandries()
     return self.husbandries
 end
 
+function TaskList:updateProductions()
+    self.productions = {}
+    local currentFarmId = self:getCurrentFarmId()
+    local points = g_currentMission.productionChainManager:getProductionPointsForFarmId(currentFarmId)
+    -- local factories = g_currentMission.productionChainManager:getFactoriesForFarmId(currentFarmId)
+
+    for _, point in pairs(points) do
+        local pointInfo = {
+            name = point:getName(),
+            id = point.id,
+            inputs = {},
+            outputs = {},
+        }
+
+        for _, fillType in pairs(point.inputFillTypeIdsArray) do
+            local fillInfo = {
+                key = fillType,
+                title = g_fillTypeManager.indexToTitle[fillType],
+                amount = point:getFillLevel(fillType),
+                capacity = point:getCapacity(fillType),
+            }
+            pointInfo.inputs[fillInfo.key] = fillInfo
+        end
+
+        for _, fillType in pairs(point.outputFillTypeIdsArray) do
+            local fillInfo = {
+                key = fillType,
+                title = g_fillTypeManager.indexToTitle[fillType],
+                amount = point:getFillLevel(fillType),
+                capacity = point:getCapacity(fillType),
+            }
+            pointInfo.outputs[fillInfo.key] = fillInfo
+        end
+
+        self.productions[point.id] = pointInfo
+    end
+end
+
+function TaskList:getProductions()
+    if self.productions == nil then
+        self:updateProductions()
+    end
+    return self.productions
+end
+
+function TaskList:taskCleanup()
+    local husbandries = self:getHusbandries()
+    for _, group in pairs(self.taskGroups) do
+        if group.type == TaskGroup.GROUP_TYPE.Standard then
+            local toRemove = {}
+            for _, task in pairs(group.tasks) do
+                if task.type == Task.TASK_TYPE.HusbandryFood or task.type == Task.TASK_TYPE.HusbandryConditions then
+                    if husbandries[task.husbandryId] == nil then
+                        table.insert(toRemove, task.id)
+                        local key = group.id .. "_" .. task.id
+                        if self.activeTasks[key] ~= nil then
+                            self.activeTasks[key] = nil
+                            g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
+                        end
+                    end
+                end
+            end
+            for _, taskId in pairs(toRemove) do
+                print('Dropped task ' .. taskId .. ' from group ' .. group.id .. ' due to missing husbandry.')
+                group.tasks[taskId] = nil
+            end
+        end
+    end
+end
+
 function TaskList:hourChanged()
     g_currentMission.taskList:updateHusbandries()
-    g_currentMission.taskList:addOrClearHusbandryTasks()
+    g_currentMission.taskList:updateProductions()
+
+    g_currentMission.taskList:taskCleanup()
+
+    g_currentMission.taskList:addOrClearAutoTasks()
 
     local period = g_currentMission.environment.currentPeriod
     if period ~= g_currentMission.taskList.currentPeriod then
@@ -350,11 +425,11 @@ function TaskList:onDayChanged()
     self:updateTemplateAddedTasks()
 end
 
-function TaskList:addOrClearHusbandryTasks()
+function TaskList:addOrClearAutoTasks()
     for _, group in pairs(self.taskGroups) do
         if group.type == TaskGroup.GROUP_TYPE.Standard then
             for _, task in pairs(group.tasks) do
-                if task.type == Task.TASK_TYPE.HusbandryFood or task.type == Task.TASK_TYPE.HusbandryConditions then
+                if task.type == Task.TASK_TYPE.HusbandryFood or task.type == Task.TASK_TYPE.HusbandryConditions or task.type == Task.TASK_TYPE.Production then
                     local didAdd = self:checkAndAddActiveTaskIfDue(group, task)
                     if didAdd then
                         g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
@@ -442,6 +517,21 @@ function TaskList:checkAndAddActiveTaskIfDue(group, task)
                 end
             end
         end
+    elseif task.type == Task.TASK_TYPE.Production then
+        local production = self:getProductions()[task.productionId]
+        if production ~= nil then
+            local fillInfo = production.inputs[task.productionFillType]
+            if task.productionType == Task.PRODUCTION_TYPE.OUTPUT then
+                fillInfo = production.outputs[task.productionFillType]
+            end
+            if fillInfo ~= nil then
+                if task.evaluator == Task.EVALUATOR.LessThan and fillInfo.amount < task.productionLevel then
+                    shouldAdd = true
+                elseif task.evaluator == Task.EVALUATOR.GreaterThan and fillInfo.amount > task.productionLevel then
+                    shouldAdd = true
+                end
+            end
+        end
     elseif task.recurMode == Task.RECUR_MODE.DAILY then
         shouldAdd = true
     elseif task.recurMode == Task.RECUR_MODE.NONE and task.period == currentPeriod then
@@ -515,6 +605,7 @@ end
 
 function TaskList:getActiveTasksForCurrentFarm()
     local result = {}
+    local currentFarmId = self:getCurrentFarmId()
     for _, task in pairs(self.activeTasks) do
         if task.farmId == currentFarmId or not g_currentMission.missionDynamicInfo.isMultiplayer then
             local taskCopy = TaskListUtils.deepcopy(task)
@@ -538,7 +629,7 @@ function TaskList:getTasksForNextYear()
         end
 
         for _, task in pairs(tasks) do
-            if task.type == Task.TASK_TYPE.HusbandryFood then
+            if task.type ~= Task.TASK_TYPE.Standard then
                 continue
             end
 

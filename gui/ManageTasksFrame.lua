@@ -143,16 +143,33 @@ end
 function ManageTasksFrame:onAddEditTaskRequestType(task, isGoingBack)
     local husbandryCount = 0
     for _ in pairs(g_currentMission.taskList:getHusbandries()) do husbandryCount = husbandryCount + 1 end
-    if self.currentGroup.type == TaskGroup.GROUP_TYPE.Template or husbandryCount == 0 then
+    local productionCount = 0
+    for _ in pairs(g_currentMission.taskList:getProductions()) do productionCount = productionCount + 1 end
+    local totalCount = husbandryCount + productionCount
+
+    if self.currentGroup.type == TaskGroup.GROUP_TYPE.Template or totalCount == 0 then
         -- If we're here after going back, the sequence should end
         if isGoingBack == false then
             self:onAddEditTaskRequestDetail(task)
         end
     else
         local allowedValues = {}
+        local lookup = {}
         table.insert(allowedValues, g_i18n:getText("ui_type_standard"))
-        table.insert(allowedValues, g_i18n:getText("ui_type_husbandry_food"))
-        table.insert(allowedValues, g_i18n:getText("ui_type_husbandry_conditions"))
+        lookup[g_i18n:getText("ui_type_standard")] = Task.TASK_TYPE.Standard
+
+        if husbandryCount > 0 then
+            table.insert(allowedValues, g_i18n:getText("ui_type_husbandry_food"))
+            lookup[g_i18n:getText("ui_type_husbandry_food")] = Task.TASK_TYPE.HusbandryFood
+            table.insert(allowedValues, g_i18n:getText("ui_type_husbandry_conditions"))
+            lookup[g_i18n:getText("ui_type_husbandry_conditions")] = Task.TASK_TYPE.HusbandryConditions
+        end
+
+        if productionCount > 0 then
+            table.insert(allowedValues, g_i18n:getText("ui_type_production"))
+            lookup[g_i18n:getText("ui_type_production")] = Task.TASK_TYPE.Production
+        end
+
         TaskListUtils.showOptionDialog({
             text = g_i18n:getText("ui_task_request_type_description"),
             title = "",
@@ -163,19 +180,168 @@ function ManageTasksFrame:onAddEditTaskRequestType(task, isGoingBack)
             args = {},
             callback = function(_, index)
                 if index > 0 then
-                    task.type = index
+                    local value = allowedValues[index]
+                    task.type = lookup[value]
 
                     if task.type == Task.TASK_TYPE.Standard then
-                        task.husbandryId = ""
-                        task.husbandryFood = ""
                         self:onAddEditTaskRequestDetail(task)
-                    elseif task.type == Task.TASK_TYPE.HusbandryFood or Task.TASK_TYPE.HusbandryConditions then
+                    elseif task.type == Task.TASK_TYPE.HusbandryFood or task.type == Task.TASK_TYPE.HusbandryConditions then
                         self:onAddEditRequestHusbandry(task)
+                    elseif task.type == Task.TASK_TYPE.Production then
+                        self:onAddEditRequestProduction(task)
                     end
                 end
             end
         })
     end
+end
+
+function ManageTasksFrame:onAddEditRequestProduction(task)
+    local allowedValues = {}
+    local lookup = {}
+    local default = 1
+
+    for _, production in pairs(g_currentMission.taskList:getProductions()) do
+        table.insert(allowedValues, production.name)
+        lookup[production.name] = production
+        if task.productionId == production.id then
+            default = #allowedValues
+        end
+    end
+
+    TaskListUtils.showOptionDialog({
+        text = g_i18n:getText("ui_task_request_production"),
+        title = "",
+        defaultText = "",
+        options = allowedValues,
+        defaultOption = default,
+        target = self,
+        args = {},
+        callback = function(_, index)
+            if index > 0 then
+                local value = allowedValues[index]
+                local production = lookup[value]
+                task.productionId = production.id
+                self:onAddEditRequestProductionType(task)
+            else
+                -- Go back
+                self:onAddEditTaskRequestType(task)
+            end
+        end
+    })
+end
+
+function ManageTasksFrame:onAddEditRequestProductionType(task)
+    local production = g_currentMission.taskList:getProductions()[task.productionId]
+    local allowedValues = {
+        g_i18n:getText("ui_task_production_input"),
+        g_i18n:getText("ui_task_production_output")
+    }
+
+    TaskListUtils.showOptionDialog({
+        text = g_i18n:getText("ui_task_request_production_type"),
+        title = "",
+        defaultText = "",
+        options = allowedValues,
+        defaultOption = task.productionType,
+        target = self,
+        args = {},
+        callback = function(_, index)
+            if index > 0 then
+                task.productionType = index
+                self:onAddEditRequestProductionFillType(task)
+            else
+                -- Go back
+                self:onAddEditRequestProduction(task)
+            end
+        end
+    })
+end
+
+function ManageTasksFrame:onAddEditRequestProductionFillType(task)
+    local production = g_currentMission.taskList:getProductions()[task.productionId]
+    local allowedValues = {}
+    local lookup = {}
+    local default = 1
+
+    local fillTypes = production.inputs
+    if task.productionType == Task.PRODUCTION_TYPE.OUTPUT then
+        fillTypes = production.outputs
+    end
+
+    for _, fillInfo in pairs(fillTypes) do
+        table.insert(allowedValues, fillInfo.title)
+        lookup[fillInfo.title] = fillInfo.key
+        if task.productionFillType == fillInfo.key then
+            default = #allowedValues
+        end
+    end
+
+    TaskListUtils.showOptionDialog({
+        text = g_i18n:getText("ui_task_request_production_fill_type"),
+        title = "",
+        defaultText = "",
+        options = allowedValues,
+        defaultOption = default,
+        target = self,
+        args = {},
+        callback = function(_, index)
+            if index > 0 then
+                task.productionFillType = lookup[allowedValues[index]]
+                self:onAddEditRequestConditionEvaluator(task)
+            else
+                -- Go back
+                self:onAddEditRequestProductionType(task)
+            end
+        end
+    })
+end
+
+function ManageTasksFrame:onAddEditRequestProductionLevel(task)
+    local production = g_currentMission.taskList:getProductions()[task.productionId]
+    local fillInfo = nil
+    if task.productionType == Task.PRODUCTION_TYPE.INPUT then
+        fillInfo = production.inputs[task.productionFillType]
+    else
+        fillInfo = production.outputs[task.productionFillType]
+    end
+
+    local allowedValues = {
+        g_i18n:getText("ui_task_level_empty"),
+        string.format("10%% (%s)", g_i18n:formatVolume(fillInfo.capacity * 0.10, 0)),
+        string.format("20%% (%s)", g_i18n:formatVolume(fillInfo.capacity * 0.20, 0)),
+        string.format("30%% (%s)", g_i18n:formatVolume(fillInfo.capacity * 0.30, 0)),
+        string.format("40%% (%s)", g_i18n:formatVolume(fillInfo.capacity * 0.40, 0)),
+        string.format("50%% (%s)", g_i18n:formatVolume(fillInfo.capacity * 0.50, 0)),
+        string.format("60%% (%s)", g_i18n:formatVolume(fillInfo.capacity * 0.60, 0)),
+        string.format("70%% (%s)", g_i18n:formatVolume(fillInfo.capacity * 0.70, 0)),
+        string.format("80%% (%s)", g_i18n:formatVolume(fillInfo.capacity * 0.80, 0)),
+        string.format("90%% (%s)", g_i18n:formatVolume(fillInfo.capacity * 0.90, 0))
+    }
+    local default = 1
+    if task.productionLevel ~= 0 then
+        default = math.floor((task.productionLevel / fillInfo.capacity) * 10) + 1
+    end
+
+    TaskListUtils.showOptionDialog({
+        text = g_i18n:getText("ui_task_request_production_level"),
+        title = "",
+        defaultText = "",
+        options = allowedValues,
+        defaultOption = default,
+        target = self,
+        args = {},
+        callback = function(_, index)
+            if index > 0 then
+                local capacity = (index - 1) * 0.10
+                task.productionLevel = capacity * fillInfo.capacity
+                self:onAddEditTaskJourneyComplete(task)
+            else 
+                -- Go back
+                self:onAddEditRequestConditionEvaluator(task)
+            end
+        end
+    })
 end
 
 function ManageTasksFrame:onAddEditRequestHusbandry(task)
@@ -352,10 +518,18 @@ function ManageTasksFrame:onAddEditRequestConditionEvaluator(task)
         callback = function(_, index)
             if index > 0 then
                 task.evaluator = index
-                self:onAddEditRequestConditionLevel(task)
+                if task.type == Task.TASK_TYPE.HusbandryConditions then
+                    self:onAddEditRequestConditionLevel(task)
+                elseif task.type == Task.TASK_TYPE.Production then
+                    self:onAddEditRequestProductionLevel(task)
+                end
             else
                 -- Go back
-                self:OnAddEditRequestConditionType(task)
+                if task.type == Task.TASK_TYPE.HusbandryConditions then
+                    self:OnAddEditRequestConditionType(task)
+                elseif task.type == Task.TASK_TYPE.Production then
+                    self:onAddEditRequestProductionFillType(task)
+                end
             end
         end
     })
@@ -401,7 +575,6 @@ function ManageTasksFrame:onAddEditRequestConditionLevel(task)
         end
     })
 end
-
 
 function ManageTasksFrame:onAddEditTaskRequestDetail(task)
     TextInputDialog.show(
