@@ -59,7 +59,7 @@ function Task.new(customMt)
     self.husbandryCondition = ""
     self.husbandryLevel = 0
     self.evaluator = Task.EVALUATOR.LessThan
-    self.productionId = 0
+    self.productionId = ""
     self.productionLevel = 0
     self.productionType = Task.PRODUCTION_TYPE.INPUT
     self.productionFillType = 0
@@ -96,18 +96,19 @@ function Task:getTaskDescription()
         end
     elseif self.type == Task.TASK_TYPE.Production then
         local production = g_currentMission.taskList:getProductions()[self.productionId]
+        local highOrLow = g_i18n:getText(Task.EVALUATOR_DESCRIPTION_STRINGS[self.evaluator])
         if production == nil then
             print("Task:getTaskDescription: production is nil: " .. tostring(self.productionId))
             description = 'N/A'
         else
             if self.productionType == Task.PRODUCTION_TYPE.INPUT then
                 local fillTypeName = production.inputs[self.productionFillType].title
-                description = string.format("%s %s %s", production.name, g_i18n:getText("ui_task_production_input"),
-                    fillTypeName)
+                description = string.format("%s: %s %s %s", production.name, g_i18n:getText("ui_task_production_input"),
+                    fillTypeName, highOrLow)
             else
                 local fillTypeName = production.outputs[self.productionFillType].title
-                description = string.format("%s %s %s", production.name, g_i18n:getText("ui_task_production_output"),
-                    fillTypeName)
+                description = string.format("%s: %s %s %s", production.name, g_i18n:getText("ui_task_production_output"),
+                    fillTypeName, highOrLow)
             end
         end
     end
@@ -128,7 +129,8 @@ function Task:getDueDescription(multiplier)
     elseif self.type == Task.TASK_TYPE.HusbandryConditions then
         return string.format("%s %s", Task.EVALUATOR_SYMBOLS[self.evaluator], g_i18n:formatVolume(self.husbandryLevel, 0))
     elseif self.type == Task.TASK_TYPE.Production then
-        return string.format("%s %s", Task.EVALUATOR_SYMBOLS[self.evaluator], g_i18n:formatVolume(self.productionLevel, 0))
+        return string.format("%s %s", Task.EVALUATOR_SYMBOLS[self.evaluator],
+        g_i18n:formatVolume(self.productionLevel, 0))
     end
 
     local monthString = TaskListUtils.formatPeriodFullMonthName(self.period)
@@ -186,7 +188,7 @@ function Task:writeStream(streamId, connection)
     streamWriteString(streamId, self.husbandryCondition)
     streamWriteInt32(streamId, self.husbandryLevel)
     streamWriteInt32(streamId, self.evaluator)
-    streamWriteInt32(streamId, self.productionId)
+    streamWriteString(streamId, self.productionId)
     streamWriteInt32(streamId, self.productionLevel)
     streamWriteInt32(streamId, self.productionType)
     streamWriteString(streamId, self.productionFillType)
@@ -208,7 +210,7 @@ function Task:readStream(streamId, connection)
     self.husbandryCondition = streamReadString(streamId)
     self.husbandryLevel = streamReadInt32(streamId)
     self.evaluator = streamReadInt32(streamId)
-    self.productionId = streamReadInt32(streamId)
+    self.productionId = streamReadString(streamId)
     self.productionLevel = streamReadInt32(streamId)
     self.productionType = streamReadInt32(streamId)
     self.productionFillType = streamReadString(streamId)
@@ -230,7 +232,7 @@ function Task:saveToXmlFile(xmlFile, key)
     setXMLString(xmlFile, key .. "#husbandryCondition", self.husbandryCondition)
     setXMLInt(xmlFile, key .. "#husbandryLevel", self.husbandryLevel)
     setXMLInt(xmlFile, key .. "#evaluator", self.evaluator)
-    setXMLInt(xmlFile, key .. "#productionId", self.productionId)
+    setXMLString(xmlFile, key .. "#productionId", self.productionId)
     setXMLInt(xmlFile, key .. "#productionLevel", self.productionLevel)
     setXMLInt(xmlFile, key .. "#productionType", self.productionType)
     setXMLInt(xmlFile, key .. "#productionFillType", self.productionFillType)
@@ -252,7 +254,7 @@ function Task:loadFromXMLFile(xmlFile, key)
     self.husbandryCondition = getXMLString(xmlFile, key .. "#husbandryCondition") or ""
     self.husbandryLevel = getXMLInt(xmlFile, key .. "#husbandryLevel") or 0
     self.evaluator = getXMLInt(xmlFile, key .. "#evaluator") or Task.EVALUATOR.LessThan
-    self.productionId = getXMLInt(xmlFile, key .. "#productionId") or 0
+    self.productionId = getXMLString(xmlFile, key .. "#productionId") or ""
     self.productionLevel = getXMLInt(xmlFile, key .. "#productionLevel") or 0
     self.productionType = getXMLInt(xmlFile, key .. "#productionType") or Task.PRODUCTION_TYPE.INPUT
     self.productionFillType = getXMLInt(xmlFile, key .. "#productionFillType") or 0

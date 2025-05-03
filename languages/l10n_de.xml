@@ -92,5 +92,12 @@
 		<text name="ui_task_condition_evaluator_less_than" text="Unter dem Ziel"/>
 		<text name="ui_task_condition_evaluator_greater_than" text="Über dem Ziel"/>
 		<text name="ui_task_request_condition_level" text="Wählen Sie die Zielebene aus, die für die Bedingung verfolgt werden soll."/>
+        <text name="ui_type_production" text="Produktion"/> 
+        <text name="ui_task_request_production" text="Wählen Sie die Produktion für diese Aufgabe."/> 
+        <text name="ui_task_request_production_type" text="Wählen Sie, ob Sie eine Eingabe oder eine Ausgabe der Produktion verfolgen möchten."/> 
+        <text name="ui_task_request_production_fill_type" text="Wählen Sie den Eingabetyp, den Sie verfolgen möchten.."/> 
+        <text name="ui_task_request_production_level" text="Wählen Sie das Zielniveau, das Sie für den Eingabetyyp verfolgen möchten."/> 
+        <text name="ui_task_production_input" text="Eingabe"/> 
+        <text name="ui_task_production_output" text="Ausgabe"/>
     </texts>
 </l10n>

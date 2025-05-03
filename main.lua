@@ -302,10 +302,14 @@ function TaskList:updateProductions()
     local points = g_currentMission.productionChainManager:getProductionPointsForFarmId(currentFarmId)
     -- local factories = g_currentMission.productionChainManager:getFactoriesForFarmId(currentFarmId)
 
+    -- for _, factory in pairs(factories) do
+    --     print('Factory: ' .. factory:getName())
+    -- end
+
     for _, point in pairs(points) do
         local pointInfo = {
             name = point:getName(),
-            id = point.id,
+            id = point.owningPlaceable.uniqueId,
             inputs = {},
             outputs = {},
         }
@@ -330,7 +334,7 @@ function TaskList:updateProductions()
             pointInfo.outputs[fillInfo.key] = fillInfo
         end
 
-        self.productions[point.id] = pointInfo
+        self.productions[pointInfo.id] = pointInfo
     end
 end
 
@@ -398,6 +402,12 @@ function TaskList:saveGameLoaded()
 
     g_messageCenter:subscribe(MessageType.UNLOADING_STATIONS_CHANGED, function(menu)
         self:updateHusbandries()
+        self:updateProductions()
+    end, self)
+    
+    g_messageCenter:subscribe(MessageType.LOADING_STATIONS_CHANGED, function(menu)
+        self:updateHusbandries()
+        self:updateProductions()
     end, self)
 end
 
