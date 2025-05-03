@@ -298,6 +298,11 @@ end
 
 function TaskList:updateProductions()
     self.productions = {}
+
+    if g_currentMission.isExitingGame then
+        return
+    end
+
     local currentFarmId = self:getCurrentFarmId()
     local points = g_currentMission.productionChainManager:getProductionPointsForFarmId(currentFarmId)
     -- local factories = g_currentMission.productionChainManager:getFactoriesForFarmId(currentFarmId)
@@ -346,6 +351,10 @@ function TaskList:getProductions()
 end
 
 function TaskList:taskCleanup()
+    if g_currentMission.isExitingGame then
+        return
+    end
+
     -- Remove auto tasks that are orphaned as their dependent placeable is missing
     local husbandries = self:getHusbandries()
     local productions = self:getProductions()
