@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <l10n>
-    <translationContributors/>
+	<translationContributors/>
 	<texts>
 		<text name="input_TL_SHOW_TASKS" text="Show tasks"/>
 		<text name="ui_intro_text_header" text="Welcome to Task List"/>
-        <text name="ui_TaskList" text="Task List"/>
-        <text name="ui_header_icon" text=""/>
-        <text name="ui_header_group" text="Group"/>
-        <text name="ui_header_detail" text="Task"/>
-        <text name="ui_header_overdue" text="Overdue"/>
-        <text name="ui_header_priority" text="Priority"/>
-        <text name="ui_header_due" text="Due"/>
-        <text name="ui_manage_groups" text="Manage Groups"/>
-        <text name="ui_manage_tasks" text="Manage Tasks"/>
-        <text name="ui_header_current_group" text="Tasks for group: %s"/>
+		<text name="ui_TaskList" text="Task List"/>
+		<text name="ui_header_icon" text=""/>
+		<text name="ui_header_group" text="Group"/>
+		<text name="ui_header_detail" text="Task"/>
+		<text name="ui_header_overdue" text="Overdue"/>
+		<text name="ui_header_priority" text="Priority"/>
+		<text name="ui_header_due" text="Due"/>
+		<text name="ui_manage_groups" text="Manage Groups"/>
+		<text name="ui_manage_tasks" text="Manage Tasks"/>
+		<text name="ui_header_current_group" text="Tasks for group: %s"/>
 		<text name="ui_btn_complete_task" text="Complete Task"/>
 		<text name="ui_btn_close" text="Close"/>
 		<text name="ui_btn_ok" text="OK"/>
@@ -43,8 +43,8 @@
 		<text name="ui_no_name_specified_error" text="No name for the group was specified"/>
 		<text name="ui_no_detail_specified_error" text="No task detail was specified"/>
 		<text name="ui_no_group_selected_error" text="No group selected to copy"/>
-		<text name="ui_no_task_selected" text="No task selected"/>		
-		<text name="ui_no_group_selected" text="No group selected"/>		
+		<text name="ui_no_task_selected" text="No task selected"/>
+		<text name="ui_no_group_selected" text="No group selected"/>
 		<text name="ui_confirm_deletion" text="Are you sure you want to delete?"/>
 		<text name="ui_group_not_found_error" text="Could not find the group. Check the group was not deleted"/>
 		<text name="ui_task_not_found_error" text="Could not find the task. Check the task was not deleted"/>
@@ -56,7 +56,7 @@
 		<text name="ui_header_effort" text="Effort"/>
 		<text name="ui_set_task_effort" text="Set the effort level for this task. This is used to differentiate small and large tasks when calculating workload over time."/>
 		<text name="ui_tasks_due_now" text="Tasks Due Now"/>
-		<text name="ui_intro_text_1" text="To get started, use Manage Groups to create a Group. A Standard group is a logical container for related tasks, for example 'Field 10', or 'General Farm Tasks'."/>		
+		<text name="ui_intro_text_1" text="To get started, use Manage Groups to create a Group. A Standard group is a logical container for related tasks, for example 'Field 10', or 'General Farm Tasks'."/>
 		<text name="ui_intro_text_2" text="Once you have made a group, use Manage Tasks to define things you need to do and when. Tasks will show in here as active tasks when due."/>
 		<text name="ui_intro_text_3" text="You can also create a Template group, for example 'Wheat Field'. You define tasks as you do with a normal group, and then create multiple Template Instance groups that use the template."/>
 		<text name="ui_intro_text_4" text="A Template itself does not generate active tasks, but will produce tasks for all associated Template Instance groups."/>

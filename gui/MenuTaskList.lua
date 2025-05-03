@@ -314,6 +314,7 @@ function MenuTaskList:populateCellForItemInSection(list, section, index, cell)
 
     if task.type == Task.TASK_TYPE.HusbandryFood then overdue = true end
     if task.type == Task.TASK_TYPE.HusbandryConditions then overdue = true end
+    if task.type == Task.TASK_TYPE.Production then overdue = true end
 
     if overdue then
         cell:getAttribute("overdue"):setText(g_i18n:getText("ui_yes"))

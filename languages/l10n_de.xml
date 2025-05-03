@@ -82,22 +82,22 @@
         <text name="ui_task_request_food_level" text="Wählen Sie das Niveau der Nahrung zu verfolgen. Wenn das Niveau unter dem Ziel fällt, wird eine Aufgabe erstellt, um mehr Nahrung zu liefern"/>
         <text name="ui_task_food_fill" text="füllen"/>
         <text name="ui_husbandry_food_total" text="Gesamt"/>
-		<text name="ui_task_food_fill_total" text="füllen Sie Lebensmittel"/>
-		<text name="ui_type_husbandry_food" text="Tierfutter"/>
+        <text name="ui_task_food_fill_total" text="füllen Sie Lebensmittel"/>
+        <text name="ui_type_husbandry_food" text="Tierfutter"/>
         <text name="ui_task_evaluator_greater_than" text="hoch"/>
-		<text name="ui_task_evaluator_less_than" text="niedrig"/>
+        <text name="ui_task_evaluator_less_than" text="niedrig"/>
         <text name="ui_type_husbandry_conditions" text="Haltungsbedingungen"/>
-		<text name="ui_task_request_condition_type" text="Wählen Sie den zu verfolgenden Zustand aus."/>
-		<text name="ui_task_request_condition_evaluator" text="Wählen Sie, wann die Aufgabe fällig werden soll. Sie können die Aufgabe erhöhen, wenn sie unter den Zielwert fällt oder diesen überschreitet."/>
-		<text name="ui_task_condition_evaluator_less_than" text="Unter dem Ziel"/>
-		<text name="ui_task_condition_evaluator_greater_than" text="Über dem Ziel"/>
-		<text name="ui_task_request_condition_level" text="Wählen Sie die Zielebene aus, die für die Bedingung verfolgt werden soll."/>
-        <text name="ui_type_production" text="Produktion"/> 
-        <text name="ui_task_request_production" text="Wählen Sie die Produktion für diese Aufgabe."/> 
-        <text name="ui_task_request_production_type" text="Wählen Sie, ob Sie eine Eingabe oder eine Ausgabe der Produktion verfolgen möchten."/> 
-        <text name="ui_task_request_production_fill_type" text="Wählen Sie den Eingabetyp, den Sie verfolgen möchten.."/> 
-        <text name="ui_task_request_production_level" text="Wählen Sie das Zielniveau, das Sie für den Eingabetyyp verfolgen möchten."/> 
-        <text name="ui_task_production_input" text="Eingabe"/> 
+        <text name="ui_task_request_condition_type" text="Wählen Sie den zu verfolgenden Zustand aus."/>
+        <text name="ui_task_request_condition_evaluator" text="Wählen Sie, wann die Aufgabe fällig werden soll. Sie können die Aufgabe erhöhen, wenn sie unter den Zielwert fällt oder diesen überschreitet."/>
+        <text name="ui_task_condition_evaluator_less_than" text="Unter dem Ziel"/>
+        <text name="ui_task_condition_evaluator_greater_than" text="Über dem Ziel"/>
+        <text name="ui_task_request_condition_level" text="Wählen Sie die Zielebene aus, die für die Bedingung verfolgt werden soll."/>
+        <text name="ui_type_production" text="Produktion"/>
+        <text name="ui_task_request_production" text="Wählen Sie die Produktion für diese Aufgabe."/>
+        <text name="ui_task_request_production_type" text="Wählen Sie, ob Sie eine Eingabe oder eine Ausgabe der Produktion verfolgen möchten."/>
+        <text name="ui_task_request_production_fill_type" text="Wählen Sie den Eingabetyp, den Sie verfolgen möchten.."/>
+        <text name="ui_task_request_production_level" text="Wählen Sie das Zielniveau, das Sie für den Eingabetyyp verfolgen möchten."/>
+        <text name="ui_task_production_input" text="Eingabe"/>
         <text name="ui_task_production_output" text="Ausgabe"/>
     </texts>
 </l10n>
