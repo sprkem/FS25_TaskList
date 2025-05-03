@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <l10n>
-    <translationContributors/>
+	<translationContributors/>
 	<texts>
 		<text name="input_TL_SHOW_TASKS" text="Show tasks"/>
 		<text name="ui_intro_text_header" text="Welcome to Task List"/>
-        <text name="ui_TaskList" text="Task List"/>
-        <text name="ui_header_icon" text=""/>
-        <text name="ui_header_group" text="Group"/>
-        <text name="ui_header_detail" text="Task"/>
-        <text name="ui_header_overdue" text="Overdue"/>
-        <text name="ui_header_priority" text="Priority"/>
-        <text name="ui_header_due" text="Due"/>
-        <text name="ui_manage_groups" text="Manage Groups"/>
-        <text name="ui_manage_tasks" text="Manage Tasks"/>
-        <text name="ui_header_current_group" text="Tasks for group: %s"/>
+		<text name="ui_TaskList" text="Task List"/>
+		<text name="ui_header_icon" text=""/>
+		<text name="ui_header_group" text="Group"/>
+		<text name="ui_header_detail" text="Task"/>
+		<text name="ui_header_overdue" text="Overdue"/>
+		<text name="ui_header_priority" text="Priority"/>
+		<text name="ui_header_due" text="Due"/>
+		<text name="ui_manage_groups" text="Manage Groups"/>
+		<text name="ui_manage_tasks" text="Manage Tasks"/>
+		<text name="ui_header_current_group" text="Tasks for group: %s"/>
 		<text name="ui_btn_complete_task" text="Complete Task"/>
 		<text name="ui_btn_close" text="Close"/>
 		<text name="ui_btn_ok" text="OK"/>
@@ -43,8 +43,8 @@
 		<text name="ui_no_name_specified_error" text="No name for the group was specified"/>
 		<text name="ui_no_detail_specified_error" text="No task detail was specified"/>
 		<text name="ui_no_group_selected_error" text="No group selected to copy"/>
-		<text name="ui_no_task_selected" text="No task selected"/>		
-		<text name="ui_no_group_selected" text="No group selected"/>		
+		<text name="ui_no_task_selected" text="No task selected"/>
+		<text name="ui_no_group_selected" text="No group selected"/>
 		<text name="ui_confirm_deletion" text="Are you sure you want to delete?"/>
 		<text name="ui_group_not_found_error" text="Could not find the group. Check the group was not deleted"/>
 		<text name="ui_task_not_found_error" text="Could not find the task. Check the task was not deleted"/>
@@ -56,7 +56,7 @@
 		<text name="ui_header_effort" text="Effort"/>
 		<text name="ui_set_task_effort" text="Set the effort level for this task. This is used to differentiate small and large tasks when calculating workload over time."/>
 		<text name="ui_tasks_due_now" text="Tasks Due Now"/>
-		<text name="ui_intro_text_1" text="To get started, use Manage Groups to create a Group. A Standard group is a logical container for related tasks, for example 'Field 10', or 'General Farm Tasks'."/>		
+		<text name="ui_intro_text_1" text="To get started, use Manage Groups to create a Group. A Standard group is a logical container for related tasks, for example 'Field 10', or 'General Farm Tasks'."/>
 		<text name="ui_intro_text_2" text="Once you have made a group, use Manage Tasks to define things you need to do and when. Tasks will show in here as active tasks when due."/>
 		<text name="ui_intro_text_3" text="You can also create a Template group, for example 'Wheat Field'. You define tasks as you do with a normal group, and then create multiple Template Instance groups that use the template."/>
 		<text name="ui_intro_text_4" text="A Template itself does not generate active tasks, but will produce tasks for all associated Template Instance groups."/>
@@ -76,11 +76,28 @@
 		<text name="ui_confirm_deletion_template" text="Are you sure you want to delete? Deleting a Template will delete all Template Instance groups associated with it."/>
 		<text name="ui_set_task_effort_multiplier" text="Multiply the effort values for this group. Use 1 to use the values of the template, or set it higher if for example the group represents a large field."/>
 		<text name="ui_task_request_type_description" text="Choose a task type. Standard is free text. Husbandry can track food inputs and raises tasks if food types get low."/>
-		<text name="ui_type_husbandry" text="Husbandry"/>
 		<text name="ui_task_request_husbandry" text="Select the husbandry for this task."/>
 		<text name="ui_task_request_food_type" text="Select the food type to track."/>
-		<text name="ui_task_food_level_empty" text="Empty"/>
+		<text name="ui_task_level_empty" text="Empty"/>
 		<text name="ui_task_request_food_level" text="Select the food level to track. When the level drops below the target, a task will be added to fill add more food."/>
-		<text name="ui_task_food_fill" text="Fill"/>
+		<text name="ui_task_food_fill" text="fill"/>
+		<text name="ui_husbandry_food_total" text="Total"/>
+		<text name="ui_task_food_fill_total" text="fill Food"/>
+		<text name="ui_type_husbandry_food" text="Husbandry Food"/>
+		<text name="ui_task_evaluator_greater_than" text="high"/>
+		<text name="ui_task_evaluator_less_than" text="low"/>
+		<text name="ui_type_husbandry_conditions" text="Husbandry Conditions"/>
+		<text name="ui_task_request_condition_type" text="Choose the condition to track."/>
+		<text name="ui_task_request_condition_evaluator" text="Choose when the task should become due. You can raise the task when it drops below the target value, or when it goes above it."/>
+		<text name="ui_task_condition_evaluator_less_than" text="Below target"/>
+		<text name="ui_task_condition_evaluator_greater_than" text="Above target"/>
+		<text name="ui_task_request_condition_level" text="Choose the target level to track for the condition."/>
+		<text name="ui_type_production" text="Production"/>
+		<text name="ui_task_request_production" text="Choose the production for this task."/>
+		<text name="ui_task_request_production_type" text="Choose whether to track a production input or output."/>
+		<text name="ui_task_request_production_fill_type" text="Choose the fill type to track.."/>
+		<text name="ui_task_request_production_level" text="Choose the target level to track for the fill type."/>
+		<text name="ui_task_production_input" text="Input"/>
+		<text name="ui_task_production_output" text="Output"/>
 	</texts>
 </l10n>

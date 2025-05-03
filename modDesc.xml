@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="97">
     <author>Ozz</author>
-    <version>1.0.0.0</version>
+    <version>1.1.0.0</version>
     <iconFilename>icon_taskList.dds</iconFilename>
     <title>
         <en>Task List</en>
@@ -23,6 +23,19 @@ On the main menu, just above Settings, you will find a new menu with a clipboard
 - View currently due tasks in the menu and mark them complete when you've done them.
 - Plan ahead by looking at cumulative effort throughout the year. Also look ahead at the coming 12 months to see what tasks are coming up.
 - View currently due tasks without checking the menu by pressing Shift + T
+- Automatically track levels for animal food, conditions and production levels.
+
+- Github:
+https://github.com/sprkem/FS25_TaskList
+
+Changelog:
+
+1.1.0.0:
+- Added tracking tasks for animal conditions e.g slurry, straw etc
+- You can now track the total food level for a husbandry
+- You can now track inputs and outputs for productions
+- Fixed a non-damaging error when saving
+- Fixed bug with sending client state in multiplayer
 
 ]]></en>		
     <de><![CDATA[Aufgabenliste
@@ -39,6 +52,19 @@ Auf dem Hauptmenü, direkt oberhalb von Einstellungen, finden Sie ein neues Men�
 - Siehen Sie die aktuell fälligen Aufgaben im Menü an und markieren Sie sie als abgeschlossen, wenn Sie sie abgeschlossen haben.
 - Planen Sie im Voraus, indem Sie den kumulativen Effort über das ganze Jahr betrachten. Siehen Sie auch im Voraus die nächsten 12 Monate an, um zu sehen, welche Aufgaben sich ankommen.
 - Siehen Sie die aktuell fälligen Aufgaben ohne, dass Sie das Menü überprüfen, indem Sie Shift + T drücken.
+- Automatisch die Nährstoffe und die Umweltbedingungen für Tiere verfolgen, sowie die Produktionsniveaus.
+
+- Github:
+https://github.com/sprkem/FS25_TaskList
+
+Änderungsliste:
+
+1.1.0.0:
+- Hinzugefügt wurden Aufgaben zum Überwachen der Tierbedingungen, z.B. Dünger, Futter etc.
+- Jetzt können Sie den gesamten Nährstoffwert für eine Tierhaltung verfolgen
+- Jetzt können Sie die Eingänge und Ausgänge für die Produktion verfolgen
+- Korrigiert wurde ein nicht schädlicher Fehler beim Speichern
+- Korrigiert wurde der Bug mit dem Client-State in Multiplayer
 
 ]]></de>	
     <fr><![CDATA[Liste Des Tâches
@@ -55,6 +81,19 @@ Sur le menu principal, juste au-dessus des Paramètres, vous trouverez un nouvea
 - Affichez les tâches actuellement en retard dans le menu et marquez-les complétées lorsque vous les avez terminées.
 - Plannez à l'avance en regardant l'effort cumulé tout au long de l'année. Regardez également à l'avance les 12 prochains mois pour voir ce qui se présente.
 - Affichez les tâches actuellement en retard sans vérifier le menu en appuyant sur Shift + T.
+- Suivre automatiquement les niveaux de nourriture et les conditions pour les animaux, ainsi que les niveaux de production.
+
+- Github:
+https://github.com/sprkem/FS25_TaskList
+
+Journal des modifications:
+
+1.1.0.0 :
+- Ajout de tâches de suivi pour les conditions d'animaux, par exemple la poudre, le foin, etc.
+- Vous pouvez maintenant suivre le niveau total de nourriture pour une élevage
+- Vous pouvez maintenant suivre les entrées et sorties pour les productions
+- Corrigé une erreur non déstructive lors de la sauvegarde
+- Corrigé le bug avec l'état client en multi-joueur
 
 ]]></fr>	
     </description>

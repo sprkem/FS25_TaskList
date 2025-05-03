@@ -312,7 +312,9 @@ function MenuTaskList:populateCellForItemInSection(list, section, index, cell)
         overdue = currentPeriod ~= task.createdMarker
     end
 
-    if task.type == Task.TASK_TYPE.Husbandry then overdue = false end
+    if task.type == Task.TASK_TYPE.HusbandryFood then overdue = true end
+    if task.type == Task.TASK_TYPE.HusbandryConditions then overdue = true end
+    if task.type == Task.TASK_TYPE.Production then overdue = true end
 
     if overdue then
         cell:getAttribute("overdue"):setText(g_i18n:getText("ui_yes"))
@@ -340,7 +342,7 @@ function MenuTaskList:completeTask()
                 g_currentMission.taskList:completeTask(taskInfo.groupId, task.id)
             end
         end, self,
-        string.format(g_i18n:getText("ui_confirm_complete_task"), task.detail))
+        string.format(g_i18n:getText("ui_confirm_complete_task"), task:getTaskDescription()))
 end
 
 -- Functions opening dialogs
