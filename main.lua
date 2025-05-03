@@ -346,13 +346,24 @@ function TaskList:getProductions()
 end
 
 function TaskList:taskCleanup()
+    -- Remove auto tasks that are orphaned as their dependent placeable is missing
     local husbandries = self:getHusbandries()
+    local productions = self:getProductions()
     for _, group in pairs(self.taskGroups) do
         if group.type == TaskGroup.GROUP_TYPE.Standard then
             local toRemove = {}
             for _, task in pairs(group.tasks) do
                 if task.type == Task.TASK_TYPE.HusbandryFood or task.type == Task.TASK_TYPE.HusbandryConditions then
                     if husbandries[task.husbandryId] == nil then
+                        table.insert(toRemove, task.id)
+                        local key = group.id .. "_" .. task.id
+                        if self.activeTasks[key] ~= nil then
+                            self.activeTasks[key] = nil
+                            g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
+                        end
+                    end
+                elseif task.type == Task.TASK_TYPE.Production then
+                    if productions[task.productionId] == nil then
                         table.insert(toRemove, task.id)
                         local key = group.id .. "_" .. task.id
                         if self.activeTasks[key] ~= nil then
@@ -374,8 +385,6 @@ function TaskList:hourChanged()
     g_currentMission.taskList:updateHusbandries()
     g_currentMission.taskList:updateProductions()
 
-    g_currentMission.taskList:taskCleanup()
-
     g_currentMission.taskList:addOrClearAutoTasks()
 
     local period = g_currentMission.environment.currentPeriod
@@ -394,20 +403,24 @@ function TaskList:saveGameLoaded()
     local self = g_currentMission.taskList
     g_messageCenter:subscribe(MessageType.HUSBANDRY_SYSTEM_ADDED_PLACEABLE, function(menu)
         self:updateHusbandries()
+        self:taskCleanup()
     end, self)
 
     g_messageCenter:subscribe(MessageType.HUSBANDRY_SYSTEM_REMOVED_PLACEABLE, function(menu)
         self:updateHusbandries()
+        self:taskCleanup()
     end, self)
 
     g_messageCenter:subscribe(MessageType.UNLOADING_STATIONS_CHANGED, function(menu)
         self:updateHusbandries()
         self:updateProductions()
+        self:taskCleanup()
     end, self)
-    
+
     g_messageCenter:subscribe(MessageType.LOADING_STATIONS_CHANGED, function(menu)
         self:updateHusbandries()
         self:updateProductions()
+        self:taskCleanup()
     end, self)
 end
 
@@ -443,6 +456,8 @@ function TaskList:addOrClearAutoTasks()
                     local didAdd = self:checkAndAddActiveTaskIfDue(group, task)
                     if didAdd then
                         g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
+                        g_currentMission:addIngameNotification(FSBaseMission.INGAME_NOTIFICATION_INFO,
+                        task:getTaskDescription())
                     else
                         local key = group.id .. "_" .. task.id
                         if self.activeTasks[key] ~= nil then
