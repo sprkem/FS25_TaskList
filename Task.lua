@@ -191,7 +191,7 @@ function Task:writeStream(streamId, connection)
     streamWriteString(streamId, self.productionId)
     streamWriteInt32(streamId, self.productionLevel)
     streamWriteInt32(streamId, self.productionType)
-    streamWriteString(streamId, self.productionFillType)
+    streamWriteInt32(streamId, self.productionFillType)
 end
 
 function Task:readStream(streamId, connection)
@@ -213,7 +213,7 @@ function Task:readStream(streamId, connection)
     self.productionId = streamReadString(streamId)
     self.productionLevel = streamReadInt32(streamId)
     self.productionType = streamReadInt32(streamId)
-    self.productionFillType = streamReadString(streamId)
+    self.productionFillType = streamReadInt32(streamId)
 end
 
 function Task:saveToXmlFile(xmlFile, key)
