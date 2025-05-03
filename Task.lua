@@ -56,7 +56,7 @@ function Task.new(customMt)
     self.type = Task.TASK_TYPE.Standard
     self.husbandryId = ""
     self.husbandryFood = ""
-    self.husbandryCondition = ""
+    self.husbandryCondition = 0
     self.husbandryLevel = 0
     self.evaluator = Task.EVALUATOR.LessThan
     self.productionId = ""
@@ -185,7 +185,7 @@ function Task:writeStream(streamId, connection)
     streamWriteInt32(streamId, self.type)
     streamWriteString(streamId, self.husbandryId)
     streamWriteString(streamId, self.husbandryFood)
-    streamWriteString(streamId, self.husbandryCondition)
+    streamWriteInt32(streamId, self.husbandryCondition)
     streamWriteInt32(streamId, self.husbandryLevel)
     streamWriteInt32(streamId, self.evaluator)
     streamWriteString(streamId, self.productionId)
@@ -207,7 +207,7 @@ function Task:readStream(streamId, connection)
     self.type = streamReadInt32(streamId)
     self.husbandryId = streamReadString(streamId)
     self.husbandryFood = streamReadString(streamId)
-    self.husbandryCondition = streamReadString(streamId)
+    self.husbandryCondition = streamReadInt32(streamId)
     self.husbandryLevel = streamReadInt32(streamId)
     self.evaluator = streamReadInt32(streamId)
     self.productionId = streamReadString(streamId)
@@ -229,7 +229,7 @@ function Task:saveToXmlFile(xmlFile, key)
     setXMLInt(xmlFile, key .. "#type", self.type)
     setXMLString(xmlFile, key .. "#husbandryId", self.husbandryId)
     setXMLString(xmlFile, key .. "#husbandryFood", self.husbandryFood)
-    setXMLString(xmlFile, key .. "#husbandryCondition", self.husbandryCondition)
+    setXMLInt(xmlFile, key .. "#husbandryCondition", self.husbandryCondition)
     setXMLInt(xmlFile, key .. "#husbandryLevel", self.husbandryLevel)
     setXMLInt(xmlFile, key .. "#evaluator", self.evaluator)
     setXMLString(xmlFile, key .. "#productionId", self.productionId)
@@ -251,7 +251,7 @@ function Task:loadFromXMLFile(xmlFile, key)
     self.type = getXMLInt(xmlFile, key .. "#type") or Task.TASK_TYPE.Standard
     self.husbandryId = getXMLString(xmlFile, key .. "#husbandryId") or ""
     self.husbandryFood = getXMLString(xmlFile, key .. "#husbandryFood") or ""
-    self.husbandryCondition = getXMLString(xmlFile, key .. "#husbandryCondition") or ""
+    self.husbandryCondition = getXMLInt(xmlFile, key .. "#husbandryCondition") or 0
     self.husbandryLevel = getXMLInt(xmlFile, key .. "#husbandryLevel") or 0
     self.evaluator = getXMLInt(xmlFile, key .. "#evaluator") or Task.EVALUATOR.LessThan
     self.productionId = getXMLString(xmlFile, key .. "#productionId") or ""
