@@ -462,11 +462,14 @@ function TaskList:addOrClearAutoTasks()
         if group.type == TaskGroup.GROUP_TYPE.Standard then
             for _, task in pairs(group.tasks) do
                 if task.type == Task.TASK_TYPE.HusbandryFood or task.type == Task.TASK_TYPE.HusbandryConditions or task.type == Task.TASK_TYPE.Production then
-                    local didAdd = self:checkAndAddActiveTaskIfDue(group, task)
-                    if didAdd then
+                    local wasActive = self.activeTasks[group.id .. "_" .. task.id] ~= nil
+                    local isActive = self:checkAndAddActiveTaskIfDue(group, task)
+                    if isActive then
                         g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
-                        g_currentMission:addIngameNotification(FSBaseMission.INGAME_NOTIFICATION_INFO,
-                        task:getTaskDescription())
+                        if not wasActive and not g_sleepManager:getIsSleeping() then
+                            g_currentMission:addIngameNotification(FSBaseMission.INGAME_NOTIFICATION_INFO,
+                                task:getTaskDescription())
+                        end
                     else
                         local key = group.id .. "_" .. task.id
                         if self.activeTasks[key] ~= nil then
