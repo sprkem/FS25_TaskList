@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
-<modDesc descVersion="97">
+<modDesc descVersion="98">
     <author>Ozz</author>
-    <version>1.1.0.1</version>
+    <version>1.1.0.2</version>
     <iconFilename>icon_taskList.dds</iconFilename>
     <title>
         <en>Task List</en>
@@ -29,6 +29,10 @@ On the main menu, just above Settings, you will find a new menu with a clipboard
 https://github.com/sprkem/FS25_TaskList
 
 Changelog:
+
+1.1.0.2:
+- Improved layout and translations to improve readability, in particular for German language and lower resolutions.
+- Fixed a multiplayer bug when changing farms
 
 1.1.0.0:
 - Added tracking tasks for animal conditions e.g slurry, straw etc
@@ -59,6 +63,10 @@ https://github.com/sprkem/FS25_TaskList
 
 Änderungsliste:
 
+1.1.0.2:
+- Verbessertes Layout und Übersetzungen zur Verbesserung der Lesbarkeit, insbesondere für die deutsche Sprache und niedrigere Auflösungen.
+- Ein Multiplayer-Fehler beim Farmwechsel wurde behoben
+
 1.1.0.0:
 - Hinzugefügt wurden Aufgaben zum Überwachen der Tierbedingungen, z.B. Dünger, Futter etc.
 - Jetzt können Sie den gesamten Nährstoffwert für eine Tierhaltung verfolgen
@@ -87,6 +95,10 @@ Sur le menu principal, juste au-dessus des Paramètres, vous trouverez un nouvea
 https://github.com/sprkem/FS25_TaskList
 
 Journal des modifications:
+
+1.1.0.2:
+- Mise en page et traductions améliorées pour améliorer la lisibilité, en particulier pour la langue allemande et les résolutions inférieures.
+- Correction d'un bug multijoueur lors du changement de ferme.
 
 1.1.0.0 :
 - Ajout de tâches de suivi pour les conditions d'animaux, par exemple la poudre, le foin, etc.
