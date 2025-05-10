@@ -8,7 +8,7 @@
         <text name="ui_header_icon" text=""/>
         <text name="ui_header_group" text="Gruppe"/>
         <text name="ui_header_detail" text="Aufgabe"/>
-        <text name="ui_header_overdue" text="Aufgabe im Rückstand"/>
+        <text name="ui_header_overdue" text="Überfällig"/>
         <text name="ui_header_priority" text="Priorität"/>
         <text name="ui_header_due" text="Frist"/>
         <text name="ui_manage_groups" text="Gruppen verwalten"/>
@@ -21,7 +21,7 @@
         <text name="ui_btn_copy" text="Kopieren"/>
         <text name="ui_btn_edit" text="Bearbeiten"/>
         <text name="ui_btn_delete" text="Löschen"/>
-        <text name="ui_btn_add_group" text="Gruppe hinzufügen"/>
+        <text name="ui_btn_add_group" text="Erstellen"/>
         <text name="ui_btn_add_task" text="Aufgabe hinzufügen"/>
         <text name="ui_btn_select_group" text="Gruppe ändern"/>
         <text name="ui_set_group_name" text="Gruppenname festlegen"/>

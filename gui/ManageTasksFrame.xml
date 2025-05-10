@@ -2,7 +2,7 @@
 <GUI onOpen="onOpen" onClose="onClose" onCreate="onCreate">
     <GuiElement profile="newLayer" />
     <Bitmap profile="dialogFullscreenBg" />
-    <GuiElement profile="dialogBg" size="960px 800px">
+    <GuiElement profile="dialogBg" size="980px 800px">
         <ThreePartBitmap profile="fs25_dialogBgMiddle" />
         <ThreePartBitmap profile="fs25_dialogBgTop" />
         <ThreePartBitmap profile="fs25_dialogBgBottom" />
@@ -17,17 +17,17 @@
             <GuiElement id="tasksContainer">
                 <GuiElement profile="fs25_statisticsHeaderBox">
                     <Button profile="taskListHeader" position="60px -145px" text="$l10n_ui_header_detail" handleFocus="false" />
-                    <Button profile="taskListHeader" position="490px -145px" text="$l10n_ui_header_due" handleFocus="false" />
-                    <Button profile="taskListHeader" position="680px -145px" text="$l10n_ui_header_effort" handleFocus="false" />
-                    <Button profile="taskListHeader" position="770px -145px" text="$l10n_ui_header_priority" handleFocus="false" />
+                    <Button profile="taskListHeader" position="480px -145px" text="$l10n_ui_header_due" handleFocus="false" />
+                    <Button profile="taskListHeaderRight" position="650px -145px" size="120px 32px" text="$l10n_ui_header_effort" handleFocus="false" />
+                    <Button profile="taskListHeaderRight" position="770px -145px" size="100px 32px" text="$l10n_ui_header_priority" handleFocus="false" />
                 </GuiElement>
 
                 <SmoothList id="tasksTable" profile="taskListTable" position="40px -180px" size="850px 520px">
                     <ListItem profile="taskListListItem">
-                        <Text profile="taskListRowCellLeft" position="20px 0px" size="430px 32px" name="detail"/>
-                        <Text profile="taskListRowCellLeft" position="450px 0px" size="150px 32px" name="due"/>
-                        <Text profile="taskListRowCellRight" position="600px 0px" size="100px 32px" name="effort"/>
-                        <Text profile="taskListRowCellRight" position="700px 0px" size="100px 32px" name="priority"/>
+                        <Text profile="taskListRowCellLeft" position="20px 0px" size="420px 32px" name="detail"/>
+                        <Text profile="taskListRowCellLeft" position="440px 0px" size="190px 32px" name="due"/>
+                        <Text profile="taskListRowCellRight" position="610px 0px" size="120px 32px" name="effort"/>
+                        <Text profile="taskListRowCellRight" position="730px 0px" size="100px 32px" name="priority"/>
                     </ListItem>
                 </SmoothList>
 

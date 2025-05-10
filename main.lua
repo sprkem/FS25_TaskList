@@ -436,7 +436,7 @@ end
 function TaskList:playerFarmChanged()
     g_messageCenter:publish(MessageType.TASK_GROUPS_UPDATED)
     g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
-    self:updateHusbandries()
+    g_currentMission.taskList:updateHusbandries()
 end
 
 function TaskList:onPeriodChanged()
