@@ -643,9 +643,10 @@ end
 function TaskList:getActiveTasksForCurrentFarm()
     local result = {}
     local currentFarmId = self:getCurrentFarmId()
-    for _, task in pairs(self.activeTasks) do
-        if task.farmId == currentFarmId or not g_currentMission.missionDynamicInfo.isMultiplayer then
-            local taskCopy = TaskListUtils.deepcopy(task)
+    for _, at in pairs(self.activeTasks) do
+        local group = self.taskGroups[at.groupId]
+        if group.farmId == currentFarmId or not g_currentMission.missionDynamicInfo.isMultiplayer then
+            local taskCopy = TaskListUtils.deepcopy(at)
             table.insert(result, taskCopy)
         end
     end

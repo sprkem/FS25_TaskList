@@ -33,6 +33,7 @@ Changelog:
 1.1.0.2:
 - Improved layout and translations to improve readability, in particular for German language and lower resolutions.
 - Fixed a multiplayer bug when changing farms
+- Fixed a multiplayer bug where active tasks were not being shown
 
 1.1.0.0:
 - Added tracking tasks for animal conditions e.g slurry, straw etc
@@ -66,6 +67,7 @@ https://github.com/sprkem/FS25_TaskList
 1.1.0.2:
 - Verbessertes Layout und Übersetzungen zur Verbesserung der Lesbarkeit, insbesondere für die deutsche Sprache und niedrigere Auflösungen.
 - Ein Multiplayer-Fehler beim Farmwechsel wurde behoben
+- Ein Multiplayer-Fehler wurde behoben, bei dem aktive Aufgaben nicht angezeigt wurden
 
 1.1.0.0:
 - Hinzugefügt wurden Aufgaben zum Überwachen der Tierbedingungen, z.B. Dünger, Futter etc.
@@ -99,6 +101,7 @@ Journal des modifications:
 1.1.0.2:
 - Mise en page et traductions améliorées pour améliorer la lisibilité, en particulier pour la langue allemande et les résolutions inférieures.
 - Correction d'un bug multijoueur lors du changement de ferme.
+- Correction d'un bug multijoueur où les tâches actives n'étaient pas affichées
 
 1.1.0.0 :
 - Ajout de tâches de suivi pour les conditions d'animaux, par exemple la poudre, le foin, etc.
