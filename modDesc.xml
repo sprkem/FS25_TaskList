@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="98">
     <author>Ozz</author>
-    <version>1.1.0.2</version>
+    <version>1.1.0.3</version>
     <iconFilename>icon_taskList.dds</iconFilename>
     <title>
         <en>Task List</en>
@@ -30,8 +30,9 @@ https://github.com/sprkem/FS25_TaskList
 
 Changelog:
 
-1.1.0.2:
-- Improved layout and translations to improve readability, in particular for German language and lower resolutions.
+1.1.0.3:
+- Updated dialog layouts to improve readability for lower resolutions.
+- Improved German translations, with credit to MeRida2104.
 - Fixed a multiplayer bug when changing farms
 - Fixed a multiplayer bug where active tasks were not being shown
 
@@ -64,10 +65,11 @@ https://github.com/sprkem/FS25_TaskList
 
 Änderungsliste:
 
-1.1.0.2:
-- Verbessertes Layout und Übersetzungen zur Verbesserung der Lesbarkeit, insbesondere für die deutsche Sprache und niedrigere Auflösungen.
-- Ein Multiplayer-Fehler beim Farmwechsel wurde behoben
-- Ein Multiplayer-Fehler wurde behoben, bei dem aktive Aufgaben nicht angezeigt wurden
+1.1.0.3:
+- Dialoglayouts wurden aktualisiert, um die Lesbarkeit bei niedrigeren Auflösungen zu verbessern.
+- Verbesserte deutsche Übersetzungen, mit Dank an MeRida2104.
+- Ein Multiplayer-Fehler beim Farmwechsel wurde behoben.
+- Ein Multiplayer-Fehler wurde behoben, bei dem aktive Aufgaben nicht angezeigt wurden.
 
 1.1.0.0:
 - Hinzugefügt wurden Aufgaben zum Überwachen der Tierbedingungen, z.B. Dünger, Futter etc.
@@ -98,10 +100,11 @@ https://github.com/sprkem/FS25_TaskList
 
 Journal des modifications:
 
-1.1.0.2:
-- Mise en page et traductions améliorées pour améliorer la lisibilité, en particulier pour la langue allemande et les résolutions inférieures.
+1.1.0.3:
+- Mise à jour de la disposition des dialogues pour une meilleure lisibilité en basse résolution.
+- Traductions allemandes améliorées, grâce à MeRida2104.
 - Correction d'un bug multijoueur lors du changement de ferme.
-- Correction d'un bug multijoueur où les tâches actives n'étaient pas affichées
+- Correction d'un bug multijoueur empêchant l'affichage des tâches actives.
 
 1.1.0.0 :
 - Ajout de tâches de suivi pour les conditions d'animaux, par exemple la poudre, le foin, etc.

@@ -21,8 +21,8 @@
 		<text name="ui_btn_copy" text="Kopieren"/>
 		<text name="ui_btn_edit" text="Bearbeiten"/>
 		<text name="ui_btn_delete" text="Löschen"/>
-		<text name="ui_btn_add_group" text="Gruppe hinzufügen"/>
-		<text name="ui_btn_add_task" text="Aufgabe hinzufügen"/>
+		<text name="ui_btn_add_group" text="Neu"/>
+		<text name="ui_btn_add_task" text="Neu"/>
 		<text name="ui_btn_select_group" text="Gruppe ändern"/>
 		<text name="ui_set_group_name" text="Wähle einen Gruppennamen"/>
 		<text name="ui_set_task_detail" text="Beschreibe die Aufgabe"/>
