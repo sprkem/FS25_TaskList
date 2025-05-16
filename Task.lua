@@ -54,25 +54,33 @@ function Task.new(customMt)
     self.nextN = 0
     self.n = 0
     self.type = Task.TASK_TYPE.Standard
-    self.husbandryId = ""
     self.husbandryFood = ""
     self.husbandryCondition = 0
     self.husbandryLevel = 0
     self.evaluator = Task.EVALUATOR.LessThan
-    self.productionId = ""
     self.productionLevel = 0
     self.productionType = Task.PRODUCTION_TYPE.INPUT
     self.productionFillType = 0
+    self.objectId = -1
+    self.uniqueId = nil -- temp, used for lazily locating the objectId
 
     return self
+end
+
+function Task:getObjectId()
+    -- Lazy load the objectId if it is not set after loading from XML
+    if self.objectId == -1 then
+        self.objectId = g_currentMission.taskList:getObjectIdFromUniqueId(self.uniqueId)
+    end
+    return self.objectId
 end
 
 function Task:getTaskDescription()
     local description = self.detail
     if self.type == Task.TASK_TYPE.HusbandryFood then
-        local husbandry = g_currentMission.taskList:getHusbandries()[self.husbandryId]
+        local husbandry = g_currentMission.taskList:getHusbandries()[self:getObjectId()]
         if husbandry == nil then
-            print("Task:getTaskDescription: husbandry is nil: " .. tostring(self.husbandryId))
+            print("Task:getTaskDescription: husbandry is nil: " .. tostring(self:getObjectId()))
             description = 'N/A'
         else
             if self.husbandryFood == Task.TOTAL_FOOD_KEY then
@@ -84,9 +92,9 @@ function Task:getTaskDescription()
             end
         end
     elseif self.type == Task.TASK_TYPE.HusbandryConditions then
-        local husbandry = g_currentMission.taskList:getHusbandries()[self.husbandryId]
+        local husbandry = g_currentMission.taskList:getHusbandries()[self:getObjectId()]
         if husbandry == nil then
-            print("Task:getTaskDescription: husbandry is nil: " .. tostring(self.husbandryId))
+            print("Task:getTaskDescription: husbandry is nil: " .. tostring(self:getObjectId()))
             description = 'N/A'
         else
             local middleString = Task.EVALUATOR_DESCRIPTION_STRINGS[self.evaluator]
@@ -95,10 +103,10 @@ function Task:getTaskDescription()
                 conditionInfo.title)
         end
     elseif self.type == Task.TASK_TYPE.Production then
-        local production = g_currentMission.taskList:getProductions()[self.productionId]
+        local production = g_currentMission.taskList:getProductions()[self:getObjectId()]
         local highOrLow = g_i18n:getText(Task.EVALUATOR_DESCRIPTION_STRINGS[self.evaluator])
         if production == nil then
-            print("Task:getTaskDescription: production is nil: " .. tostring(self.productionId))
+            print("Task:getTaskDescription: production is nil: " .. tostring(self:getObjectId()))
             description = 'N/A'
         else
             if self.productionType == Task.PRODUCTION_TYPE.INPUT then
@@ -130,7 +138,7 @@ function Task:getDueDescription(multiplier)
         return string.format("%s %s", Task.EVALUATOR_SYMBOLS[self.evaluator], g_i18n:formatVolume(self.husbandryLevel, 0))
     elseif self.type == Task.TASK_TYPE.Production then
         return string.format("%s %s", Task.EVALUATOR_SYMBOLS[self.evaluator],
-        g_i18n:formatVolume(self.productionLevel, 0))
+            g_i18n:formatVolume(self.productionLevel, 0))
     end
 
     local monthString = TaskListUtils.formatPeriodFullMonthName(self.period)
@@ -157,15 +165,15 @@ function Task:copyValuesFromTask(sourceTask, includeId)
     self.nextN = sourceTask.nextN
     self.n = sourceTask.n
     self.type = sourceTask.type
-    self.husbandryId = sourceTask.husbandryId
     self.husbandryFood = sourceTask.husbandryFood
     self.husbandryCondition = sourceTask.husbandryCondition
     self.husbandryLevel = sourceTask.husbandryLevel
     self.evaluator = sourceTask.evaluator
-    self.productionId = sourceTask.productionId
     self.productionLevel = sourceTask.productionLevel
     self.productionType = sourceTask.productionType
     self.productionFillType = sourceTask.productionFillType
+    self.objectId = sourceTask.objectId
+    self.uniqueId = sourceTask.uniqueId
 
     if includeId then
         self.id = sourceTask.id
@@ -183,15 +191,19 @@ function Task:writeStream(streamId, connection)
     streamWriteInt32(streamId, self.n)
     streamWriteInt32(streamId, self.effort)
     streamWriteInt32(streamId, self.type)
-    streamWriteString(streamId, self.husbandryId)
     streamWriteString(streamId, self.husbandryFood)
     streamWriteInt32(streamId, self.husbandryCondition)
     streamWriteInt32(streamId, self.husbandryLevel)
     streamWriteInt32(streamId, self.evaluator)
-    streamWriteString(streamId, self.productionId)
     streamWriteInt32(streamId, self.productionLevel)
     streamWriteInt32(streamId, self.productionType)
     streamWriteInt32(streamId, self.productionFillType)
+
+    if self:linksToPlaceable() then
+        streamWriteInt32(streamId, self:getObjectId())
+    else
+        streamWriteInt32(streamId, -1)
+    end
 end
 
 function Task:readStream(streamId, connection)
@@ -205,15 +217,14 @@ function Task:readStream(streamId, connection)
     self.n = streamReadInt32(streamId)
     self.effort = streamReadInt32(streamId)
     self.type = streamReadInt32(streamId)
-    self.husbandryId = streamReadString(streamId)
     self.husbandryFood = streamReadString(streamId)
     self.husbandryCondition = streamReadInt32(streamId)
     self.husbandryLevel = streamReadInt32(streamId)
     self.evaluator = streamReadInt32(streamId)
-    self.productionId = streamReadString(streamId)
     self.productionLevel = streamReadInt32(streamId)
     self.productionType = streamReadInt32(streamId)
     self.productionFillType = streamReadInt32(streamId)
+    self.objectId = streamReadInt32(streamId)
 end
 
 function Task:saveToXmlFile(xmlFile, key)
@@ -227,15 +238,18 @@ function Task:saveToXmlFile(xmlFile, key)
     setXMLInt(xmlFile, key .. "#n", self.n)
     setXMLInt(xmlFile, key .. "#effort", self.effort)
     setXMLInt(xmlFile, key .. "#type", self.type)
-    setXMLString(xmlFile, key .. "#husbandryId", self.husbandryId)
     setXMLString(xmlFile, key .. "#husbandryFood", self.husbandryFood)
     setXMLInt(xmlFile, key .. "#husbandryCondition", self.husbandryCondition)
     setXMLInt(xmlFile, key .. "#husbandryLevel", self.husbandryLevel)
     setXMLInt(xmlFile, key .. "#evaluator", self.evaluator)
-    setXMLString(xmlFile, key .. "#productionId", self.productionId)
     setXMLInt(xmlFile, key .. "#productionLevel", self.productionLevel)
     setXMLInt(xmlFile, key .. "#productionType", self.productionType)
     setXMLInt(xmlFile, key .. "#productionFillType", self.productionFillType)
+
+    if self:linksToPlaceable() then
+        local uniqueId = NetworkUtil.getObject(self:getObjectId()).uniqueId
+        setXMLString(xmlFile, key .. "#uniqueId", uniqueId)
+    end
 end
 
 function Task:loadFromXMLFile(xmlFile, key)
@@ -249,13 +263,29 @@ function Task:loadFromXMLFile(xmlFile, key)
     self.n = getXMLInt(xmlFile, key .. "#n")
     self.effort = getXMLInt(xmlFile, key .. "#effort") or 1
     self.type = getXMLInt(xmlFile, key .. "#type") or Task.TASK_TYPE.Standard
-    self.husbandryId = getXMLString(xmlFile, key .. "#husbandryId") or ""
     self.husbandryFood = getXMLString(xmlFile, key .. "#husbandryFood") or ""
     self.husbandryCondition = getXMLInt(xmlFile, key .. "#husbandryCondition") or 0
     self.husbandryLevel = getXMLInt(xmlFile, key .. "#husbandryLevel") or 0
     self.evaluator = getXMLInt(xmlFile, key .. "#evaluator") or Task.EVALUATOR.LessThan
-    self.productionId = getXMLString(xmlFile, key .. "#productionId") or ""
     self.productionLevel = getXMLInt(xmlFile, key .. "#productionLevel") or 0
     self.productionType = getXMLInt(xmlFile, key .. "#productionType") or Task.PRODUCTION_TYPE.INPUT
     self.productionFillType = getXMLInt(xmlFile, key .. "#productionFillType") or 0
+
+    if self:linksToPlaceable() then
+        if self.type == Task.TASK_TYPE.HusbandryFood or self.type == Task.TASK_TYPE.HusbandryConditions then
+            self.uniqueId = getXMLString(xmlFile, key .. "#husbandryId") or getXMLString(xmlFile, key .. "#uniqueId")
+        elseif self.type == Task.TASK_TYPE.Production then
+            self.uniqueId = getXMLString(xmlFile, key .. "#productionId") or getXMLString(xmlFile, key .. "#uniqueId")
+        end
+    end
+end
+
+function Task:linksToPlaceable()
+    if self.type == Task.TASK_TYPE.HusbandryFood
+        or self.type == Task.TASK_TYPE.HusbandryConditions
+        or self.type == Task.TASK_TYPE.Production then
+        return true
+    end
+
+    return false
 end

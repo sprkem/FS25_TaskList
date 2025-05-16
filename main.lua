@@ -55,6 +55,7 @@ function TaskList:loadMap()
     self.activeTasks = {}
     self.templateTasksAdded = {}
     self.fillTypeCache = nil
+    self.objectIdCache = nil
     self.husbandries = nil
     self.productions = nil
     self.currentPeriod = g_currentMission.environment.currentPeriod
@@ -207,6 +208,25 @@ function TaskList.addIngameMenuPage(frame, pageName, uvs, predicateFunc, insertA
     g_inGameMenu:rebuildTabList()
 end
 
+function TaskList:populateObjectIdCache()
+    self.objectIdCache = {}
+    for _, placeable in pairs(g_currentMission.placeableSystem.placeables) do
+        local objectId = NetworkUtil.getObjectId(placeable)
+        self.objectIdCache[placeable.uniqueId] = objectId
+    end
+    for _, placeable in pairs(g_currentMission.husbandrySystem.placeables) do
+        local objectId = NetworkUtil.getObjectId(placeable)
+        self.objectIdCache[placeable.uniqueId] = objectId
+    end
+end
+
+function TaskList:getObjectIdFromUniqueId(uniqueId)
+    if self.objectIdCache == nil then
+        self:populateObjectIdCache()
+    end
+    return self.objectIdCache[uniqueId]
+end
+
 function TaskList:populateFillTypeCache()
     self.fillTypeCache = {}
     for k, v in pairs(g_fillTypeManager.indexToTitle) do
@@ -241,9 +261,10 @@ function TaskList:updateHusbandries()
         end
         local foodSpec = husbandry.spec_husbandryFood
         local animalType = foodSpec.animalTypeIndex
-        self.husbandries[husbandry.uniqueId] = {
+        local objectId = NetworkUtil.getObjectId(husbandry)
+        self.husbandries[objectId] = {
             name = husbandry:getName(),
-            id = husbandry.uniqueId,
+            id = objectId,
             foodCapacity = foodSpec.capacity,
             totalFood = 0,
             keys = {},
@@ -263,9 +284,9 @@ function TaskList:updateHusbandries()
                 foodInfo.amount = foodInfo.amount + foodSpec.fillLevels[fillLevel]
             end
             totalFood = totalFood + foodInfo.amount
-            self.husbandries[husbandry.uniqueId].keys[foodInfo.key] = foodInfo
+            self.husbandries[objectId].keys[foodInfo.key] = foodInfo
         end
-        self.husbandries[husbandry.uniqueId].totalFood = totalFood
+        self.husbandries[objectId].totalFood = totalFood
 
         -- Get condition levels for the husbandry
         local conditionInfos = husbandry:getConditionInfos()
@@ -282,7 +303,7 @@ function TaskList:updateHusbandries()
                     capacity = husbandry:getHusbandryCapacity(conditionFillType)
                 }
                 if conditionInfo.capacity > 0 then
-                    self.husbandries[husbandry.uniqueId].conditionInfos[conditionInfo.key] = conditionInfo
+                    self.husbandries[objectId].conditionInfos[conditionInfo.key] = conditionInfo
                 end
             end
         end
@@ -314,7 +335,7 @@ function TaskList:updateProductions()
     for _, point in pairs(points) do
         local pointInfo = {
             name = point:getName(),
-            id = point.owningPlaceable.uniqueId,
+            id = NetworkUtil.getObjectId(point.owningPlaceable),
             inputs = {},
             outputs = {},
         }
@@ -363,7 +384,7 @@ function TaskList:taskCleanup()
             local toRemove = {}
             for _, task in pairs(group.tasks) do
                 if task.type == Task.TASK_TYPE.HusbandryFood or task.type == Task.TASK_TYPE.HusbandryConditions then
-                    if husbandries[task.husbandryId] == nil then
+                    if husbandries[task:getObjectId()] == nil then
                         table.insert(toRemove, task.id)
                         local key = group.id .. "_" .. task.id
                         if self.activeTasks[key] ~= nil then
@@ -372,7 +393,7 @@ function TaskList:taskCleanup()
                         end
                     end
                 elseif task.type == Task.TASK_TYPE.Production then
-                    if productions[task.productionId] == nil then
+                    if productions[task:getObjectId()] == nil then
                         table.insert(toRemove, task.id)
                         local key = group.id .. "_" .. task.id
                         if self.activeTasks[key] ~= nil then
@@ -408,7 +429,7 @@ function TaskList:hourChanged()
     end
 end
 
-function TaskList:saveGameLoaded()
+function TaskList:currentMissionStarted()
     local self = g_currentMission.taskList
     g_messageCenter:subscribe(MessageType.HUSBANDRY_SYSTEM_ADDED_PLACEABLE, function(menu)
         self:updateHusbandries()
@@ -431,12 +452,15 @@ function TaskList:saveGameLoaded()
         self:updateProductions()
         self:taskCleanup()
     end, self)
+    g_currentMission.taskList:addOrClearAutoTasks()
 end
 
 function TaskList:playerFarmChanged()
+    g_currentMission.taskList:updateHusbandries()
+    g_currentMission.taskList:updateProductions()
+    g_currentMission.taskList:addOrClearAutoTasks()
     g_messageCenter:publish(MessageType.TASK_GROUPS_UPDATED)
     g_messageCenter:publish(MessageType.ACTIVE_TASKS_UPDATED)
-    g_currentMission.taskList:updateHusbandries()
 end
 
 function TaskList:onPeriodChanged()
@@ -529,7 +553,7 @@ function TaskList:checkAndAddActiveTaskIfDue(group, task)
     local shouldAdd = false
 
     if task.type == Task.TASK_TYPE.HusbandryFood then
-        local husbandry = self:getHusbandries()[task.husbandryId]
+        local husbandry = self:getHusbandries()[task:getObjectId()]
         if husbandry ~= nil then
             if task.husbandryFood == Task.TOTAL_FOOD_KEY then
                 if husbandry.totalFood <= task.husbandryLevel then
@@ -543,7 +567,7 @@ function TaskList:checkAndAddActiveTaskIfDue(group, task)
             end
         end
     elseif task.type == Task.TASK_TYPE.HusbandryConditions then
-        local husbandry = self:getHusbandries()[task.husbandryId]
+        local husbandry = self:getHusbandries()[task:getObjectId()]
         if husbandry ~= nil then
             local conditionInfo = husbandry.conditionInfos[task.husbandryCondition]
             if conditionInfo ~= nil then
@@ -555,7 +579,7 @@ function TaskList:checkAndAddActiveTaskIfDue(group, task)
             end
         end
     elseif task.type == Task.TASK_TYPE.Production then
-        local production = self:getProductions()[task.productionId]
+        local production = self:getProductions()[task:getObjectId()]
         if production ~= nil then
             local fillInfo = production.inputs[task.productionFillType]
             if task.productionType == Task.PRODUCTION_TYPE.OUTPUT then
@@ -950,6 +974,6 @@ PlayerInputComponent.registerGlobalPlayerActionEvents = Utils.overwrittenFunctio
 
 g_messageCenter:subscribe(MessageType.HOUR_CHANGED, TaskList.hourChanged)
 g_messageCenter:subscribe(MessageType.PLAYER_FARM_CHANGED, TaskList.playerFarmChanged)
-g_messageCenter:subscribe(MessageType.SAVEGAME_LOADED, TaskList.saveGameLoaded)
+g_messageCenter:subscribe(MessageType.CURRENT_MISSION_START, TaskList.currentMissionStarted)
 
 addModEventListener(TaskList)
