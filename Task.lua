@@ -54,12 +54,10 @@ function Task.new(customMt)
     self.nextN = 0
     self.n = 0
     self.type = Task.TASK_TYPE.Standard
-    -- self.husbandryId = ""
     self.husbandryFood = ""
     self.husbandryCondition = 0
     self.husbandryLevel = 0
     self.evaluator = Task.EVALUATOR.LessThan
-    -- self.productionId = ""
     self.productionLevel = 0
     self.productionType = Task.PRODUCTION_TYPE.INPUT
     self.productionFillType = 0
@@ -70,6 +68,7 @@ function Task.new(customMt)
 end
 
 function Task:getObjectId()
+    -- Lazy load the objectId if it is not set after loading from XML
     if self.objectId == -1 then
         self.objectId = g_currentMission.taskList:getObjectIdFromUniqueId(self.uniqueId)
     end
