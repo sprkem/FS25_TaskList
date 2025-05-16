@@ -69,6 +69,10 @@ https://github.com/sprkem/FS25_TaskList
 
 Änderungsliste:
 
+1.1.0.4:
+- Problem im Mehrspielermodus behoben, bei dem Aufgaben zwischen den Sitzungen die Verbindung zum zugehörigen platzierbaren Objekt verloren.
+- Stellen Sie sicher, dass automatische Aufgaben beim Beitritt zu einem Multiplayer-Spiel als fällig angezeigt werden
+
 1.1.0.3:
 - Dialoglayouts wurden aktualisiert, um die Lesbarkeit bei niedrigeren Auflösungen zu verbessern.
 - Verbesserte deutsche Übersetzungen, mit Dank an MeRida2104.
@@ -103,6 +107,10 @@ Sur le menu principal, juste au-dessus des Paramètres, vous trouverez un nouvea
 https://github.com/sprkem/FS25_TaskList
 
 Journal des modifications:
+
+1.1.0.4:
+- Correction d'un problème multijoueur où les tâches perdaient la connexion au placement associé entre les sessions
+- Assurez-vous que les tâches automatiques s'affichent comme dues lorsque vous rejoignez une partie multijoueur
 
 1.1.0.3:
 - Mise à jour de la disposition des dialogues pour une meilleure lisibilité en basse résolution.
