@@ -62,7 +62,6 @@ function TaskGroup:writeStream(streamId, connection)
     streamWriteString(streamId, self.name)
     streamWriteInt32(streamId, self.effortMultiplier)
 
-
     local taskCount = 0
     for _ in pairs(self.tasks) do taskCount = taskCount + 1 end
     streamWriteInt32(streamId, taskCount)

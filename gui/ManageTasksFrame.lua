@@ -125,12 +125,22 @@ end
 
 -- New Task Step
 function ManageTasksFrame:onClickAdd(sender)
+    if self.currentGroupId == -1 then
+        InfoDialog.show(g_i18n:getText("ui_no_group_selected"))
+        return
+    end
+
     local newTask = Task.new()
     self.isEdit = false
     self:onAddEditTaskRequestType(newTask, false)
 end
 
 function ManageTasksFrame:onClickEdit(sender)
+    if self.currentGroupId == -1 then
+        InfoDialog.show(g_i18n:getText("ui_no_group_selected"))
+        return
+    end
+
     local task = self.currentGroup.tasks[self.selectedTaskIndex]
     if task == nil then
         InfoDialog.show(g_i18n:getText("ui_no_task_selected"))
@@ -204,7 +214,7 @@ function ManageTasksFrame:onAddEditRequestProduction(task)
     for _, production in pairs(g_currentMission.taskList:getProductions()) do
         table.insert(allowedValues, production.name)
         lookup[production.name] = production
-        if task.productionId == production.id then
+        if task:getObjectId() == production.id then
             default = #allowedValues
         end
     end
@@ -221,7 +231,7 @@ function ManageTasksFrame:onAddEditRequestProduction(task)
             if index > 0 then
                 local value = allowedValues[index]
                 local production = lookup[value]
-                task.productionId = production.id
+                task.objectId = production.id
                 self:onAddEditRequestProductionType(task)
             else
                 -- Go back
@@ -232,7 +242,6 @@ function ManageTasksFrame:onAddEditRequestProduction(task)
 end
 
 function ManageTasksFrame:onAddEditRequestProductionType(task)
-    local production = g_currentMission.taskList:getProductions()[task.productionId]
     local allowedValues = {
         g_i18n:getText("ui_task_production_input"),
         g_i18n:getText("ui_task_production_output")
@@ -259,7 +268,7 @@ function ManageTasksFrame:onAddEditRequestProductionType(task)
 end
 
 function ManageTasksFrame:onAddEditRequestProductionFillType(task)
-    local production = g_currentMission.taskList:getProductions()[task.productionId]
+    local production = g_currentMission.taskList:getProductions()[task:getObjectId()]
     local allowedValues = {}
     local lookup = {}
     local default = 1
@@ -298,7 +307,7 @@ function ManageTasksFrame:onAddEditRequestProductionFillType(task)
 end
 
 function ManageTasksFrame:onAddEditRequestProductionLevel(task)
-    local production = g_currentMission.taskList:getProductions()[task.productionId]
+    local production = g_currentMission.taskList:getProductions()[task:getObjectId()]
     local fillInfo = nil
     if task.productionType == Task.PRODUCTION_TYPE.INPUT then
         fillInfo = production.inputs[task.productionFillType]
@@ -336,7 +345,7 @@ function ManageTasksFrame:onAddEditRequestProductionLevel(task)
                 local capacity = (index - 1) * 0.10
                 task.productionLevel = capacity * fillInfo.capacity
                 self:onAddEditTaskJourneyComplete(task)
-            else 
+            else
                 -- Go back
                 self:onAddEditRequestConditionEvaluator(task)
             end
@@ -358,7 +367,7 @@ function ManageTasksFrame:onAddEditRequestHusbandry(task)
 
         table.insert(allowedValues, husbandry.name)
         lookup[husbandry.name] = husbandry
-        if task.husbandryId == husbandry.id then
+        if task:getObjectId() == husbandry.id then
             default = #allowedValues
         end
     end
@@ -375,7 +384,7 @@ function ManageTasksFrame:onAddEditRequestHusbandry(task)
             if index > 0 then
                 local value = allowedValues[index]
                 local husbandry = lookup[value]
-                task.husbandryId = husbandry.id
+                task.objectId = husbandry.id
                 if task.type == Task.TASK_TYPE.HusbandryFood then
                     self:onAddEditRequestFoodType(task)
                 elseif task.type == Task.TASK_TYPE.HusbandryConditions then
@@ -390,7 +399,7 @@ function ManageTasksFrame:onAddEditRequestHusbandry(task)
 end
 
 function ManageTasksFrame:onAddEditRequestFoodType(task)
-    local husbandry = g_currentMission.taskList:getHusbandries()[task.husbandryId]
+    local husbandry = g_currentMission.taskList:getHusbandries()[task:getObjectId()]
     local allowedValues = { g_i18n:getText("ui_husbandry_food_total") }
     local lookup = {}
     local default = 1
@@ -429,7 +438,7 @@ function ManageTasksFrame:onAddEditRequestFoodType(task)
 end
 
 function ManageTasksFrame:onAddEditRequestFoodLevel(task)
-    local husbandry = g_currentMission.taskList:getHusbandries()[task.husbandryId]
+    local husbandry = g_currentMission.taskList:getHusbandries()[task:getObjectId()]
     local allowedValues = {
         g_i18n:getText("ui_task_level_empty"),
         string.format("10%% (%s)", g_i18n:formatVolume(husbandry.foodCapacity * 0.10, 0)),
@@ -469,7 +478,7 @@ function ManageTasksFrame:onAddEditRequestFoodLevel(task)
 end
 
 function ManageTasksFrame:OnAddEditRequestConditionType(task)
-    local husbandry = g_currentMission.taskList:getHusbandries()[task.husbandryId]
+    local husbandry = g_currentMission.taskList:getHusbandries()[task:getObjectId()]
     local allowedValues = {}
     local lookup = {}
     local default = 1
@@ -536,7 +545,7 @@ function ManageTasksFrame:onAddEditRequestConditionEvaluator(task)
 end
 
 function ManageTasksFrame:onAddEditRequestConditionLevel(task)
-    local husbandry = g_currentMission.taskList:getHusbandries()[task.husbandryId]
+    local husbandry = g_currentMission.taskList:getHusbandries()[task:getObjectId()]
     local conditionInfo = husbandry.conditionInfos[task.husbandryCondition]
     local allowedValues = {
         g_i18n:getText("ui_task_level_empty"),
@@ -810,6 +819,10 @@ function ManageTasksFrame:onAddEditTaskJourneyComplete(task)
 end
 
 function ManageTasksFrame:onClickDelete(sender)
+    if self.currentGroupId == -1 then
+        InfoDialog.show(g_i18n:getText("ui_no_group_selected"))
+        return
+    end
     if self.selectedTaskIndex == -1 then
         InfoDialog.show(g_i18n:getText("ui_no_task_selected"))
         return
