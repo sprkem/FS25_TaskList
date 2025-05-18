@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="98">
     <author>Ozz</author>
-    <version>1.1.0.4</version>
+    <version>1.1.0.5</version>
     <iconFilename>icon_taskList.dds</iconFilename>
     <title>
         <en>Task List</en>
@@ -29,6 +29,10 @@ On the main menu, just above Settings, you will find a new menu with a clipboard
 https://github.com/sprkem/FS25_TaskList
 
 Changelog:
+
+1.1.0.5:
+- Multiplayer fix where auto tasks from previous version would prevent tasks being sent to the client
+- Note: Some auto tasks (food, straw etc) may need to be re-added with this update
 
 1.1.0.4:
 - Fixed multiplayer issue where tasks would lose connection to the associated placeable between sessions
@@ -69,6 +73,10 @@ https://github.com/sprkem/FS25_TaskList
 
 Änderungsliste:
 
+1.1.0.5:
+- Multiplayer-Fix, bei dem automatische Aufgaben aus der vorherigen Version das Senden von Aufgaben an den Client verhinderten
+- Hinweis: Einige automatische Aufgaben (Lebensmittel, Stroh usw.) müssen mit diesem Update möglicherweise erneut hinzugefügt werden
+
 1.1.0.4:
 - Problem im Mehrspielermodus behoben, bei dem Aufgaben zwischen den Sitzungen die Verbindung zum zugehörigen platzierbaren Objekt verloren.
 - Stellen Sie sicher, dass automatische Aufgaben beim Beitritt zu einem Multiplayer-Spiel als fällig angezeigt werden
@@ -107,6 +115,10 @@ Sur le menu principal, juste au-dessus des Paramètres, vous trouverez un nouvea
 https://github.com/sprkem/FS25_TaskList
 
 Journal des modifications:
+
+1.1.0.5:
+- Correction multijoueur où les tâches automatiques de la version précédente empêchaient l'envoi des tâches au client
+- Hinweis: Einige automatische Aufgaben (Lebensmittel, Stroh usw.) müssen mit diesem Update möglicherweise erneut hinzugefügt werden
 
 1.1.0.4:
 - Correction d'un problème multijoueur où les tâches perdaient la connexion au placement associé entre les sessions

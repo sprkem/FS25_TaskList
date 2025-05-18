@@ -452,6 +452,27 @@ function TaskList:currentMissionStarted()
         self:updateProductions()
         self:taskCleanup()
     end, self)
+
+    -- Sanity check for orphaned tasks
+    local orphans = {}
+    for _, group in pairs(self.taskGroups) do
+        if group.type == TaskGroup.GROUP_TYPE.Standard then
+            for _, task in pairs(group.tasks) do
+                if task.type == Task.TASK_TYPE.HusbandryFood or task.type == Task.TASK_TYPE.HusbandryConditions or task.type == Task.TASK_TYPE.Production then
+                    local objectId = task:getObjectId()
+                    if objectId == nil or objectId == -1 then
+                        table.insert(orphans, {taskId = task.id, groupId = group.id})
+                    end
+                end
+            end
+        end
+    end
+    for _, orphan in pairs(orphans) do
+        print('Dropping orphaned task ' .. orphan.taskId .. ' from group ' .. orphan.groupId)
+        self.taskGroups[orphan.groupId].tasks[orphan.taskId] = nil
+        self.activeTasks[orphan.groupId .. "_" .. orphan.taskId] = nil
+    end
+
     g_currentMission.taskList:addOrClearAutoTasks()
 end
 
