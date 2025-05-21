@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<l10n>
+	<translationContributors>NozemOil1982</translationContributors>
+	<texts>
+		<text name="input_TL_SHOW_TASKS" text="Toon taken"/>
+		<text name="ui_intro_text_header" text="Welkom in de takenlijst"/>
+		<text name="ui_TaskList" text="Takenlijst"/>
+		<text name="ui_header_icon" text=""/>
+		<text name="ui_header_group" text="Groep"/>
+		<text name="ui_header_detail" text="Taak"/>
+		<text name="ui_header_overdue" text="Achterstallige taak"/>
+		<text name="ui_header_priority" text="Prioriteit"/>
+		<text name="ui_header_due" text="Vervaldatum"/>
+		<text name="ui_manage_groups" text="Beheer groepen"/>
+		<text name="ui_manage_tasks" text="Beheer taken"/>
+		<text name="ui_header_current_group" text="Taken voor groep: %s"/>
+		<text name="ui_btn_complete_task" text="Taak voltooien"/>
+		<text name="ui_btn_close" text="Sluiten"/>
+		<text name="ui_btn_ok" text="OK"/>
+		<text name="ui_btn_cancel" text="Annuleren"/>
+		<text name="ui_btn_copy" text="Kopiëren"/>
+		<text name="ui_btn_edit" text="Bewerken"/>
+		<text name="ui_btn_delete" text="Verwijderen"/>
+		<text name="ui_btn_add_group" text="Groep toevoegen"/>
+		<text name="ui_btn_add_task" text="Taak toevoegen"/>
+		<text name="ui_btn_select_group" text="Groep wijzigen"/>
+		<text name="ui_set_group_name" text="Groepsnaam instellen"/>
+		<text name="ui_set_task_detail" text="Taak beschrijven"/>
+		<text name="ui_set_task_priority" text="Taak prioriteren. Dit wordt gebruikt om de taken te ordenen"/>
+		<text name="ui_set_task_should_recur" text="Moet de taak herhaald worden?"/>
+		<text name="ui_set_task_period" text="Wanneer moet de taak voltooid zijn?"/>
+		<text name="ui_set_task_recur_mode" text="Wanneer moet de taak herhaald worden?"/>
+		<text name="ui_set_task_recur_mode_monthly" text="Op een specifieke maand"/>
+		<text name="ui_set_task_recur_mode_n_months" text="Elke %s maanden"/>
+		<text name="ui_set_task_recur_mode_n_days" text="Elke %s dagen"/>
+		<text name="ui_task_due_daily" text="Dagelijks"/>
+		<text name="ui_task_due_monthly" text="Elke %s"/>
+		<text name="ui_task_due_n_months" text="Elke %s maanden"/>
+		<text name="ui_task_due_n_days" text="Elke %s dagen"/>
+		<text name="ui_set_task_n_months" text="Hoe vaak per maand moet de taak worden uitgevoerd?"/>
+		<text name="ui_set_task_n_days" text="Hoe vaak per dag moet de taak worden uitgevoerd?"/>
+		<text name="ui_group_exists_error" text="Er bestaat al een groep met deze naam"/>
+		<text name="ui_no_name_specified_error" text="Er is geen groepsnaam opgegeven"/>
+		<text name="ui_no_detail_specified_error" text="Er is geen taakbeschrijving opgegeven"/>
+		<text name="ui_no_group_selected_error" text="Er is geen groep geselecteerd om te kopiëren"/>
+		<text name="ui_no_task_selected" text="Er is geen taak geselecteerd"/>
+		<text name="ui_no_group_selected" text="Er is geen groep geselecteerd"/>
+		<text name="ui_confirm_deletion" text="Weet je zeker dat je deze taak wilt verwijderen?"/>
+		<text name="ui_group_not_found_error" text="Groepsnaam niet gevonden. Controleer of de groep niet is verwijderd"/>
+		<text name="ui_task_not_found_error" text="Taak niet gevonden. Controleer of de taak niet is verwijderd"/>
+		<text name="ui_no_groups_exist" text="Je hebt nog geen groepen"/>
+		<text name="ui_no_tasks_exist_for_group" text="Je hebt nog geen taken in deze groep"/>
+		<text name="ui_no_active_tasks" text="Er zijn momenteel geen taken"/>
+		<text name="ui_confirm_complete_task" text="Bevestig het voltooien van de taak: %s"/>
+		<text name="ui_tasks_over_time" text="Werkbelasting over tijd"/>
+		<text name="ui_header_effort" text="Inspanning"/>
+		<text name="ui_set_task_effort" text="Stel de inspanning voor deze taak in. Dit wordt gebruikt om taken op belangrijkheid te sorteren"/>
+		<text name="ui_tasks_due_now" text="Taken die nu moeten worden voltooid"/>
+		<text name="ui_intro_text_1" text="Begin met het beheren van groepen om een groep aan te maken. Een standaardgroep is een logische container voor gerelateerde taken, zoals 'veld 10' of 'Algemene boerderijtaken'"/>
+		<text name="ui_intro_text_2" text="Zodra je een groep hebt aangemaakt, kun je taken definiëren en wanneer ze moeten worden uitgevoerd. Taken verschijnen hier als actieve taken wanneer ze aan de beurt zijn"/>
+		<text name="ui_intro_text_3" text="Je kunt ook een sjabloongroep maken, bijvoorbeeld 'Tarweveld'. Je definieert taken zoals bij een standaardgroep, en maakt meerdere instanties aan van deze sjabloongroep die hetzelfde sjabloon gebruiken en gezamenlijk beheerd worden"/>
+		<text name="ui_intro_text_4" text="Een sjabloon zelf genereert geen actieve taken, maar levert taken voor alle sjablooninstantie-groepen die het gebruiken"/>
+		<text name="ui_intro_text_5" text="Een taak is gewoon tekst, bijvoorbeeld 'Graan oogsten'. Je kunt prioriteit (1 is hoogste) en inspanning instellen"/>
+		<text name="ui_intro_text_6" text="Taken kunnen eenmalig zijn of herhaald worden op maandelijkse of dagelijkse basis. Als je dieren hebt, kun je automatisch taken laten aanmaken wanneer het voedselniveau onder de doelwaarde zakt"/>
+		<text name="ui_intro_text_7" text="Wanneer een taak actief is, wordt deze in de hoofdweergave getoond op basis van prioriteit. Gebruik 'Taak voltooien' als deze is afgerond. Bij herhaling wordt de taak opnieuw ingepland"/>
+		<text name="ui_intro_text_8" text="Kies 'Modus selecteren' om te wisselen tussen de weergave van actuele taken en een planningshulpmiddel dat de totale inspanning per maand toont"/>
+		<text name="ui_intro_text_9" text="Een groep en alle gekoppelde taken kunnen eenvoudig worden gekopieerd indien nodig"/>
+		<text name="ui_intro_text_10" text="Je kunt actuele taken bekijken door op Shift + T te drukken"/>
+		<text name="ui_header_group_type" text="Groepstype"/>
+		<text name="ui_header_group_source_template" text="Sjabloon"/>
+		<text name="ui_type_standard" text="Standaard"/>
+		<text name="ui_type_template" text="Sjabloon"/>
+		<text name="ui_type_template_instance" text="Sjablooninstantie"/>
+		<text name="ui_group_request_type_description" text="Kies een groepstype. Een standaardgroep bevat taken die verschuldigd zijn. Een sjabloon definieert enkel taken als sjabloon. Je kunt dan meerdere sjablooninstantie maken die hetzelfde sjabloon gebruiken"/>
+		<text name="ui_group_request_source_group" text="Kies een sjabloon om voor deze groep te gebruiken"/>
+		<text name="ui_confirm_deletion_template" text="Weet je zeker dat je het sjabloon wilt verwijderen? Verwijderen van een sjabloon verwijdert alle gekoppelde sjablooninstantie"/>
+		<text name="ui_set_task_effort_multiplier" text="Vermenigvuldig de inspanningswaarden voor deze groep. Gebruik 1 om de waarden van het sjabloon te behouden, of stel een hoger getal in voor bijvoorbeeld een groot veld"/>
+		<text name="ui_task_request_type_description" text="Kies een taaktype. Standaard is vrije tekst. 'Veeteelt' kan voedselniveaus volgen en herhaalde taken genereren als het niveau onder de doelwaarde komt"/>
+		<text name="ui_task_request_husbandry" text="Kies de veeteelt voor deze taak"/>
+		<text name="ui_task_request_food_type" text="Kies het voedsel om te volgen"/>
+		<text name="ui_task_level_empty" text="Leeg"/>
+		<text name="ui_task_request_food_level" text="Kies het voedselniveau om te volgen. Als het onder het doel valt, wordt een taak aangemaakt om aan te vullen"/>
+		<text name="ui_task_food_fill" text="aanvullen"/>
+		<text name="ui_husbandry_food_total" text="Totaal"/>
+		<text name="ui_task_food_fill_total" text="voedsel aanvullen"/>
+		<text name="ui_type_husbandry_food" text="Dierenvoeding"/>
+		<text name="ui_task_evaluator_greater_than" text="hoog"/>
+		<text name="ui_task_evaluator_less_than" text="laag"/>
+		<text name="ui_type_husbandry_conditions" text="Huisvestingscondities"/>
+		<text name="ui_task_request_condition_type" text="Kies de conditie die gevolgd moet worden."/>
+		<text name="ui_task_request_condition_evaluator" text="Kies wanneer de taak actief moet zijn. Je kunt de taak activeren als de waarde onder of boven het doel komt."/>
+		<text name="ui_task_condition_evaluator_less_than" text="Onder het doel"/>
+		<text name="ui_task_condition_evaluator_greater_than" text="Boven het doel"/>
+		<text name="ui_task_request_condition_level" text="Kies het doelniveau dat voor de conditie gevolgd moet worden."/>
+		<text name="ui_type_production" text="Productie"/>
+		<text name="ui_task_request_production" text="Kies de productie voor deze taak."/>
+		<text name="ui_task_request_production_type" text="Kies of je een input of output van de productie wilt volgen."/>
+		<text name="ui_task_request_production_fill_type" text="Kies het vultype dat je wilt volgen."/>
+		<text name="ui_task_request_production_level" text="Kies het doel dat je voor dit vultype wilt volgen."/>
+		<text name="ui_task_production_input" text="Invoer"/>
+		<text name="ui_task_production_output" text="Uitvoer"/>
+	</texts>
+</l10n>
