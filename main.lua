@@ -461,7 +461,7 @@ function TaskList:currentMissionStarted()
                 if task.type == Task.TASK_TYPE.HusbandryFood or task.type == Task.TASK_TYPE.HusbandryConditions or task.type == Task.TASK_TYPE.Production then
                     local objectId = task:getObjectId()
                     if objectId == nil or objectId == -1 then
-                        table.insert(orphans, {taskId = task.id, groupId = group.id})
+                        table.insert(orphans, { taskId = task.id, groupId = group.id })
                     end
                 end
             end
@@ -960,8 +960,11 @@ function TaskList.ShowActiveTaskNotifications()
     local hasTasks = false
     local tempActive = {}
     for _, activeTask in pairs(g_currentMission.taskList.activeTasks) do
-        table.insert(tempActive, activeTask)
-        hasTasks = true
+        local group = g_currentMission.taskList.taskGroups[activeTask.groupId]
+        if group ~= nil and group.farmId == g_currentMission.taskList:getCurrentFarmId() then
+            table.insert(tempActive, activeTask)
+            hasTasks = true
+        end
     end
     if not hasTasks then
         g_currentMission:addIngameNotification(FSBaseMission.INGAME_NOTIFICATION_INFO,
