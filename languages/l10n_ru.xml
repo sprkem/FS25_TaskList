@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<l10n>
+	<translationContributors/>
+	<texts>
+		<text name="input_TL_SHOW_TASKS" text="Показать задачи"/>
+		<text name="ui_intro_text_header" text="Добро пожаловать в Task List"/>
+		<text name="ui_TaskList" text="Список задач"/>
+		<text name="ui_header_icon" text=""/>
+		<text name="ui_header_group" text="Группа"/>
+		<text name="ui_header_detail" text="Задача"/>
+		<text name="ui_header_overdue" text="Просрочено"/>
+		<text name="ui_header_priority" text="Приоритет"/>
+		<text name="ui_header_due" text="Срок"/>
+		<text name="ui_manage_groups" text="Управление группами"/>
+		<text name="ui_manage_tasks" text="Управление задачами"/>
+		<text name="ui_header_current_group" text="Задачи для группы: %s"/>
+		<text name="ui_btn_complete_task" text="Завершить задачу"/>
+		<text name="ui_btn_close" text="Закрыть"/>
+		<text name="ui_btn_ok" text="ОК"/>
+		<text name="ui_btn_cancel" text="Отмена"/>
+		<text name="ui_btn_copy" text="Копировать"/>
+		<text name="ui_btn_edit" text="Редактировать"/>
+		<text name="ui_btn_delete" text="Удалить"/>
+		<text name="ui_btn_add_group" text="Добавить группу"/>
+		<text name="ui_btn_add_task" text="Добавить задачу"/>
+		<text name="ui_btn_select_group" text="Сменить группу"/>
+		<text name="ui_set_group_name" text="Введите имя группы"/>
+		<text name="ui_set_task_detail" text="Опишите задачу"/>
+		<text name="ui_set_task_priority" text="Установите приоритет задачи. Используется для сортировки задач по важности."/>
+		<text name="ui_set_task_should_recur" text="Повторяющаяся задача?"/>
+		<text name="ui_set_task_period" text="Когда срок выполнения?"/>
+		<text name="ui_set_task_recur_mode" text="Как должна повторяться задача?"/>
+		<text name="ui_set_task_recur_mode_monthly" text="В определённый месяц"/>
+		<text name="ui_set_task_recur_mode_n_months" text="Каждые N месяцев"/>
+		<text name="ui_set_task_recur_mode_n_days" text="Каждые N дней"/>
+		<text name="ui_task_due_daily" text="Ежедневно"/>
+		<text name="ui_task_due_monthly" text="Каждый %s"/>
+		<text name="ui_task_due_n_months" text="Каждые %s месяцев"/>
+		<text name="ui_task_due_n_days" text="Каждые %s дней"/>
+		<text name="ui_set_task_n_months" text="С какой периодичностью в месяцах должна выполняться задача?"/>
+		<text name="ui_set_task_n_days" text="С какой периодичностью в днях должна выполняться задача?"/>
+		<text name="ui_group_exists_error" text="Группа с таким именем уже существует"/>
+		<text name="ui_no_name_specified_error" text="Имя группы не указано"/>
+		<text name="ui_no_detail_specified_error" text="Описание задачи не указано"/>
+		<text name="ui_no_group_selected_error" text="Не выбрана группа для копирования"/>
+		<text name="ui_no_task_selected" text="Задача не выбрана"/>
+		<text name="ui_no_group_selected" text="Группа не выбрана"/>
+		<text name="ui_confirm_deletion" text="Вы уверены, что хотите удалить?"/>
+		<text name="ui_group_not_found_error" text="Группа не найдена. Возможно, она была удалена"/>
+		<text name="ui_task_not_found_error" text="Задача не найдена. Возможно, она была удалена"/>
+		<text name="ui_no_groups_exist" text="У вас ещё нет групп"/>
+		<text name="ui_no_tasks_exist_for_group" text="В этой группе пока нет задач"/>
+		<text name="ui_no_active_tasks" text="У вас нет задач со сроком исполнения"/>
+		<text name="ui_confirm_complete_task" text="Подтвердите выполнение задачи: %s"/>
+		<text name="ui_tasks_over_time" text="Нагрузка по времени"/>
+		<text name="ui_header_effort" text="Усилие"/>
+		<text name="ui_set_task_effort" text="Установите уровень усилий для этой задачи. Используется для различия между мелкими и крупными задачами при расчёте нагрузки."/>
+		<text name="ui_tasks_due_now" text="Задачи со сроком сейчас"/>
+		<text name="ui_intro_text_1" text="Для начала нажмите «Управление группами», чтобы создать новую группу. Например, 'Поле 10' или 'Общие задачи фермы'."/>
+		<text name="ui_intro_text_2" text="После создания группы используйте «Управление задачами», чтобы указать, что и когда нужно сделать. Задачи будут отображаться здесь при наступлении срока."/>
+		<text name="ui_intro_text_3" text="Вы также можете создать шаблонную группу, например 'Пшеничное поле'. Задачи в ней настраиваются как в обычной группе, но можно создавать несколько экземпляров на её основе."/>
+		<text name="ui_intro_text_4" text="Сама шаблонная группа не создаёт активных задач, но они будут появляться у всех связанных экземпляров."/>
+		<text name="ui_intro_text_5" text="Задача — это просто текст, например 'Собрать кукурузу'. Вы можете задать приоритет (1 — наивысший) и относительное усилие."/>
+		<text name="ui_intro_text_6" text="Задачи могут быть одноразовыми или повторяться по дням или месяцам. Если у вас есть животные, задачи можно создавать автоматически при нехватке корма."/>
+		<text name="ui_intro_text_7" text="Когда приходит срок задачи, она появляется в основном окне по приоритету. Нажмите «Завершить задачу», когда она выполнена. Повторяющиеся задачи появятся снова при следующем сроке."/>
+		<text name="ui_intro_text_8" text="Используйте 'Сменить режим', чтобы переключаться между текущими задачами и планировщиком, показывающим нагрузку и предстоящие задачи по месяцам."/>
+		<text name="ui_intro_text_9" text="Группу и все её задачи можно легко скопировать в новую группу при необходимости."/>
+		<text name="ui_intro_text_10" text="Вы можете просматривать задачи во время игры, нажав Shift + T."/>
+		<text name="ui_header_group_type" text="Тип группы"/>
+		<text name="ui_header_group_source_template" text="Шаблон"/>
+		<text name="ui_type_standard" text="Обычный"/>
+		<text name="ui_type_template" text="Шаблон"/>
+		<text name="ui_type_template_instance" text="Экземпляр шаблона"/>
+		<text name="ui_group_request_type_description" text="Выберите тип группы. Обычная содержит задачи, отображаемые по сроку. Шаблон содержит задачи для многократного использования. Экземпляры шаблона используют один и тот же шаблон и управляются централизованно."/>
+		<text name="ui_group_request_source_group" text="Выберите шаблон, который будет использоваться для этой группы."/>
+		<text name="ui_confirm_deletion_template" text="Вы уверены, что хотите удалить шаблон? При удалении шаблона будут удалены все связанные с ним группы экземпляров шаблона."/>
+		<text name="ui_set_task_effort_multiplier" text="Умножьте значения усилий для этой группы. Используйте значение 1, чтобы использовать значения шаблона, или установите его выше, если, например, группа представляет собой большое поле."/>
+		<text name="ui_task_request_type_description" text="Выберите тип задания. Стандартным является текст в произвольной форме. Фермерское хозяйство может отслеживать количество потребляемых продуктов и увеличивать количество заданий, если не хватает продуктов."/>
+		<text name="ui_task_request_husbandry" text="Выберите хозяйство для выполнения этой задачи."/>
+		<text name="ui_task_request_food_type" text="Выберите тип продукта для отслеживания."/>
+		<text name="ui_task_level_empty" text="Пусто"/>
+		<text name="ui_task_request_food_level" text="Выберите уровень продуктов для отслеживания. Когда уровень упадет ниже заданного, будет добавлена задача добавить больше продуктов."/>
+		<text name="ui_task_food_fill" text="заполнить"/>
+		<text name="ui_husbandry_food_total" text="Всего"/>
+		<text name="ui_task_food_fill_total" text="наполнять пищу"/>
+		<text name="ui_type_husbandry_food" text="Продукты для сельского хозяйства"/>
+		<text name="ui_task_evaluator_greater_than" text="высокий"/>
+		<text name="ui_task_evaluator_less_than" text="низкий"/>
+		<text name="ui_type_husbandry_conditions" text="Условия содержания"/>
+		<text name="ui_task_request_condition_type" text="Выберите условие для отслеживания."/>
+		<text name="ui_task_request_condition_evaluator" text="Выберите, когда наступит срок выполнения задачи. Вы можете повысить уровень выполнения задачи, когда она опустится ниже целевого значения или когда превысит его."/>
+		<text name="ui_task_condition_evaluator_less_than" text="Ниже целевого уровня"/>
+		<text name="ui_task_condition_evaluator_greater_than" text="Выше целевого уровня"/>
+		<text name="ui_task_request_condition_level" text="Выберите целевой уровень для отслеживания состояния."/>
+		<text name="ui_type_production" text="Производство"/>
+		<text name="ui_task_request_production" text="Выберите производство для выполнения этой задачи."/>
+		<text name="ui_task_request_production_type" text="Выберите, следует ли отслеживать производственные затраты или выпуск продукции."/>
+		<text name="ui_task_request_production_fill_type" text="Выберите тип заливки для отслеживания.."/>
+		<text name="ui_task_request_production_level" text="Выберите целевой уровень для отслеживания типа заливки."/>
+		<text name="ui_task_production_input" text="Ввод"/>
+		<text name="ui_task_production_output" text="Выход"/>
+	</texts>
+</l10n>
