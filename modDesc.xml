@@ -32,6 +32,8 @@ Changelog:
 
 1.1.0.6:
 - Limit active tasks shown with Shift + T to only those for the current farm
+- Add Dutch translation, with credit to Nozem1982
+- Add Russian translation, with credit to nik-conder
 
 1.1.0.5:
 - Multiplayer fix where auto tasks from previous version would prevent tasks being sent to the client
@@ -76,6 +78,11 @@ https://github.com/sprkem/FS25_TaskList
 
 Änderungsliste:
 
+1.1.0.6:
+- Beschränken Sie die anzeigten aktiven Aufgaben mit Shift + T auf diejenigen des aktuellen Bauern
+- Hinzufügen einer niederländischen Übersetzung, mit Kredit zu Nozem1982
+- Hinzufügen einer russischen Übersetzung, mit Kredit zu nik-conder
+
 1.1.0.5:
 - Multiplayer-Fix, bei dem automatische Aufgaben aus der vorherigen Version das Senden von Aufgaben an den Client verhinderten
 - Hinweis: Einige automatische Aufgaben (Lebensmittel, Stroh usw.) müssen mit diesem Update möglicherweise erneut hinzugefügt werden
@@ -118,6 +125,11 @@ Sur le menu principal, juste au-dessus des Paramètres, vous trouverez un nouvea
 https://github.com/sprkem/FS25_TaskList
 
 Journal des modifications:
+
+1.1.0.6:
+- Limiter les tâches actives affichées avec Shift + T à celles du fermier actuel
+- Ajouter une traduction néerlandaise, avec crédit à Nozem1982
+- Ajouter une traduction russe, avec crédit à nik-conder
 
 1.1.0.5:
 - Correction multijoueur où les tâches automatiques de la version précédente empêchaient l'envoi des tâches au client
