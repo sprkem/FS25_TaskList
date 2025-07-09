@@ -473,6 +473,14 @@ function TaskList:currentMissionStarted()
         self.activeTasks[orphan.groupId .. "_" .. orphan.taskId] = nil
     end
 
+    for _, activeTask in pairs(self.activeTasks) do
+        local group = self.taskGroups[activeTask.groupId]
+        if group == nil then
+            print('Removing active task ' .. activeTask.id .. ' from group ' .. activeTask.groupId .. ' due to missing group.')
+            self.activeTasks[activeTask.groupId .. "_" .. activeTask.id] = nil
+        end
+    end
+
     g_currentMission.taskList:addOrClearAutoTasks()
 end
 

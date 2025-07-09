@@ -1,7 +1,7 @@
 ManageGroupsFrame = {}
 ManageGroupsFrame.currentGroups = {}
 local ManageGroupsFrame_mt = Class(ManageGroupsFrame, MessageDialog)
-
+ManageGroupsFrame.groupSortingFunction = function(k1, k2) return k1.name < k2.name end
 
 function ManageGroupsFrame.new(target, custom_mt)
     local self = MessageDialog.new(target, custom_mt or ManageGroupsFrame_mt)
@@ -37,6 +37,7 @@ end
 
 function ManageGroupsFrame:updateContent()
     self.currentGroups = g_currentMission.taskList:getGroupListForCurrentFarm()
+    table.sort(self.currentGroups, ManageGroupsFrame.groupSortingFunction)
 
     if next(self.currentGroups) == nil then
         self.tableContainer:setVisible(false)

@@ -47,6 +47,17 @@ function DeleteGroupEvent:run(connection)
         end
     end
 
+    if group.type == TaskGroup.GROUP_TYPE.TemplateInstance then
+        -- Remove any active tasks that are part of this template instance
+        local templateGroup = g_currentMission.taskList.taskGroups[group.templateGroupId]
+        if templateGroup then
+            for _, task in pairs(templateGroup.tasks) do
+                local key = group.id .. "_" .. task.id
+                g_currentMission.taskList.activeTasks[key] = nil
+            end
+        end
+    end
+
     -- Remove any active tasks for the group
     for _, task in pairs(group.tasks) do
         local key = group.id .. "_" .. task.id
