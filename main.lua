@@ -375,11 +375,16 @@ function TaskList:taskCleanup()
     if g_currentMission.isExitingGame then
         return
     end
+    local currentFarmId = self:getCurrentFarmId()
 
     -- Remove auto tasks that are orphaned as their dependent placeable is missing
     local husbandries = self:getHusbandries()
     local productions = self:getProductions()
     for _, group in pairs(self.taskGroups) do
+        if group.farmId ~= currentFarmId then
+            continue
+        end
+
         if group.type == TaskGroup.GROUP_TYPE.Standard then
             local toRemove = {}
             for _, task in pairs(group.tasks) do
@@ -708,10 +713,15 @@ end
 
 function TaskList:getTasksForNextYear()
     local result = {}
+    local currentFarmId = self:getCurrentFarmId()
     for i = 1, 12 do
         result[i] = {}
     end
     for _, group in pairs(self.taskGroups) do
+        if group.farmId ~= currentFarmId then
+            continue
+        end
+
         local tasks = group.tasks
         if group.type == TaskGroup.GROUP_TYPE.TemplateInstance then
             tasks = self.taskGroups[group.templateGroupId].tasks
