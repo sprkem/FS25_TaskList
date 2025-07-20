@@ -90,6 +90,7 @@ https://github.com/sprkem/FS25_TaskList
 1.1.0.8:
 - Beheben Sie das Anzeigen von Aufgaben für alle Bauern im Arbeitslastansicht in Mehrspielerspielen
 - Versuchen Sie, ein Problem zu beheben, bei dem 'automatische' Aufgaben in Mehrspielerspielen verschwinden
+- Turkische Übersetzung hinzufügen, mit Kredit an Cyber-Syntax
 
 1.1.0.7:
 - Beheben Sie einen Fehler beim Löschen einer Vorlageninstanz
@@ -145,7 +146,8 @@ Journal des modifications:
 
 1.1.0.8:
 - Correction de l'affichage des tâches pour tous les agriculteurs dans la vue de la charge de travail dans les jeux multijoueurs
-- Essayez de résoudre un problème où les tâches « automatiques » disparaissent dans les jeux multijoueurs
+- Essayez de résoudre un problème où les tâches automatiques disparaissent dans les jeux multijoueurs
+- Ajouter une traduction turque, avec crédit à Cyber-Syntax
 
 1.1.0.7:
 - Correction d'un bug lors de la suppression d'une instance de modèle
