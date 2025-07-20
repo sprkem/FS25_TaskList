@@ -33,6 +33,7 @@ Changelog:
 1.1.0.8:
 - Fix showing tasks for all farms in the workload view in multiplayer games
 - Attempt to fix an issue where 'auto' tasks vanish in multiplayer games
+- Add Turkish translation, with credit to Cyber-Syntax
 
 1.1.0.7:
 - Fix a bug when deleting a template instance
