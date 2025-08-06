@@ -731,7 +731,7 @@ function ManageTasksFrame:onAddEditTaskRequestRecurMode(task)
 end
 
 function ManageTasksFrame:onAddEditTaskRequestN(task)
-    local allowedValues = { "1", "2", "3", "4", "5" }
+    local allowedValues = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }
     local default = 1
     if task.n ~= 0 then
         default = task.n

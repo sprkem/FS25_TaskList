@@ -605,7 +605,7 @@ function TaskList:checkAndAddActiveTaskIfDue(group, task)
         if husbandry ~= nil then
             local conditionInfo = husbandry.conditionInfos[task.husbandryCondition]
             if conditionInfo ~= nil then
-                if task.evaluator == Task.EVALUATOR.LessThan and conditionInfo.amount < task.husbandryLevel then
+                if task.evaluator == Task.EVALUATOR.LessThan and conditionInfo.amount <= task.husbandryLevel then
                     shouldAdd = true
                 elseif task.evaluator == Task.EVALUATOR.GreaterThan and conditionInfo.amount > task.husbandryLevel then
                     shouldAdd = true
@@ -620,7 +620,7 @@ function TaskList:checkAndAddActiveTaskIfDue(group, task)
                 fillInfo = production.outputs[task.productionFillType]
             end
             if fillInfo ~= nil then
-                if task.evaluator == Task.EVALUATOR.LessThan and fillInfo.amount < task.productionLevel then
+                if task.evaluator == Task.EVALUATOR.LessThan and fillInfo.amount <= task.productionLevel then
                     shouldAdd = true
                 elseif task.evaluator == Task.EVALUATOR.GreaterThan and fillInfo.amount > task.productionLevel then
                     shouldAdd = true
