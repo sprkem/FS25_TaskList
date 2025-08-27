@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="100">
     <author>Ozz</author>
-    <version>1.1.0.9</version>
+    <version>1.1.0.10</version>
     <iconFilename>icon_taskList.dds</iconFilename>
     <title>
         <en>Task List</en>
@@ -30,6 +30,9 @@ https://github.com/sprkem/FS25_TaskList
 
 Changelog:
 
+1.1.0.10:
+- Disable the filter for text inputs, which caused words like Grass to be censored.
+- Add Italian translation, thanks to FirenzeIT
 
 1.1.0.9:
 - Change evaluation to account for empty production/husbandry levels triggering a task
@@ -92,6 +95,10 @@ https://github.com/sprkem/FS25_TaskList
 
 Änderungsliste:
 
+1.1.0.10:
+- Deaktivierung des Filters für Texteingaben, der zur Zensur von Wörtern wie „Gras“ führte.
+- Italienische Übersetzung hinzugefügt, danke an FirenzeIT
+
 1.1.0.9:
 - Änderung der Auswertung, um leere Produktions-/Tierhaltungsebenen zu berücksichtigen, die eine Aufgabe auslösen.
 - Erhöhung der Nummernpriorität und Wiederholungsoptionen
@@ -153,6 +160,10 @@ https://github.com/sprkem/FS25_TaskList
 
 Journal des modifications:
 
+1.1.0.10:
+- Désactivation du filtre de saisie de texte, qui entraînait la censure de mots comme Grass.
+- Ajout de la traduction italienne, grâce à FirenzeIT.
+
 1.1.0.9:
 - Modification de l'évaluation pour tenir compte des niveaux de production/élevage vides déclenchant une tâche
 - Augmentation de la priorité numérique et des options de répétition
@@ -179,7 +190,7 @@ Journal des modifications:
 - Correction d'un problème multijoueur où les tâches perdaient la connexion au placement associé entre les sessions
 - Assurez-vous que les tâches automatiques s'affichent comme dues lorsque vous rejoignez une partie multijoueur
 
-1.1.0.3:
+1.1.0.3: 
 - Mise à jour de la disposition des dialogues pour une meilleure lisibilité en basse résolution.
 - Traductions allemandes améliorées, grâce à MeRida2104.
 - Correction d'un bug multijoueur lors du changement de ferme.

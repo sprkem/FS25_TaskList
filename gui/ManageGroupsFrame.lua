@@ -130,7 +130,7 @@ function ManageGroupsFrame:onAddEditGroupRequestName(group)
         end, self,
         group.name,
         g_i18n:getText("ui_set_group_name"),
-        nil, TaskGroup.MAX_NAME_LENGTH, g_i18n:getText("ui_btn_ok"))
+        nil, TaskGroup.MAX_NAME_LENGTH, g_i18n:getText("ui_btn_ok"), nil, nil, false)
 end
 
 function ManageGroupsFrame:onAddEditRequestType(group)
@@ -248,7 +248,7 @@ function ManageGroupsFrame:onClickCopy(sender)
         ManageGroupsFrame.onCopyGroupNameSet, self,
         "",
         g_i18n:getText("ui_set_group_name"),
-        nil, TaskGroup.MAX_NAME_LENGTH, g_i18n:getText("ui_btn_ok"))
+        nil, TaskGroup.MAX_NAME_LENGTH, g_i18n:getText("ui_btn_ok"), nil, nil, false)
 end
 
 function ManageGroupsFrame:onClickDelete(sender)

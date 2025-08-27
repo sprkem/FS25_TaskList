@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<l10n>
+    <translationContributors/>
+    <texts>
+        <text name="input_TL_SHOW_TASKS" text="Mostra attività"/>
+        <text name="ui_intro_text_header" text="Benvenuto nella lista attività"/>
+        <text name="ui_TaskList" text="Lista attività"/>
+        <text name="ui_header_icon" text=""/>
+        <text name="ui_header_group" text="Gruppo"/>
+        <text name="ui_header_detail" text="Attività"/>
+        <text name="ui_header_overdue" text="Scadute"/>
+        <text name="ui_header_priority" text="Priorità"/>
+        <text name="ui_header_due" text="Scadenza"/>
+        <text name="ui_manage_groups" text="Gestisci gruppi"/>
+        <text name="ui_manage_tasks" text="Gestisci attività"/>
+        <text name="ui_header_current_group" text="Attività per il gruppo: %s"/>
+        <text name="ui_btn_complete_task" text="Completa attività"/>
+        <text name="ui_btn_close" text="Chiudi"/>
+        <text name="ui_btn_ok" text="OK"/>
+        <text name="ui_btn_cancel" text="Annulla"/>
+        <text name="ui_btn_copy" text="Copia"/>
+        <text name="ui_btn_edit" text="Modifica"/>
+        <text name="ui_btn_delete" text="Elimina"/>
+        <text name="ui_btn_add_group" text="Aggiungi gruppo"/>
+        <text name="ui_btn_add_task" text="Aggiungi attività"/>
+        <text name="ui_btn_select_group" text="Cambia gruppo"/>
+        <text name="ui_set_group_name" text="Scegli un nome per il gruppo"/>
+        <text name="ui_set_task_detail" text="Descrivi l'attività"/>
+        <text name="ui_set_task_priority" text="Imposta la priorità dell'attività. Serve per ordinare le attività così sai cosa fare prima."/>
+        <text name="ui_set_task_should_recur" text="L'attività è ricorrente?"/>
+        <text name="ui_set_task_period" text="Quando scade l'attività?"/>
+        <text name="ui_set_task_recur_mode" text="Quando dovrebbe ripetersi l'attività?"/>
+        <text name="ui_set_task_recur_mode_monthly" text="In un mese specifico"/>
+        <text name="ui_set_task_recur_mode_n_months" text="Ogni N mesi"/>
+        <text name="ui_set_task_recur_mode_n_days" text="Ogni N giorni"/>
+        <text name="ui_task_due_daily" text="Giornalmente"/>
+        <text name="ui_task_due_monthly" text="Ogni %s"/>
+        <text name="ui_task_due_n_months" text="Ogni %s mesi"/>
+        <text name="ui_task_due_n_days" text="Ogni %s giorni"/>
+        <text name="ui_set_task_n_months" text="Con che frequenza (in mesi) deve essere completata l'attività?"/>
+        <text name="ui_set_task_n_days" text="Con che frequenza (in giorni) deve essere completata l'attività?"/>
+        <text name="ui_group_exists_error" text="Esiste già un gruppo con questo nome."/>
+        <text name="ui_no_name_specified_error" text="Non è stato specificato alcun nome per il gruppo."/>
+        <text name="ui_no_detail_specified_error" text="Non sono stati specificati dettagli per l'attività."/>
+        <text name="ui_no_group_selected_error" text="Nessun gruppo selezionato da copiare."/>
+        <text name="ui_no_task_selected" text="Nessuna attività selezionata."/>
+        <text name="ui_no_group_selected" text="Nessun gruppo selezionato."/>
+        <text name="ui_confirm_deletion" text="Sei sicuro di voler eliminare?"/>
+        <text name="ui_group_not_found_error" text="Impossibile trovare il gruppo. Verifica che non sia stato eliminato."/>
+        <text name="ui_task_not_found_error" text="Impossibile trovare l'attività. Verifica che non sia stata eliminata."/>
+        <text name="ui_no_groups_exist" text="Non hai ancora alcun gruppo."/>
+        <text name="ui_no_tasks_exist_for_group" text="Non hai ancora alcuna attività."/>
+        <text name="ui_no_active_tasks" text="Non hai attività in scadenza."/>
+        <text name="ui_confirm_complete_task" text="Conferma il completamento dell'attività: %s"/>
+        <text name="ui_tasks_over_time" text="Carico di lavoro nel tempo"/>
+        <text name="ui_header_effort" text="Impegno"/>
+        <text name="ui_set_task_effort" text="Imposta il livello di impegno per questa attività. Serve a distinguere attività piccole da grandi nel calcolo del carico di lavoro nel tempo."/>
+        <text name="ui_tasks_due_now" text="Attività in scadenza ora"/>
+        <text name="ui_intro_text_1" text="Per iniziare, seleziona 'Gestisci gruppi' per creare un nuovo gruppo. Un gruppo Standard è un contenitore organizzativo per attività correlate, come 'Campo 10' o 'Lavori generali della fattoria'."/>
+        <text name="ui_intro_text_2" text="Una volta creato un gruppo, usa 'Gestisci attività' per definire cosa fare e quando. Le attività saranno visibili come attive quando si avvicinano alla scadenza."/>
+        <text name="ui_intro_text_3" text="Puoi creare un gruppo Modello, ad esempio 'Campo di grano'. Imposta le attività come faresti per un gruppo Standard, quindi genera più gruppi istanza basati su quel Modello."/>
+        <text name="ui_intro_text_4" text="Un Modello non genera attività attive direttamente: le attività vengono prodotte per tutte le istanze di gruppo che lo utilizzano."/>
+        <text name="ui_intro_text_5" text="Le attività consistono in semplice testo, come 'Raccogliere il mais'. Puoi assegnare una priorità (1 è la più alta) e un livello di impegno."/>
+        <text name="ui_intro_text_6" text="Le attività possono essere singole o ricorrenti per giorno, mese o multipli. Se gestisci animali, puoi configurare attività automatiche al calo del cibo."/>
+        <text name="ui_intro_text_7" text="Le attività in scadenza vengono mostrate nella vista principale, ordinate per priorità. Usa 'Completa attività' una volta terminata. Se è ricorrente, verrà riproposta alla prossima scadenza."/>
+        <text name="ui_intro_text_8" text="Con 'Cambia modalità' puoi passare dalla vista delle attività in scadenza a uno strumento di pianificazione che mostra lo sforzo totale per ciascun mese e le attività previste."/>
+        <text name="ui_intro_text_9" text="Un gruppo e tutte le sue attività possono essere copiati in un nuovo gruppo quando necessario."/>
+        <text name="ui_intro_text_10" text="Durante la modalità di gioco puoi visualizzare immediatamente le attività in scadenza premendo Shift + T."/>
+        <text name="ui_header_group_type" text="Tipo di gruppo"/>
+        <text name="ui_header_group_source_template" text="Modello"/>
+        <text name="ui_type_standard" text="Standard"/>
+        <text name="ui_type_template" text="Modello"/>
+        <text name="ui_type_template_instance" text="Istanza di modello"/>
+        <text name="ui_group_request_type_description" text="Seleziona il tipo di gruppo che desideri creare. Un gruppo Standard contiene attività che verranno visualizzate automaticamente alla scadenza. Un Modello invece è una struttura di riferimento: definisci le attività una sola volta e crea più istanze che lo utilizzano. Tutte le istanze possono essere gestite da un'unica interfaccia."/>
+        <text name="ui_group_request_source_group" text="Scegli un Modello da associare a questo gruppo. Il gruppo erediterà le attività e la struttura del Modello selezionato."/>
+        <text name="ui_confirm_deletion_template" text="Attenzione: eliminando un Modello, verranno eliminati anche tutti i gruppi istanza associati."/>
+        <text name="ui_set_task_effort_multiplier" text="Imposta un moltiplicatore di impegno per il gruppo. Usa 1 per mantenere i valori del Modello, oppure scegli un valore superiore se, ad esempio, il gruppo rappresenta un campo di grandi dimensioni."/>        
+        <text name="ui_task_request_type_description" text="Seleziona il tipo di attività. Standard: testo libero. Zootecnia: monitora l'alimentazione e crea attività automatiche quando i livelli di cibo scendono sotto la soglia."/>
+        <text name="ui_task_request_husbandry" text="Seleziona la zootecnia specifica da associare all'attività."/>
+        <text name="ui_task_request_food_type" text="Scegli il tipo di cibo da monitorare."/>
+        <text name="ui_task_level_empty" text="Vuoto"/>
+        <text name="ui_task_request_food_level" text="Seleziona il livello di cibo da monitorare. Quando scende sotto il valore obiettivo, verrà creata un'attività per aggiungere altro cibo."/>
+        <text name="ui_task_food_fill" text="Riempi"/>
+        <text name="ui_husbandry_food_total" text="Totale"/>
+        <text name="ui_task_food_fill_total" text="Riempi cibo"/>
+        <text name="ui_type_husbandry_food" text="Cibo per zootecnia"/>
+        <text name="ui_task_evaluator_greater_than" text="Maggiore di"/>
+        <text name="ui_task_evaluator_less_than" text="Minore di"/>
+        <text name="ui_type_husbandry_conditions" text="Condizioni zootecniche"/>
+        <text name="ui_task_request_condition_type" text="Scegli la condizione da monitorare."/>
+        <text name="ui_task_request_condition_evaluator" text="Scegli quando l'attività deve diventare in scadenza: sotto o sopra il valore obiettivo."/>
+        <text name="ui_task_condition_evaluator_less_than" text="Sotto il valore obiettivo"/>
+        <text name="ui_task_condition_evaluator_greater_than" text="Sopra il valore obiettivo"/>
+        <text name="ui_task_request_condition_level" text="Scegli il livello obiettivo da monitorare per la condizione."/>
+        <text name="ui_type_production" text="Produzione"/>
+        <text name="ui_task_request_production" text="Scegli la produzione per questa attività."/>
+        <text name="ui_task_request_production_type" text="Scegli se monitorare un input o un output di produzione."/>
+        <text name="ui_task_request_production_fill_type" text="Scegli il tipo di riempimento da monitorare."/>
+        <text name="ui_task_request_production_level" text="Scegli il livello obiettivo da monitorare per il tipo di riempimento."/>
+        <text name="ui_task_production_input" text="Input"/>
+        <text name="ui_task_production_output" text="Output"/>
+    </texts>
+</l10n>

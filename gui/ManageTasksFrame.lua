@@ -604,7 +604,7 @@ function ManageTasksFrame:onAddEditTaskRequestDetail(task)
         end, self,
         task.detail,
         g_i18n:getText("ui_set_task_detail"),
-        nil, Task.MAX_DETAIL_LENGTH, g_i18n:getText("ui_btn_ok"))
+        nil, Task.MAX_DETAIL_LENGTH, g_i18n:getText("ui_btn_ok"), nil, nil, false)
 end
 
 function ManageTasksFrame:onAddEditTaskEffort(task)
