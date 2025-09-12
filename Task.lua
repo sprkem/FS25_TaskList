@@ -60,7 +60,7 @@ function Task.new(customMt)
     self.evaluator = Task.EVALUATOR.LessThan
     self.productionLevel = 0
     self.productionType = Task.PRODUCTION_TYPE.INPUT
-    self.productionFillType = 0
+    self.productionFillType = ""
     self.objectId = -1
     self.uniqueId = nil -- temp, used for lazily locating the objectId
 
@@ -197,7 +197,7 @@ function Task:writeStream(streamId, connection)
     streamWriteInt32(streamId, self.evaluator)
     streamWriteInt32(streamId, self.productionLevel)
     streamWriteInt32(streamId, self.productionType)
-    streamWriteInt32(streamId, self.productionFillType)
+    streamWriteString(streamId, self.productionFillType)
 
     if self:linksToPlaceable() then
         streamWriteInt32(streamId, self:getObjectId())
@@ -223,7 +223,7 @@ function Task:readStream(streamId, connection)
     self.evaluator = streamReadInt32(streamId)
     self.productionLevel = streamReadInt32(streamId)
     self.productionType = streamReadInt32(streamId)
-    self.productionFillType = streamReadInt32(streamId)
+    self.productionFillType = streamReadString(streamId)
     self.objectId = streamReadInt32(streamId)
 end
 
@@ -244,7 +244,7 @@ function Task:saveToXmlFile(xmlFile, key)
     setXMLInt(xmlFile, key .. "#evaluator", self.evaluator)
     setXMLInt(xmlFile, key .. "#productionLevel", self.productionLevel)
     setXMLInt(xmlFile, key .. "#productionType", self.productionType)
-    setXMLInt(xmlFile, key .. "#productionFillType", self.productionFillType)
+    setXMLString(xmlFile, key .. "#productionFillType", self.productionFillType or "")
 
     if self:linksToPlaceable() then
         local uniqueId = NetworkUtil.getObject(self:getObjectId()).uniqueId
@@ -269,7 +269,9 @@ function Task:loadFromXMLFile(xmlFile, key)
     self.evaluator = getXMLInt(xmlFile, key .. "#evaluator") or Task.EVALUATOR.LessThan
     self.productionLevel = getXMLInt(xmlFile, key .. "#productionLevel") or 0
     self.productionType = getXMLInt(xmlFile, key .. "#productionType") or Task.PRODUCTION_TYPE.INPUT
-    self.productionFillType = getXMLInt(xmlFile, key .. "#productionFillType") or 0
+    self.productionFillType = getXMLString(xmlFile, key .. "#productionFillType") or ""
+
+    self:postLoadFillTypeFix()
 
     if self:linksToPlaceable() then
         if self.type == Task.TASK_TYPE.HusbandryFood or self.type == Task.TASK_TYPE.HusbandryConditions then
@@ -278,6 +280,34 @@ function Task:loadFromXMLFile(xmlFile, key)
             self.uniqueId = getXMLString(xmlFile, key .. "#productionId") or getXMLString(xmlFile, key .. "#uniqueId")
         end
     end
+end
+
+-- Conversion from old method of storing fill types by id, to the new version of storing by name
+function Task:postLoadFillTypeFix()
+    if self:stringContainsNumber(self.husbandryFood) then
+        local conversions = {
+            ["115"] = "116", -- Hacky fix for when TMR id was changed from 115 to 116
+        }
+        local parts = {}
+        for part in string.gmatch(self.husbandryFood, "[^_]+") do
+            local fixedPart = conversions[part] or part
+            local newPart = g_fillTypeManager.indexToName[tonumber(fixedPart)]
+            table.insert(parts, newPart)
+        end
+        self.husbandryFood = table.concat(parts, "_")
+        print("Converted husbandryFood to names: " .. self.husbandryFood)
+    end
+
+    if self:stringContainsNumber(self.productionFillType) then
+        self.productionFillType = g_fillTypeManager.indexToName[tonumber(self.productionFillType)]
+        if self.productionFillType ~= nil then
+            print("Converted productionFillType to name: " .. self.productionFillType)
+        end
+    end
+end
+
+function Task:stringContainsNumber(string)
+    return string:find("%d") ~= nil
 end
 
 function Task:linksToPlaceable()

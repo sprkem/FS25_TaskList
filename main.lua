@@ -236,8 +236,8 @@ end
 
 function TaskList:getHusbandryFoodKey(foodGroup)
     local fillTypes = {}
-    for _, fillLevel in pairs(foodGroup.fillTypes) do
-        table.insert(fillTypes, fillLevel)
+    for _, fillType in pairs(foodGroup.fillTypes) do
+        table.insert(fillTypes, g_fillTypeManager.indexToName[tonumber(fillType)])
     end
     table.sort(fillTypes, function(a, b) return a < b end)
     return table.concat(fillTypes, "_")
@@ -342,7 +342,7 @@ function TaskList:updateProductions()
 
         for _, fillType in pairs(point.inputFillTypeIdsArray) do
             local fillInfo = {
-                key = fillType,
+                key = g_fillTypeManager.indexToName[tonumber(fillType)],
                 title = g_fillTypeManager.indexToTitle[fillType],
                 amount = point:getFillLevel(fillType),
                 capacity = point:getCapacity(fillType),
@@ -352,7 +352,7 @@ function TaskList:updateProductions()
 
         for _, fillType in pairs(point.outputFillTypeIdsArray) do
             local fillInfo = {
-                key = fillType,
+                key = g_fillTypeManager.indexToName[tonumber(fillType)],
                 title = g_fillTypeManager.indexToTitle[fillType],
                 amount = point:getFillLevel(fillType),
                 capacity = point:getCapacity(fillType),
@@ -595,7 +595,8 @@ function TaskList:checkAndAddActiveTaskIfDue(group, task)
                 end
             else
                 local foodInfo = husbandry.keys[task.husbandryFood]
-                if foodInfo.amount <= task.husbandryLevel then
+
+                if foodInfo ~= nil and foodInfo.amount <= task.husbandryLevel then
                     shouldAdd = true
                 end
             end
