@@ -299,7 +299,7 @@ function TaskList:updateHusbandries()
                 local conditionInfo = {
                     title = conditionInfo.title,
                     amount = conditionInfo.value,
-                    key = conditionFillType,
+                    key = g_fillTypeManager.indexToName[tonumber(conditionFillType)],
                     capacity = husbandry:getHusbandryCapacity(conditionFillType)
                 }
                 if conditionInfo.capacity > 0 then
@@ -377,7 +377,7 @@ function TaskList:taskCleanup()
     end
     local currentFarmId = self:getCurrentFarmId()
 
-    -- Remove auto tasks that are orphaned as their dependent placeable is missing
+    -- Remove auto tasks that are orphaned as their dependent placeable is missing or fill types are broken
     local husbandries = self:getHusbandries()
     local productions = self:getProductions()
     for _, group in pairs(self.taskGroups) do
@@ -389,7 +389,20 @@ function TaskList:taskCleanup()
             local toRemove = {}
             for _, task in pairs(group.tasks) do
                 if task.type == Task.TASK_TYPE.HusbandryFood or task.type == Task.TASK_TYPE.HusbandryConditions then
+                    local remove = false
                     if husbandries[task:getObjectId()] == nil then
+                        remove = true
+                    elseif task.type == Task.TASK_TYPE.HusbandryFood and task.husbandryFood == nil then
+                        remove = true
+                    elseif task.type == Task.TASK_TYPE.HusbandryFood and task.husbandryFood == "" then
+                        remove = true
+                    elseif task.type == Task.TASK_TYPE.HusbandryConditions and task.husbandryCondition == nil then
+                        remove = true
+                    elseif task.type == Task.TASK_TYPE.HusbandryConditions and task.husbandryCondition == "" then
+                        remove = true
+                    end
+
+                    if remove then
                         table.insert(toRemove, task.id)
                         local key = group.id .. "_" .. task.id
                         if self.activeTasks[key] ~= nil then
@@ -398,7 +411,14 @@ function TaskList:taskCleanup()
                         end
                     end
                 elseif task.type == Task.TASK_TYPE.Production then
+                    local remove = false
                     if productions[task:getObjectId()] == nil then
+                        remove = true
+                    elseif task.productionFillType == nil then
+                        remove = true
+                    end
+
+                    if remove then
                         table.insert(toRemove, task.id)
                         local key = group.id .. "_" .. task.id
                         if self.activeTasks[key] ~= nil then
@@ -409,7 +429,7 @@ function TaskList:taskCleanup()
                 end
             end
             for _, taskId in pairs(toRemove) do
-                print('Dropped task ' .. taskId .. ' from group ' .. group.id .. ' due to missing husbandry.')
+                print('Dropped task ' .. taskId .. ' from group ' .. group.id .. ' due to missing husbandry or bad fill type.')
                 group.tasks[taskId] = nil
             end
         end
@@ -458,33 +478,35 @@ function TaskList:currentMissionStarted()
         self:taskCleanup()
     end, self)
 
-    -- Sanity check for orphaned tasks
-    local orphans = {}
-    for _, group in pairs(self.taskGroups) do
-        if group.type == TaskGroup.GROUP_TYPE.Standard then
-            for _, task in pairs(group.tasks) do
-                if task.type == Task.TASK_TYPE.HusbandryFood or task.type == Task.TASK_TYPE.HusbandryConditions or task.type == Task.TASK_TYPE.Production then
-                    local objectId = task:getObjectId()
-                    if objectId == nil or objectId == -1 then
-                        table.insert(orphans, { taskId = task.id, groupId = group.id })
-                    end
-                end
-            end
-        end
-    end
-    for _, orphan in pairs(orphans) do
-        print('Dropping orphaned task ' .. orphan.taskId .. ' from group ' .. orphan.groupId)
-        self.taskGroups[orphan.groupId].tasks[orphan.taskId] = nil
-        self.activeTasks[orphan.groupId .. "_" .. orphan.taskId] = nil
-    end
+    -- -- Sanity check for orphaned tasks
+    -- local toRemove = {}
+    -- for _, group in pairs(self.taskGroups) do
+    --     if group.type == TaskGroup.GROUP_TYPE.Standard then
+    --         for _, task in pairs(group.tasks) do
+    --             if task.type == Task.TASK_TYPE.HusbandryFood or task.type == Task.TASK_TYPE.HusbandryConditions or task.type == Task.TASK_TYPE.Production then
+    --                 local objectId = task:getObjectId()
+    --                 if objectId == nil or objectId == -1 then
+    --                     table.insert(toRemove, { taskId = task.id, groupId = group.id })
+    --                 end
+    --             end
+    --         end
+    --     end
+    -- end
+    -- for _, orphan in pairs(toRemove) do
+    --     print('Dropping orphaned task ' .. orphan.taskId .. ' from group ' .. orphan.groupId)
+    --     self.taskGroups[orphan.groupId].tasks[orphan.taskId] = nil
+    --     self.activeTasks[orphan.groupId .. "_" .. orphan.taskId] = nil
+    -- end
 
-    for _, activeTask in pairs(self.activeTasks) do
-        local group = self.taskGroups[activeTask.groupId]
-        if group == nil then
-            print('Removing active task ' .. activeTask.id .. ' from group ' .. activeTask.groupId .. ' due to missing group.')
-            self.activeTasks[activeTask.groupId .. "_" .. activeTask.id] = nil
-        end
-    end
+    -- for _, activeTask in pairs(self.activeTasks) do
+    --     local group = self.taskGroups[activeTask.groupId]
+    --     if group == nil then
+    --         print('Removing active task ' ..
+    --             activeTask.id .. ' from group ' .. activeTask.groupId .. ' due to missing group.')
+    --         self.activeTasks[activeTask.groupId .. "_" .. activeTask.id] = nil
+    --     end
+    -- end
+    g_currentMission.taskList:taskCleanup()
 
     g_currentMission.taskList:addOrClearAutoTasks()
 end

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="101">
     <author>Ozz</author>
-    <version>1.1.0.11</version>
+    <version>1.1.0.12</version>
     <iconFilename>icon_taskList.dds</iconFilename>
     <title>
         <en>Task List</en>
@@ -29,6 +29,9 @@ On the main menu, just above Settings, you will find a new menu with a clipboard
 https://github.com/sprkem/FS25_TaskList
 
 Changelog:
+
+1.1.0.12:
+- Improve handling of missing fill types in tasks, to avoid losing tasks when mods or updates change fill type ids.
 
 1.1.0.11:
 - Move to store fill types by name instead of id, to avoid issues when mods or updates change fill type ids.
@@ -99,6 +102,9 @@ https://github.com/sprkem/FS25_TaskList
 
 Änderungsliste:
 
+1.1.0.12:
+- Verbesserung der Handhabung fehlender Fülltypen in Aufgaben, um zu vermeiden, dass Aufgaben verloren gehen, wenn Mods oder Updates die Fülltyp-IDs ändern.
+
 1.1.0.11:
 - Fülltypen werden nun nach Namen statt nach ID gespeichert, um Probleme zu vermeiden, wenn Mods oder Updates die Fülltyp-IDs ändern.
 - Einige Aufgaben im Zusammenhang mit Fülltypen müssen nach diesem Update möglicherweise erneut hinzugefügt werden.
@@ -167,6 +173,9 @@ Sur le menu principal, juste au-dessus des Paramètres, vous trouverez un nouvea
 https://github.com/sprkem/FS25_TaskList
 
 Journal des modifications:
+
+1.1.0.12:
+- Amélioration de la gestion des types de remplissage manquants dans les tâches, afin d'éviter la perte de tâches lorsque des mods ou des mises à jour modifient les identifiants de types de remplissage.
 
 1.1.0.11:
 - Stockage des types de remplissage par nom plutôt que par identifiant, afin d'éviter les problèmes liés aux modifications des identifiants des types de remplissage par les mods ou les mises à jour.

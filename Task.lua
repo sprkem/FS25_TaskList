@@ -55,7 +55,7 @@ function Task.new(customMt)
     self.n = 0
     self.type = Task.TASK_TYPE.Standard
     self.husbandryFood = ""
-    self.husbandryCondition = 0
+    self.husbandryCondition = ""
     self.husbandryLevel = 0
     self.evaluator = Task.EVALUATOR.LessThan
     self.productionLevel = 0
@@ -192,7 +192,7 @@ function Task:writeStream(streamId, connection)
     streamWriteInt32(streamId, self.effort)
     streamWriteInt32(streamId, self.type)
     streamWriteString(streamId, self.husbandryFood)
-    streamWriteInt32(streamId, self.husbandryCondition)
+    streamWriteString(streamId, self.husbandryCondition)
     streamWriteInt32(streamId, self.husbandryLevel)
     streamWriteInt32(streamId, self.evaluator)
     streamWriteInt32(streamId, self.productionLevel)
@@ -218,7 +218,7 @@ function Task:readStream(streamId, connection)
     self.effort = streamReadInt32(streamId)
     self.type = streamReadInt32(streamId)
     self.husbandryFood = streamReadString(streamId)
-    self.husbandryCondition = streamReadInt32(streamId)
+    self.husbandryCondition = streamReadString(streamId)
     self.husbandryLevel = streamReadInt32(streamId)
     self.evaluator = streamReadInt32(streamId)
     self.productionLevel = streamReadInt32(streamId)
@@ -239,7 +239,7 @@ function Task:saveToXmlFile(xmlFile, key)
     setXMLInt(xmlFile, key .. "#effort", self.effort)
     setXMLInt(xmlFile, key .. "#type", self.type)
     setXMLString(xmlFile, key .. "#husbandryFood", self.husbandryFood)
-    setXMLInt(xmlFile, key .. "#husbandryCondition", self.husbandryCondition)
+    setXMLString(xmlFile, key .. "#husbandryCondition", self.husbandryCondition)
     setXMLInt(xmlFile, key .. "#husbandryLevel", self.husbandryLevel)
     setXMLInt(xmlFile, key .. "#evaluator", self.evaluator)
     setXMLInt(xmlFile, key .. "#productionLevel", self.productionLevel)
@@ -264,7 +264,7 @@ function Task:loadFromXMLFile(xmlFile, key)
     self.effort = getXMLInt(xmlFile, key .. "#effort") or 1
     self.type = getXMLInt(xmlFile, key .. "#type") or Task.TASK_TYPE.Standard
     self.husbandryFood = getXMLString(xmlFile, key .. "#husbandryFood") or ""
-    self.husbandryCondition = getXMLInt(xmlFile, key .. "#husbandryCondition") or 0
+    self.husbandryCondition = getXMLString(xmlFile, key .. "#husbandryCondition") or ""
     self.husbandryLevel = getXMLInt(xmlFile, key .. "#husbandryLevel") or 0
     self.evaluator = getXMLInt(xmlFile, key .. "#evaluator") or Task.EVALUATOR.LessThan
     self.productionLevel = getXMLInt(xmlFile, key .. "#productionLevel") or 0
@@ -289,10 +289,17 @@ function Task:postLoadFillTypeFix()
             ["115"] = "116", -- Hacky fix for when TMR id was changed from 115 to 116
         }
         local parts = {}
+        local failedConversion = false
         for part in string.gmatch(self.husbandryFood, "[^_]+") do
             local fixedPart = conversions[part] or part
             local newPart = g_fillTypeManager.indexToName[tonumber(fixedPart)]
+            if newPart == nil then
+                failedConversion = true
+            end
             table.insert(parts, newPart)
+        end
+        if failedConversion then
+            self.husbandryFood = nil
         end
         self.husbandryFood = table.concat(parts, "_")
         print("Converted husbandryFood to names: " .. self.husbandryFood)
@@ -302,6 +309,13 @@ function Task:postLoadFillTypeFix()
         self.productionFillType = g_fillTypeManager.indexToName[tonumber(self.productionFillType)]
         if self.productionFillType ~= nil then
             print("Converted productionFillType to name: " .. self.productionFillType)
+        end
+    end
+
+    if self:stringContainsNumber(self.husbandryCondition) then
+        self.husbandryCondition = g_fillTypeManager.indexToName[tonumber(self.husbandryCondition)]
+        if self.husbandryCondition ~= nil then
+            print("Converted husbandryCondition to name: " .. tostring(self.husbandryCondition))
         end
     end
 end
