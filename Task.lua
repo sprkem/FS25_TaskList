@@ -295,7 +295,13 @@ function Task:isValid()
         return false
     elseif self.type == Task.TASK_TYPE.HusbandryConditions and self.husbandryCondition == "" then
         return false
+    elseif self.type == Task.TASK_TYPE.Production and self.productionFillType == nil then
+        return false
+    elseif self.type == Task.TASK_TYPE.Production and self.productionFillType == "" then
+        return false
     end
+
+    return true
 end
 
 -- Conversion from old method of storing fill types by id, to the new version of storing by name
