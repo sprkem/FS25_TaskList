@@ -228,6 +228,10 @@ function Task:readStream(streamId, connection)
 end
 
 function Task:saveToXmlFile(xmlFile, key)
+    if not self:isValid() then
+        return
+    end
+
     setXMLString(xmlFile, key .. "#id", self.id)
     setXMLString(xmlFile, key .. "#detail", self.detail)
     setXMLInt(xmlFile, key .. "#priority", self.priority)
@@ -279,6 +283,18 @@ function Task:loadFromXMLFile(xmlFile, key)
         elseif self.type == Task.TASK_TYPE.Production then
             self.uniqueId = getXMLString(xmlFile, key .. "#productionId") or getXMLString(xmlFile, key .. "#uniqueId")
         end
+    end
+end
+
+function Task:isValid()
+    if self.type == Task.TASK_TYPE.HusbandryFood and self.husbandryFood == nil then
+        return false
+    elseif self.type == Task.TASK_TYPE.HusbandryFood and self.husbandryFood == "" then
+        return false
+    elseif self.type == Task.TASK_TYPE.HusbandryConditions and self.husbandryCondition == nil then
+        return false
+    elseif self.type == Task.TASK_TYPE.HusbandryConditions and self.husbandryCondition == "" then
+        return false
     end
 end
 
