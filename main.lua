@@ -139,7 +139,9 @@ function TaskList:loadFromXMLFile()
             local taskId = getXMLString(xmlFile, activeTaskKey .. "#id")
             local groupId = getXMLString(xmlFile, activeTaskKey .. "#groupId")
             local task = g_currentMission.taskList:addActiveTask(groupId, taskId)
-            task.createdMarker = getXMLInt(xmlFile, activeTaskKey .. "#createdMarker")
+            if task ~= nil then
+                task.createdMarker = getXMLInt(xmlFile, activeTaskKey .. "#createdMarker")
+            end
             j = j + 1
         end
 
