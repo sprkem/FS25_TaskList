@@ -699,9 +699,19 @@ end
 function TaskList:addActiveTask(groupId, taskId)
     local group = self.taskGroups[groupId]
 
+    if group == nil then
+        print('TaskList:addActiveTask: Group not found: ' .. tostring(groupId))
+        return
+    end
+
     local task = group.tasks[taskId]
     if group.type == TaskGroup.GROUP_TYPE.TemplateInstance then
         task = self.taskGroups[group.templateGroupId].tasks[taskId]
+    end
+
+    if task == nil then
+        print('TaskList:addActiveTask: Task not found: ' .. tostring(taskId) .. ' in group ' .. tostring(groupId))
+        return
     end
 
     local activeTask = {
