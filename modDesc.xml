@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="101">
     <author>Ozz</author>
-    <version>1.1.0.13</version>
+    <version>1.2.0.0</version>
     <iconFilename>icon_taskList.dds</iconFilename>
     <title>
         <en>Task List</en>
@@ -30,7 +30,7 @@ https://github.com/sprkem/FS25_TaskList
 
 Changelog:
 
-1.1.0.13:
+1.2.0.0:
 - Fix issue where tasks could not be saved if they had become invalid (e.g. due to missing fill types)
 
 1.1.0.12:
@@ -105,7 +105,7 @@ https://github.com/sprkem/FS25_TaskList
 
 Änderungsliste:
 
-1.1.0.13:
+1.2.0.0:
 - Beheben Sie ein Problem, bei dem Aufgaben nicht gespeichert werden konnten, wenn sie ungültig geworden waren (z. B. aufgrund fehlender Fülltypen)
 
 1.1.0.12:
@@ -180,7 +180,7 @@ https://github.com/sprkem/FS25_TaskList
 
 Journal des modifications:
 
-1.1.0.13:
+1.2.0.0:
 - Correction d'un problème où les tâches ne pouvaient pas être enregistrées si elles devenaient invalides (par exemple, en raison de types de remplissage manquants).
 
 1.1.0.12:
