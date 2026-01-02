@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<l10n>
+	<translationContributors/>
+	<texts>
+		<text name="input_TL_SHOW_TASKS" text="Mostrar tareas"/>
+		<text name="ui_intro_text_header" text="Bienvenido al Listado de tareas"/>
+		<text name="ui_TaskList" text="Listado de tareas"/>
+		<text name="ui_header_icon" text=""/>
+		<text name="ui_header_group" text="Grupo"/>
+		<text name="ui_header_detail" text="Tarea"/>
+		<text name="ui_header_overdue" text="Vencida"/>
+		<text name="ui_header_priority" text="Prioridad"/>
+		<text name="ui_header_due" text="Vencimiento"/>
+		<text name="ui_manage_groups" text="Gestionar grupos"/>
+		<text name="ui_manage_tasks" text="Gestionar tareas"/>
+		<text name="ui_header_current_group" text="Tareas del grupo: %s"/>
+		<text name="ui_btn_complete_task" text="Finalizar tarea"/>
+		<text name="ui_btn_close" text="Cerrar"/>
+		<text name="ui_btn_ok" text="OK"/>
+		<text name="ui_btn_cancel" text="Cancelar"/>
+		<text name="ui_btn_copy" text="Copiar"/>
+		<text name="ui_btn_edit" text="Editar"/>
+		<text name="ui_btn_delete" text="Borrar"/>
+		<text name="ui_btn_add_group" text="Añadir grupo"/>
+		<text name="ui_btn_add_task" text="Añadir tarea"/>
+		<text name="ui_btn_select_group" text="Cambiar grupo"/>
+		<text name="ui_set_group_name" text="Elige el nombre del grupo"/>
+		<text name="ui_set_task_detail" text="Describe la tarea"/>
+		<text name="ui_set_task_priority" text="Establece la prioridad de la tarea. Esto se utiliza para ordenar las tareas y saber qué hay que hacer primero."/>
+		<text name="ui_set_task_should_recur" text="¿Esta tarea es recurrente?"/>
+		<text name="ui_set_task_period" text="¿Cuándo hay que terminar la tarea?"/>
+		<text name="ui_set_task_recur_mode" text="¿Cuándo debería repetirse la tarea?"/>
+		<text name="ui_set_task_recur_mode_monthly" text="En un mes específico"/>
+		<text name="ui_set_task_recur_mode_n_months" text="Cada N meses"/>
+		<text name="ui_set_task_recur_mode_n_days" text="Cada N días"/>
+		<text name="ui_task_due_daily" text="Diariamente"/>
+		<text name="ui_task_due_monthly" text="Cada %s"/>
+		<text name="ui_task_due_n_months" text="Cada %s meses"/>
+		<text name="ui_task_due_n_days" text="Cada %s días"/>
+		<text name="ui_set_task_n_months" text="¿Con qué frecuencia, en meses, debe completarse la tarea?"/>
+		<text name="ui_set_task_n_days" text="¿Con qué frecuencia, en días, debe completarse la tarea?"/>
+		<text name="ui_group_exists_error" text="Ya existe un grupo con este nombre"/>
+		<text name="ui_no_name_specified_error" text="No se ha proporcionado un nombre para el grupo"/>
+		<text name="ui_no_detail_specified_error" text="No se ha proporcionado una descripción para la tarea"/>
+		<text name="ui_no_group_selected_error" text="No se ha seleccionado un grupo para copiar"/>
+		<text name="ui_no_task_selected" text="No se ha seleccionado una tarea"/>
+		<text name="ui_no_group_selected" text="No se ha seleccionado un grupo"/>
+		<text name="ui_confirm_deletion" text="¿Seguro que quieres borrar esto?"/>
+		<text name="ui_group_not_found_error" text="No se puede encontrar el grupo. Asegúrate de que no se haya borrado"/>
+		<text name="ui_task_not_found_error" text="No se puede encontrar la tarea. Asegúrate de que no se haya borrado"/>
+		<text name="ui_no_groups_exist" text="Todavía no tienes ningún grupo"/>
+		<text name="ui_no_tasks_exist_for_group" text="Todavía no tienes ninguna tarea"/>
+		<text name="ui_no_active_tasks" text="No tienes ninguna tarea pendiente"/>
+		<text name="ui_confirm_complete_task" text="Confirmar que se ha completado la tarea: %s"/>
+		<text name="ui_tasks_over_time" text="Carga de trabajo"/>
+		<text name="ui_header_effort" text="Esfuerzo"/>
+		<text name="ui_set_task_effort" text="Define el nivel de esfuerzo para esta tarea. Esto se utiliza para diferenciar tareas pequeñas y grandes al calcular la carga de trabajo durante un periodo de tiempo."/>
+		<text name="ui_tasks_due_now" text="Tareas pendientes"/>
+		<text name="ui_intro_text_1" text="Para empezar, utiliza «Gestionar grupos» para crear un grupo. Un grupo estándar es un contenedor lógico para tareas relacionadas, por ejemplo, «Campo 10» o «Tareas generales de la granja»."/>
+		<text name="ui_intro_text_2" text="Una vez hayas creado un grupo, utiliza «Gestionar tareas» para definir las cosas que debes hacer y cuándo. Las tareas aparecerán aquí como tareas activas cuando deban realizarse."/>
+		<text name="ui_intro_text_3" text="También puedes crear una «Plantilla de grupo», por ejemplo, «Campo de trigo». Define las tareas como lo harías con un grupo normal y, a continuación, puedes crear grupos (Instancias) a partir de esta plantilla."/>
+		<text name="ui_intro_text_4" text="Una plantilla en sí misma no genera tareas, pero producirá tareas para todas las instancias asociadas."/>
+		<text name="ui_intro_text_5" text="Una tarea es simplemente texto sin formato, como «Cosechar maíz». Puedes definir la prioridad (1 es la más alta) y el esfuerzo relativo necesario."/>
+		<text name="ui_intro_text_6" text="Las tareas pueden ser puntuales o recurrentes por mes o día, o por un múltiplo de meses o días. Si tienes animales puedes crear tareas automáticamente cuando los niveles de comida disminuyan."/>
+		<text name="ui_intro_text_7" text="Cuando llegue el momento de realizar una tarea aparecerá en la vista principal por orden de prioridad. Utiliza «Finalizar tarea» cuando la termines. Si se trata de una tarea recurrente volverá a aparecer cuando se deba realizar de nuevo."/>
+		<text name="ui_intro_text_8" text="Selecciona «Cambiar modo» para alternar entre la vista de las tareas pendientes actualmente y la herramienta de planificación, que muestra el esfuerzo total para cada mes y las próximas tareas por meses."/>
+		<text name="ui_intro_text_9" text="Puedes copiar un grupo y todas sus tareas a un nuevo grupo si lo necesitas."/>
+		<text name="ui_intro_text_10" text="Puedes ver las tareas que tienes pendientes mientras juegas pulsando Shift + T."/>
+		<text name="ui_header_group_type" text="Tipo de grupo"/>
+		<text name="ui_header_group_source_template" text="Plantilla"/>
+		<text name="ui_type_standard" text="Estándar"/>
+		<text name="ui_type_template" text="Plantilla"/>
+		<text name="ui_type_template_instance" text="Instancia de plantilla"/>
+		<text name="ui_group_request_type_description" text="Escoge un tipo de grupo. Un grupo «Estándar» contiene tareas que se mostrarán cuando sea el momento de realizarlas. Una «Plantilla» define las tareas solo como una plantilla. Posteriormente, puedes crear instancias de grupos que usen la misma plantilla y administrarlos en un solo lugar."/>
+		<text name="ui_group_request_source_group" text="Escoge una pantilla para este grupo."/>
+		<text name="ui_confirm_deletion_template" text="¿Seguro que quieres eliminar esta plantilla? Eliminar una plantilla borrará todas las instancias asociadas a ella."/>
+		<text name="ui_set_task_effort_multiplier" text="Multiplica los valores de esfuerzo para este grupo. Utiliza 1 para usar los valores de la plantilla o establece un valor más alto si, por ejemplo, el grupo representa un campo más grande."/>
+		<text name="ui_task_request_type_description" text="Elige un tipo de tarea. «Estándar» es texto libre. Las tareas relativas al ganado y las producciones pueden realizar un seguimiento de los insumos alimenticios, las condiciones del ganado o los niveles de producción y generar tareas conforme a diferentes criterios."/>
+		<text name="ui_task_request_husbandry" text="Selecciona un establo para esta tarea."/>
+		<text name="ui_task_request_food_type" text="Selecciona qué alimento deseas monitorizar."/>
+		<text name="ui_task_level_empty" text="Vacío"/>
+		<text name="ui_task_request_food_level" text="Selecciona el nivel del alimento que deseas monitorizar. Cuando el nivel caiga por debajo del objetivo se añadirá una tarea para reponerlo."/>
+		<text name="ui_task_food_fill" text="rellenar"/>
+		<text name="ui_husbandry_food_total" text="Total"/>
+		<text name="ui_task_food_fill_total" text="rellenar comida"/>
+		<text name="ui_type_husbandry_food" text="Comida del ganado"/>
+		<text name="ui_task_evaluator_greater_than" text="↑"/>
+		<text name="ui_task_evaluator_less_than" text="↓"/>
+		<text name="ui_type_husbandry_conditions" text="Condiciones del ganado"/>
+		<text name="ui_task_request_condition_type" text="Escoge qué condición deseas monitorizar."/>
+		<text name="ui_task_request_condition_evaluator" text="Elige cuándo debe realizarse la tarea. Puedes generar la tarea cuando esté por debajo del valor objetivo o cuando lo supere."/>
+		<text name="ui_task_condition_evaluator_less_than" text="Por debajo del objetivo"/>
+		<text name="ui_task_condition_evaluator_greater_than" text="Por encima del objetivo"/>
+		<text name="ui_task_request_condition_level" text="Elige el nivel objetivo que deseas monitorizar."/>
+		<text name="ui_type_production" text="Producciones"/>
+		<text name="ui_task_request_production" text="Escoge el edificio que deseas monitorizar."/>
+		<text name="ui_task_request_production_type" text="Escoge si deseas monitorizar una entrada o una salida del edificio."/>
+		<text name="ui_task_request_production_fill_type" text="Escoge lo que quieres monitorizar."/>
+		<text name="ui_task_request_production_level" text="Selecciona el nivel objetivo que deseas monitorizar."/>
+		<text name="ui_task_production_input" text="Entrada"/>
+		<text name="ui_task_production_output" text="Salida"/>
+	</texts>
+</l10n>
