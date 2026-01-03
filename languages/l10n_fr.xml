@@ -99,5 +99,6 @@
         <text name="ui_task_request_production_level" text="Choisissez le niveau cible à suivre pour le type de remplissage."/>
         <text name="ui_task_production_input" text="Entrée"/>
         <text name="ui_task_production_output" text="Sortie"/>
+        <text name="ui_set_task_start_period" text="Définir le premier mois où la tâche doit être due."/>
     </texts>
 </l10n>

@@ -99,5 +99,6 @@
 		<text name="ui_task_request_production_level" text="Выберите целевой уровень для отслеживания типа заливки."/>
 		<text name="ui_task_production_input" text="Ввод"/>
 		<text name="ui_task_production_output" text="Выход"/>
+		<text name="ui_set_task_start_period" text="Установите первый месяц, когда задача должна стать активной."/>
 	</texts>
 </l10n>

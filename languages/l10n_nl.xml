@@ -99,5 +99,6 @@
 		<text name="ui_task_request_production_level" text="Kies het doel dat je voor dit vultype wilt volgen."/>
 		<text name="ui_task_production_input" text="Invoer"/>
 		<text name="ui_task_production_output" text="Uitvoer"/>
+		<text name="ui_set_task_start_period" text="Stel de eerste maand in waarin de taak moet vervallen."/>
 	</texts>
 </l10n>

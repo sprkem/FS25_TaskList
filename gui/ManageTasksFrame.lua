@@ -731,7 +731,7 @@ function ManageTasksFrame:onAddEditTaskRequestRecurMode(task)
 end
 
 function ManageTasksFrame:onAddEditTaskRequestN(task)
-    local allowedValues = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }
+    local allowedValues = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"}
     local default = 1
     if task.n ~= 0 then
         default = task.n
@@ -740,6 +740,8 @@ function ManageTasksFrame:onAddEditTaskRequestN(task)
     local text = ""
     if task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
         text = g_i18n:getText("ui_set_task_n_months")
+        table.insert(allowedValues, "24")
+        table.insert(allowedValues, "36")
     elseif task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
         text = g_i18n:getText("ui_set_task_n_days")
     end
@@ -757,13 +759,53 @@ function ManageTasksFrame:onAddEditTaskRequestN(task)
                 local increment = tonumber(allowedValues[index])
                 task.n = increment
                 if task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
-                    task.nextN = g_currentMission.environment.currentPeriod
+                    self:onAddEditTaskRequestStartPeriod(task)
                 elseif task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
                     task.nextN = g_currentMission.environment.currentDay
+                    self:onAddEditTaskJourneyComplete(task)
                 end
-                self:onAddEditTaskJourneyComplete(task)
             else
                 self:onAddEditTaskRequestRecurMode(task)
+            end
+        end
+    })
+end
+
+-- New Task Step for Start Period
+function ManageTasksFrame:onAddEditTaskRequestStartPeriod(task)
+    local allowedValues = {
+        g_i18n:getText("ui_month1"),
+        g_i18n:getText("ui_month2"),
+        g_i18n:getText("ui_month3"),
+        g_i18n:getText("ui_month4"),
+        g_i18n:getText("ui_month5"),
+        g_i18n:getText("ui_month6"),
+        g_i18n:getText("ui_month7"),
+        g_i18n:getText("ui_month8"),
+        g_i18n:getText("ui_month9"),
+        g_i18n:getText("ui_month10"),
+        g_i18n:getText("ui_month11"),
+        g_i18n:getText("ui_month12")
+    }
+    local default = TaskListUtils.convertPeriodToMonthNumber(g_currentMission.environment.currentPeriod)
+    if task.nextN ~= 0 then
+        default = TaskListUtils.convertPeriodToMonthNumber(task.nextN)
+    end
+    TaskListUtils.showOptionDialog({
+        text = g_i18n:getText("ui_set_task_start_period"),
+        title = "",
+        defaultText = "",
+        options = allowedValues,
+        defaultOption = default,
+        target = self,
+        args = {},
+        callback = function(_, index)
+            if index > 0 then
+                task.nextN = TaskListUtils.convertMonthNumberToPeriod(index)
+                self:onAddEditTaskJourneyComplete(task)
+            else
+                -- Go back
+                self:onAddEditTaskRequestN(task)
             end
         end
     })

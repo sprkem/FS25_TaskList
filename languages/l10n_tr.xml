@@ -99,5 +99,6 @@
 		<text name="ui_task_request_production_level" text="Dolum türü için takip edilecek hedef seviyeyi seçin."/>
 		<text name="ui_task_production_input" text="Girdi"/>
 		<text name="ui_task_production_output" text="Çıktı"/>
+		<text name="ui_set_task_start_period" text="Görevin teslim tarihi gelmesi gereken ilk ayı belirleyin."/>
 	</texts>
 </l10n>

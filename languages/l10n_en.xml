@@ -99,5 +99,7 @@
 		<text name="ui_task_request_production_level" text="Choose the target level to track for the fill type."/>
 		<text name="ui_task_production_input" text="Input"/>
 		<text name="ui_task_production_output" text="Output"/>
+		<text name="ui_task_production_output" text="Output"/>
+		<text name="ui_set_task_start_period" text="Set the first month for the task to be due."/>
 	</texts>
 </l10n>

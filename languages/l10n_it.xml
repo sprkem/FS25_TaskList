@@ -99,5 +99,6 @@
         <text name="ui_task_request_production_level" text="Scegli il livello obiettivo da monitorare per il tipo di riempimento."/>
         <text name="ui_task_production_input" text="Input"/>
         <text name="ui_task_production_output" text="Output"/>
+        <text name="ui_set_task_start_period" text="Imposta il primo mese in cui l'attività deve scadere."/>
     </texts>
 </l10n>

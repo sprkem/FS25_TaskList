@@ -307,9 +307,9 @@ function MenuTaskList:populateCellForItemInSection(list, section, index, cell)
     if task.recurMode == Task.RECUR_MODE.DAILY then
         overdue = false
     elseif task.recurMode == Task.RECUR_MODE.EVERY_N_DAYS then
-        overdue = currentDay ~= task.createdMarker
+        overdue = currentDay ~= taskInfo.createdMarker
     elseif task.recurMode == Task.RECUR_MODE.EVERY_N_MONTHS then
-        overdue = currentPeriod ~= task.createdMarker
+        overdue = currentPeriod ~= taskInfo.createdMarker
     end
 
     if task.type == Task.TASK_TYPE.HusbandryFood then overdue = true end

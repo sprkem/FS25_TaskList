@@ -99,5 +99,6 @@
 		<text name="ui_task_request_production_level" text="Wähle den Zielwert für den Fülltyp."/>
 		<text name="ui_task_production_input" text="Eingang"/>
 		<text name="ui_task_production_output" text="Ausgang"/>
+		<text name="ui_set_task_start_period" text="Lege den ersten Monat fest, in dem die Aufgabe fällig wird."/>
 	</texts>
 </l10n>
