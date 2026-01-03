@@ -99,5 +99,6 @@
 		<text name="ui_task_request_production_level" text="Selecciona el nivel objetivo que deseas monitorizar."/>
 		<text name="ui_task_production_input" text="Entrada"/>
 		<text name="ui_task_production_output" text="Salida"/>
+		<text name="ui_set_task_start_period" text="Establece el primer mes en el que debe realizarse la tarea."/>
 	</texts>
 </l10n>
