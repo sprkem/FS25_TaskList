@@ -33,6 +33,7 @@ Changelog:
 1.2.0.1:
 - Updated 'Every N month tasks to support 24 and 36 month recurrence. You can also set the start month. This is to better support setting up crop rotation schedules for groups or templates.
 - Fixed a display bug where some tasks would incorrectly show as overdue.
+- Added Spanish translation, thanks to sharak.
 
 1.2.0.0:
 - Fix issue where tasks could not be saved if they had become invalid (e.g. due to missing fill types)
@@ -109,6 +110,12 @@ https://github.com/sprkem/FS25_TaskList
 
 Änderungsliste:
 
+1.2.0.1:
+
+- Die Aufgaben „Alle N Monate“ wurden aktualisiert und unterstützen nun Wiederholungen von 24 und 36 Monaten. Der Startmonat kann ebenfalls festgelegt werden. Dies erleichtert die Einrichtung von Fruchtfolgeplänen für Gruppen oder Vorlagen.
+- Ein Anzeigefehler wurde behoben, durch den einige Aufgaben fälschlicherweise als überfällig angezeigt wurden.
+- Spanische Übersetzung hinzugefügt (Vielen Dank an sharak).
+
 1.2.0.0:
 - Beheben Sie ein Problem, bei dem Aufgaben nicht gespeichert werden konnten, wenn sie ungültig geworden waren (z. B. aufgrund fehlender Fülltypen)
 
@@ -183,6 +190,11 @@ Sur le menu principal, juste au-dessus des Paramètres, vous trouverez un nouvea
 https://github.com/sprkem/FS25_TaskList
 
 Journal des modifications:
+
+1.2.0.1:
+- Mise à jour des tâches « Tous les N mois » pour prendre en charge les récurrences de 24 et 36 mois. Il est également possible de définir le mois de début. Ceci facilite la configuration des calendriers de rotation des cultures pour les groupes ou les modèles.
+- Correction d'un bug d'affichage : certaines tâches apparaissaient incorrectement comme étant en retard.
+- Ajout de la traduction espagnole, grâce à sharak.
 
 1.2.0.0:
 - Correction d'un problème où les tâches ne pouvaient pas être enregistrées si elles devenaient invalides (par exemple, en raison de types de remplissage manquants).
